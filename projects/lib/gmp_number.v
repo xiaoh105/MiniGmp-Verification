@@ -35,6 +35,30 @@ Proof.
   rewrite (Z.pow_add_r a b 1); lia.
 Qed.
 
+Lemma Zmul_mod_cancel: forall (n a b: Z),
+  n >= 0 -> a > 0 -> b >= 0 ->
+  (n * a) mod (a ^ (b + 1)) = a * (n mod (a ^ b)).
+Proof.
+  intros.
+  pose proof (Z_div_mod_eq_full n (a ^ b)).
+  pose proof (Z.mod_bound_pos n (a ^ b) ltac:(lia) ltac:(nia)).
+  remember (n / a ^ b) as q eqn:Hq.
+  remember (n mod a ^ b) as rem eqn:Hrem.
+  rewrite H2.
+  rewrite Z.mul_add_distr_r.
+  rewrite (Z.mul_comm (a ^ b) q); rewrite <-Z.mul_assoc.
+  rewrite <-Zpow_add_1; try lia.
+  assert (0 <= rem * a < a ^ (b + 1)). { 
+    rewrite Zpow_add_1; try lia.
+    nia.
+  }
+  rewrite <-(Zmod_unique_full (q * a ^ (b + 1) + rem * a) (a ^ (b + 1)) q (rem * a)).
+  + lia.
+  + unfold Remainder.
+    lia.
+  + lia.
+Qed.
+
 Lemma Zdiv_mod_pow: forall (n a b: Z),
   a > 0 -> b >= 0 -> n >= 0 ->
   (n / a) mod (a ^ b) = (n mod (a ^ (b + 1))) / a.
@@ -62,6 +86,22 @@ Proof.
     exists q.
     lia.
 Qed.
+
+Lemma list_app_cons: forall (l1 l2: list Z) (a: Z),
+  app l1 (a :: l2) = app (app l1 (a :: nil)) l2.
+Proof.
+  intros.
+  revert a l2.
+  induction l1.
+  + intros.
+    rewrite app_nil_l.
+    reflexivity.
+  + intros.
+    simpl in *.
+    specialize (IHl1 a0 l2).
+    rewrite IHl1.
+    reflexivity.
+Qed.
       
 End Aux.
 
@@ -72,194 +112,263 @@ Definition mpd_store_list (ptr: addr) (data: list Z) (cap: Z): Assertion :=
   store_uint_array ptr (Zlength data) data &&
   store_undef_uint_array_rec ptr ((Zlength data) + 1) cap.
 
-Fixpoint list_store_Z (data: list Z) (n: Z): Assertion :=
+Fixpoint list_to_Z (data: list Z): Z :=
   match data with
-    | nil => [| n = 0 |]
-    | a :: l0 => [| (n mod UINT_MOD) = a |] && list_store_Z l0 (n / UINT_MOD)
+    | nil => 0
+    | a :: l0 => (list_to_Z l0) * UINT_MOD + a
   end.
+
+Fixpoint list_within_bound (data: list Z): Prop :=
+  match data with
+   | nil => True
+   | a :: l0 => 0 <= a < UINT_MOD /\ (list_within_bound l0)
+  end.
+
+Definition list_store_Z (data: list Z) (n: Z): Prop := 
+  list_to_Z data = n /\ list_within_bound data.
 
 Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) (cap: Z): Assertion :=
   EX data,
-    mpd_store_list ptr data cap && list_store_Z data n && [| size = Zlength data |].
+    mpd_store_list ptr data cap && [| list_store_Z data n|] && [| size = Zlength data |].
 
-Fixpoint list_store_Z_pref (data: list Z) (n: Z) (len: nat): Assertion :=
-  match len with
-    | O => [| n = 0 |]
-    | S len' => 
-      EX a l0,
-        [| data = a :: l0 |] && [| (n mod UINT_MOD) = a |] && list_store_Z_pref l0 (n / UINT_MOD) len'
-  end.
-
-Definition mpd_store_Z_pref (ptr: addr) (n: Z) (size: Z) (cap: Z) (len: nat): Assertion :=
-  EX data,
-    mpd_store_list ptr data cap && list_store_Z_pref data n len && [| size = Zlength data |].
-
-Lemma list_store_Z_split: forall (data: list Z) (n: Z) (len: nat),
-  n >= 0 ->
-  Z.of_nat len < Zlength data ->
-  list_store_Z data n |--
-    list_store_Z_pref data (n mod (UINT_MOD ^ Z.of_nat len)) len.
+Lemma __list_within_bound_concat_r: forall (l1: list Z) (a: Z),
+  list_within_bound l1 ->
+  0 <= a < UINT_MOD ->
+  list_within_bound (l1 ++ [a]).
 Proof.
   intros.
-  revert n H data H0.
-  induction len.
-  + intros.
+  induction l1.
+  + rewrite app_nil_l.
     simpl.
-    entailer!.
-    apply Z.mod_1_r.
-  + intros.
-    assert (Zlength data >= 1); [ lia | ].
-    destruct data; [ unfold Zlength, Zlength_aux in H1; lia | ].
-    simpl.
-    Exists z data.
-    entailer!.
-    sep_apply IHlen; try tauto.
-    - pose proof (Aux.Zdiv_mod_pow n UINT_MOD (Z.of_nat len) ltac:(lia) ltac:(lia) ltac:(lia)).
-      rewrite H5.
-      pose proof (Aux.Z_of_nat_succ len).
-      rewrite <-H6.
-      reflexivity.
-    - pose proof (Aux.Z_of_nat_succ len).
-      pose proof (Zlength_cons z data).
-      lia.
-    - pose proof (Z.div_pos n UINT_MOD ltac:(lia) ltac:(lia)).
-      lia.
-    - rewrite <-H2.
-      pose proof (Znumtheory.Zmod_div_mod UINT_MOD (Z.pow_pos UINT_MOD (Pos.of_succ_nat len)) n ltac:(lia) ltac:(lia)).
-      rewrite H3; try tauto.
-      unfold Z.divide.
-      destruct len.
-      * exists 1.
-        simpl.
-        lia.
-      * exists (Z.pow_pos UINT_MOD (Pos.of_succ_nat len)).
-        assert (Pos.of_succ_nat (S len) = Pos.add (Pos.of_succ_nat len) xH). { lia. }
-        rewrite H4.
-        apply Zpower_pos_is_exp.
+    lia.
+  + simpl in *; repeat split; try tauto.
 Qed.
 
-Lemma list_store_Z_pref_full: forall (data: list Z) (n: Z),
-  list_store_Z_pref data n (Z.to_nat (Zlength data)) --||-- list_store_Z data n.
+Lemma list_within_bound_concat: forall (l1 l2: list Z),
+  list_within_bound l1 ->
+  list_within_bound l2 ->
+  list_within_bound (l1 ++ l2).
 Proof.
   intros.
-  revert n.
-  induction data.
+  revert l1 H.
+  induction l2.
   + intros.
-    simpl.
-    split; entailer!.
+    rewrite app_nil_r.
+    tauto.
   + intros.
-    pose proof (Zlength_cons a data).
-    rewrite H.
-    pose proof (Z2Nat.inj_succ (Zlength data) (Zlength_nonneg data)).
-    rewrite H0.
-    simpl.
-    split.
-    - Intros a0 l0.
-      injection H1; intros.
-      subst.
-      specialize (IHdata (n / UINT_MOD)).
-      destruct IHdata.
-      sep_apply H2.
-      entailer!.
-    - Exists a data.
-      entailer!.
-      specialize (IHdata (n / UINT_MOD)).
-      destruct IHdata.
-      sep_apply H3.
-      entailer!.
+    simpl in H0.
+    destruct H0.
+    rewrite Aux.list_app_cons.
+    pose proof (__list_within_bound_concat_r l1 a H H0).
+    specialize (IHl2 H1 (app l1 [a]) H2).
+    tauto.
 Qed.
 
-Lemma list_store_Z_pref_extend_data: forall (data: list Z) (a: Z) (n: Z) (len: nat),
-  list_store_Z_pref data n len |--
-    list_store_Z_pref (data ++ (a :: nil)) n len.
+Lemma __list_within_bound_split_r: forall (l1: list Z) (a: Z),
+  list_within_bound (l1 ++ [a]) ->
+  list_within_bound l1 /\ 0 <= a < UINT_MOD.
 Proof.
   intros.
-  revert data n.
-  induction len.
+  induction l1.
+  + rewrite app_nil_l in H.
+    simpl in *.
+    tauto.
+  + simpl in *.
+    destruct H.
+    specialize (IHl1 H0).
+    tauto.
+Qed.
+
+Lemma list_within_bound_split: forall (l1 l2: list Z),
+  list_within_bound (l1 ++ l2) ->
+  list_within_bound l1 /\ list_within_bound l2.
+Proof.
+  intros.
+  revert l1 H.
+  induction l2.
   + intros.
     simpl.
-    entailer!.
+    rewrite app_nil_r in H.
+    tauto.
   + intros.
     simpl.
-    Intros a0 l0.
-    Exists a0 (app l0 (cons a nil)).
-    entailer!.
+    rewrite Aux.list_app_cons in H.
+    specialize (IHl2 (app l1 [a]) H).
+    destruct IHl2.
+    apply __list_within_bound_split_r in H0.
+    tauto.
+Qed.
+
+Lemma __list_store_Z_concat_r: forall (l1: list Z) (n1 a: Z),
+  list_store_Z l1 n1 ->
+  0 <= a < UINT_MOD ->
+  list_store_Z (l1 ++ [a]) (a * (UINT_MOD ^ (Zlength l1)) + n1).
+Proof.
+  induction l1; intros.
+  + rewrite app_nil_l.
+    unfold Zlength, Zlength_aux.
+    rewrite Z.pow_0_r.
+    unfold list_store_Z in H; destruct H.
+    simpl in H.
     subst.
-    reflexivity.
-Qed.
-
-Search list.
-
-Lemma list_store_Z_pref_extend: forall (data: list Z) (a: Z) (n: Z) (len: nat),
-  n >= 0 ->
-  Zlength data = Z.of_nat len ->
-  list_store_Z_pref data (n mod (UINT_MOD ^ Z.of_nat len)) len && 
-    [| a = (n / (UINT_MOD ^ Z.of_nat len)) mod UINT_MOD |] |--
-    list_store_Z_pref (data ++ (cons a nil)) (n mod (UINT_MOD ^ (Z.of_nat len + 1))) (S len).
-Proof.
-  intros.
-  entailer!.
-  simpl.
-  revert a data H0 H1.
-  induction len.
-  + intros.
-    Exists a nil.
     simpl.
-    entailer!.
-    - intros.
-      unfold Z.pow_pos, Pos.iter; simpl.
-      apply Z.mod_div; lia.
-    - unfold Z.pow_pos, Pos.iter; simpl.
-      simpl in H1; rewrite Z.div_1_r in H1.
-      rewrite Z.mod_mod; lia.
-    - pose proof (Zlength_nil_inv data H0).
-      rewrite H2.
-      reflexivity.
-  + intros.
-    simpl.
-    Intros a0 l0.
-    Exists a0 (app l0 [a]).
-    assert (Zlength l0 = Z.of_nat len). {
-      rewrite H2 in H0.
-      rewrite Zlength_cons in H0.
-      lia.
+    unfold list_store_Z; simpl.
+    lia.
+  + unfold list_store_Z in H; destruct H.
+    simpl in H.
+    simpl in H1.
+    assert (list_store_Z l1 ((n1 - a) / UINT_MOD)). { 
+       unfold list_store_Z; split; try simpl; try tauto.
+       apply Z.div_unique_exact; lia.
     }
-    specialize (IHlen ((n / UINT_MOD ^ (Z.of_nat len)) mod UINT_MOD) l0 H4 ltac:(lia)).
-    sep_apply IHlen.
-    Admitted. (* Unfinished. *)
-
-Lemma mpd_store_Z_split: forall (ptr: addr) (n: Z) (size: Z) (cap: Z) (len: nat),
-  n >= 0 ->
-  Z.of_nat len < size ->
-    mpd_store_Z ptr n size cap |--
-      mpd_store_Z_pref ptr (n mod (UINT_MOD ^ Z.of_nat len)) size cap len.
-Proof.
-  intros.
-  unfold mpd_store_Z, mpd_store_Z_pref.
-  Intros data.
-  Exists data.
-  unfold mpd_store_list.
-  Intros.
-  entailer!.
-  sep_apply (list_store_Z_split data n len).
-  + entailer!.
-  + lia.
-  + lia.
+    specialize (IHl1 ((n1 - a) / UINT_MOD) a0 H2 ltac:(lia)).
+    unfold list_store_Z; split.
+    - simpl.
+      unfold list_store_Z in IHl1; destruct IHl1.
+      rewrite Zlength_cons; unfold Z.succ.
+      rewrite H3.
+      assert ((n1 - a) / UINT_MOD * UINT_MOD = n1 - a). { 
+        rewrite <-(Z.div_unique_exact (n1 - a) UINT_MOD (list_to_Z l1)); lia.
+      }
+      rewrite Z.mul_add_distr_r.
+      rewrite H5.
+      rewrite Aux.Zpow_add_1; try lia.
+      pose proof (Zlength_nonneg l1).
+      lia.
+    - apply list_within_bound_concat; try simpl; try lia; try tauto.
 Qed.
 
-Lemma mpd_store_Z_pref_full: forall (ptr: addr) (n: Z) (size: Z) (cap: Z),
-  mpd_store_Z ptr n size cap --||-- mpd_store_Z_pref ptr n size cap (Z.to_nat size).
+Lemma list_store_Z_concat: forall (l1 l2: list Z) (n1 n2: Z),
+  list_store_Z l1 n1 ->
+  list_store_Z l2 n2 ->
+  list_store_Z (l1 ++ l2) (n1 + n2 * (UINT_MOD ^ (Zlength l1))).
+Proof.
+  unfold list_store_Z.
+  intros.
+  split; [ | apply list_within_bound_concat; tauto].
+  revert n1 l1 n2 H H0.
+  induction l2.
+  + intros.
+    simpl in *.
+    subst.
+    rewrite app_nil_r.
+    nia.
+  + intros.
+    destruct H0.
+    destruct H.
+    simpl in H0.
+    rewrite Aux.list_app_cons.
+    specialize (IHl2 (n1 + a * UINT_MOD ^ (Zlength l1)) (app l1 [a]) ((n2 - a) / UINT_MOD)).
+    rewrite IHl2.
+    - rewrite Zlength_app; rewrite Zlength_cons; simpl.
+      assert ((n2 - a) / UINT_MOD * UINT_MOD = n2 - a). {
+        rewrite <-(Z.div_unique_exact (n2 - a) UINT_MOD (list_to_Z l2)); try lia.
+      }
+      rewrite Aux.Zpow_add_1; try lia.
+      pose proof (Zlength_nonneg l1); lia.
+    - pose proof (__list_store_Z_concat_r l1 n1 a).
+      assert (list_store_Z l1 n1). { unfold list_store_Z; tauto. }
+      simpl in H1.
+      specialize (H3 H4 ltac:(lia)).
+      unfold list_store_Z in H3.
+      destruct H3.
+      split; [ lia | tauto].
+    - simpl in H1.
+      split; [ | tauto].
+      apply Z.div_unique_exact; lia.
+Qed.
+
+Lemma list_store_Z_bound: forall (l1: list Z) (n: Z),
+  list_store_Z l1 n -> 0 <= n < UINT_MOD ^ (Zlength l1).
+Proof.
+  induction l1; intros.
+  + rewrite Zlength_nil; rewrite Z.pow_0_r.
+    unfold list_store_Z in H; destruct H; simpl in *.
+    lia.
+  + rewrite Zlength_cons; unfold Z.succ.
+    unfold list_store_Z in *; destruct H; simpl in *.
+    assert (list_to_Z l1 = (n - a) / UINT_MOD /\ list_within_bound l1). {
+      rewrite (Z.div_unique_exact (n - a) UINT_MOD (list_to_Z l1)); try lia; try tauto.
+    }
+    specialize (IHl1 ((n - a) / UINT_MOD) H1).
+    rewrite Aux.Zpow_add_1; try lia.
+    pose proof (Zlength_nonneg l1); lia.
+Qed.
+
+Lemma list_store_Z_split: forall (l1 l2: list Z) (n: Z),
+  list_store_Z (l1 ++ l2) n ->
+  list_store_Z l1 (n mod UINT_MOD ^ (Zlength l1)) /\
+    list_store_Z l2 (n / UINT_MOD ^ (Zlength l1)).
 Proof.
   intros.
-  unfold mpd_store_Z, mpd_store_Z_pref.
-  pose proof list_store_Z_pref_full.
-  split; Intros data; Exists data; entailer!; specialize (H data n); destruct H.
-  + sep_apply H1.
-    subst.
-    entailer!.
-  + subst.
-    sep_apply H.
-    entailer!.
+  revert n H.
+  induction l1; split.
+  + intros.
+    rewrite app_nil_l in H.
+    rewrite Zlength_nil; rewrite Z.pow_0_r; rewrite Z.mod_1_r.
+    unfold list_store_Z; simpl; lia.
+  + rewrite app_nil_l in H.
+    unfold list_store_Z; simpl.
+    rewrite Z.div_1_r.
+    tauto.
+  + rewrite Zlength_cons; unfold Z.succ.
+    unfold list_store_Z in H; simpl in H; destruct H.
+    unfold list_store_Z in IHl1.
+    assert (list_to_Z (l1 ++ l2) = (n - a) / UINT_MOD /\ list_within_bound (l1 ++ l2)). {
+      rewrite (Z.div_unique_exact (n - a) UINT_MOD (list_to_Z (app l1 l2))); try lia; try tauto.
+    }
+    specialize (IHl1 ((n - a) / UINT_MOD) H1).
+    unfold list_store_Z; simpl; split.
+    - destruct IHl1; destruct H2, H3.
+      rewrite H2.
+      destruct H1.
+      rewrite <-H1, <-H.
+      remember (list_to_Z (l1 ++ l2)) as n' eqn:Hn'.
+      rewrite Zplus_mod.
+      rewrite Aux.Zmul_mod_cancel; try lia.
+      * assert (UINT_MOD ^ (Zlength l1 + 1) >= UINT_MOD). {
+          pose proof (Zlength_nonneg l1).
+          rewrite Aux.Zpow_add_1; try tauto; try lia.
+        }
+        rewrite (Z.mod_small a (UINT_MOD ^ (Zlength l1 + 1)) ltac:(lia)).
+        assert (list_store_Z (l1 ++ l2) n'). { unfold list_store_Z; split; [ lia | tauto]. }
+        pose proof (list_store_Z_bound (l1 ++ l2) n' H8).
+        pose proof (Zlength_nonneg l1).
+        pose proof (Z.mod_bound_pos n' (UINT_MOD ^ (Zlength l1)) ltac:(lia) ltac:(lia)).
+        assert (UINT_MOD * (n' mod UINT_MOD ^ (Zlength l1)) + a < UINT_MOD ^ (Zlength l1 + 1)). {
+          rewrite Aux.Zpow_add_1; lia.
+        }
+        rewrite (Z.mod_small (UINT_MOD * (n' mod UINT_MOD ^ (Zlength l1)) + a) (UINT_MOD ^ (Zlength l1 + 1)) ltac:(lia)).
+        lia.
+      * assert (list_store_Z (l1 ++ l2) n'). { unfold list_store_Z; split; [ lia | tauto]. }
+        pose proof (list_store_Z_bound (l1 ++ l2) n' H7).
+        lia.
+      * pose proof (Zlength_nonneg l1); lia.
+    - split; [ lia | tauto].
+  + unfold list_store_Z in *.
+    simpl in *.
+    pose proof (list_within_bound_split l1 l2 ltac:(tauto)).
+    split; [ | tauto].
+    rewrite Zlength_cons; unfold Z.succ.
+    destruct H as [H [H1 H2]].
+    assert (list_to_Z (l1 ++ l2) = (n - a) / UINT_MOD /\ list_within_bound (l1 ++ l2)). { 
+      rewrite (Z.div_unique_exact (n - a) UINT_MOD (list_to_Z (l1 ++ l2))); try lia; try tauto.
+    }
+    specialize (IHl1 ((n - a) / UINT_MOD) H3).
+    destruct IHl1 as [[H4 H5] [H6 H7]].
+    rewrite H6.
+    rewrite Aux.Zpow_add_1; try lia.
+    - rewrite Z.mul_comm.
+      rewrite <-Zdiv_Zdiv; try lia.
+      destruct H3.
+      assert ((n - a) / UINT_MOD = n / UINT_MOD). {
+        apply (Zdiv_unique_full n UINT_MOD ((n - a) / UINT_MOD) a).
+        + unfold Remainder; lia.
+        + lia.
+      }
+      rewrite H9.
+      reflexivity.
+    - pose proof (Zlength_nonneg l1); lia.
 Qed.
 
 End Internal.
@@ -281,8 +390,8 @@ Definition store_bigint_ent (x: addr) (n: bigint_ent): Assertion :=
     Internal.mpd_store_list p (data n) (cap n).
 
 Definition bigint_ent_store_Z (n: bigint_ent) (x: Z): Assertion :=
-  [| sign n |] && Internal.list_store_Z (data n) (-x) ||
-    [| ~(sign n) |] && Internal.list_store_Z (data n) x.
+  [| sign n |] && [| Internal.list_store_Z (data n) (-x) |] ||
+    [| ~(sign n) |] && [| Internal.list_store_Z (data n) x |].
 
 Definition store_Z (x: addr) (n: Z): Assertion :=
   EX ent,
