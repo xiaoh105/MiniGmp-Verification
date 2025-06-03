@@ -371,6 +371,67 @@ Proof.
     - pose proof (Zlength_nonneg l1); lia.
 Qed.
 
+Lemma list_store_Z_nth: forall (l: list Z) (n: Z) (i: Z),
+  0 <= i < Zlength l ->
+  list_store_Z l n ->
+  Znth i l 0 = (n / (UINT_MOD ^ i)) mod UINT_MOD.
+Proof.
+  intros.
+  revert n i H H0.
+  induction l; intros.
+  + rewrite Zlength_nil in H.
+    lia.
+  + rewrite Zlength_cons in H; unfold Z.succ in H.
+    assert (i = 0 \/ i > 0). { lia. }
+    destruct H1.
+    - pose proof (list_store_Z_split [a] l n).
+      assert (a :: l = app [a] l). { auto. }
+      rewrite <-H3 in H2; clear H3.
+      specialize (H2 H0); destruct H2.
+      unfold list_store_Z, list_to_Z in H2.
+      unfold Zlength, Zlength_aux, Z.succ in H2.
+      destruct H2.
+      rewrite (Aux.Zpow_add_1 UINT_MOD 0) in H2; try lia.
+      rewrite Z.pow_0_r, Z.mul_1_l in H2.
+      simpl in H2.
+      rewrite H1; rewrite Znth0_cons.
+      rewrite Z.pow_0_r, Z.div_1_r.
+      lia.
+    - rewrite Znth_cons; [ | lia ].
+      unfold list_store_Z in H0; destruct H0.
+      simpl in H0.
+      simpl in H2.
+      unfold list_store_Z in IHl.
+      assert (list_to_Z l = (n - a) / UINT_MOD /\ list_within_bound l). {
+        rewrite (Z.div_unique_exact (n - a) UINT_MOD (list_to_Z l)); try lia; try tauto.
+      }
+      specialize (IHl ((n - a) / UINT_MOD) (i - 1) ltac:(lia) H3).
+      rewrite IHl.
+      assert ((n - a) / UINT_MOD / (UINT_MOD ^ (i - 1)) = (n - a) / (UINT_MOD ^ 1 * UINT_MOD ^ (i - 1))). {
+        rewrite Zdiv_Zdiv; try lia.
+        rewrite Z.pow_1_r.
+        reflexivity.
+      }
+      rewrite H4.
+      rewrite <-Z.pow_add_r; try lia.
+      assert (n / UINT_MOD ^ i = (n - a) / UINT_MOD ^ i). {
+        assert (i = 1 + (i - 1)). { lia. }
+        rewrite H5.
+        rewrite (Z.pow_add_r UINT_MOD 1 (i - 1)); try lia.
+        repeat rewrite <-Zdiv_Zdiv; try lia.
+        repeat rewrite Z.pow_1_r.
+        rewrite <-(Zdiv_unique_full n UINT_MOD (list_to_Z l) a); try lia.
+        + destruct H3.
+          rewrite <-H3.
+          reflexivity.
+        + unfold Remainder; lia.
+      }
+      rewrite H5.
+      assert (1 + (i - 1) = i). { lia. }
+      rewrite H6.
+      reflexivity.
+Qed.
+
 End Internal.
 
 Record bigint_ent: Type := {
@@ -379,7 +440,7 @@ Record bigint_ent: Type := {
     sign: Prop;
 }.
 
-Definition store_bigint_ent (x: addr) (n: bigint_ent): Assertion :=
+Definition store_bigint_ent (x: addr) (n: bigint_ent): Asrtion :=
     EX size, 
       &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> size &&
       ([| size < 0 |] && [| sign n |] && [| size = -Zlength (data n) |] ||
