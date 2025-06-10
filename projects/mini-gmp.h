@@ -36,7 +36,7 @@ gmp_free_limbs (unsigned int *old, int size);
 
 void mpn_copyi (unsigned int *d, unsigned int *s, int n);
 
-int mpn_cmp (unsigned int *, unsigned int *, int);
+int mpn_cmp (unsigned int *ap, unsigned int *bp, int n);
 
 unsigned int mpn_add_1 (unsigned int *, unsigned int *, int, unsigned int);
 unsigned int mpn_add_n (unsigned int *, unsigned int *, unsigned int *, int);
@@ -59,7 +59,9 @@ void mpz_sub (mpz_t, const mpz_t, const mpz_t);
 void mpz_set (mpz_t, const mpz_t);
 
 /*@ 
-  Extern Coq (Zabs: Z -> Z) 
-             (Zmax: Z -> Z -> Z)
-             (mpd_store_Z: Z -> Z -> Z -> Z -> Assertion)
+  Extern Coq (Zabs : Z -> Z) 
+             (Zmax : Z -> Z -> Z)
+             (mpd_store_Z : Z -> Z -> Z -> Z -> Assertion)
+             (mpd_store_list : Z -> list Z -> Z -> Assertion)
+             (list_store_Z : list Z -> Z -> Prop)
 */

@@ -21,11 +21,12 @@ Import naive_C_Rules.
 Local Open Scope sac.
 
 Notation "'UINT_MOD'" := (4294967296).
+Notation "'LENGTH_MAX'" := (100000000).
 
 Module Internal.
 
 Definition mpd_store_list (ptr: addr) (data: list Z) (cap: Z): Assertion :=
-  [| Zlength data <= cap |] &&
+  [| Zlength data <= cap |] && [| cap <= LENGTH_MAX |] && 
   store_uint_array ptr (Zlength data) data **
   store_undef_uint_array_rec ptr ((Zlength data) + 1) cap.
 
@@ -46,7 +47,7 @@ Definition list_store_Z (data: list Z) (n: Z): Prop :=
 
 Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) (cap: Z): Assertion :=
   EX data,
-    mpd_store_list ptr data cap && [| list_store_Z data n|] && [| size = Zlength data |].
+    mpd_store_list ptr data cap && [| list_store_Z data n |] && [| size = Zlength data |].
 
 Lemma __list_within_bound_concat_r: forall (l1: list Z) (a: Z),
   list_within_bound l1 ->

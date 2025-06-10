@@ -5,7 +5,7 @@
 
 int gmp_abs(int x)
 /*@
-  Require emp
+  Require INT_MIN < x && x <= INT_MAX
   Ensure __return == Zabs(x)
 */
 {
@@ -25,9 +25,10 @@ int gmp_cmp(int a, int b)
 /*@
   Require emp
   Ensure 
-    a > b && __return == 1 || 
+    emp * 
+    (a > b && __return == 1 || 
     a == b && __return == 0 ||
-    a < b && __return == -1
+    a < b && __return == -1)
 */
 {
   return (a > b) - (a < b);
@@ -39,25 +40,60 @@ int gmp_cmp(int a, int b)
 void
 mpn_copyi (unsigned int *d, unsigned int *s, int n)
 /*@
-  With val data cap1 cap2
+  With val l2 cap1 cap2
   Require
     mpd_store_Z(s, val, n, cap1) *
-    store_uint_array(d, cap2, data)
+    store_uint_array(d, cap2, l2) &&
+    Zlength(l2) == cap2 &&
+    cap2 >= n
   Ensure 
     mpd_store_Z(s, val, n, cap1) *
     mpd_store_Z(d, val, n, cap2)
 */
 {
-  /*
+  /*@
     mpd_store_Z(s, val, n, cap1)
     which implies
     exists l,
-      store_uint_array(s, n, l) **
-      store_undef
+      n <= cap1 && 
+      Zlength(l) == n &&
+      cap1 <= 100000000 &&
+      store_uint_array(s, n, l) *
+      store_undef_uint_array_rec(s, n + 1, cap1) &&
+      list_store_Z(l, val)
+  */
+  /*@
+    store_uint_array(d, cap2, l2) && Zlength(l2) == cap2
+    which implies
+    store_uint_array_rec(d, 0, cap2, l2) * store_uint_array(d, 0, nil) &&
+    Zlength(l2) == cap2
   */
   int i;
-  for (i = 0; i < n; i++)
-    d[i] = s[i];
+    /*@ Inv
+    exists l l',
+    0 <= i && i <= n && Zlength(l) == n && 
+    list_store_Z(l, val) && n <= cap1 && 
+    store_uint_array(s, n, l) *
+    store_undef_uint_array_rec(s, n + 1, cap1) * 
+    store_uint_array(d, i, sublist(0, i, l)) * 
+    store_uint_array_rec(d, i, cap2, l')
+  */
+  for (i = 0; i < n; i++) {
+      /*@
+        Given l l'
+      */
+      /*@
+        0 <= i && i < n && n <= cap2 &&
+        store_uint_array_rec(d, i, cap2, l') *
+        store_uint_array(d, i, sublist(0, i, l))
+        which implies
+        exists a l2',
+        l' == cons(a, l2') && i < n && n <= cap2 &&
+        store_uint_array_rec(d, i + 1, cap2, l2') *
+        store_uint_array(d, i + 1, app(sublist(0, i, l), cons(a, nil)))
+      */
+      d[i] = s[i];
+  }
 }
 
 /* 大于返回1，小于返回-1，等于返回0 */
@@ -66,19 +102,53 @@ mpn_cmp (unsigned int *ap, unsigned int *bp, int n)
 /*@
   With cap1 cap2 val1 val2
   Require
-    mpd_store_Z(ap, val1, n, cap1) **
-    mpd_store_Z(bp, val2, n, cap2)
+    mpd_store_Z(ap, val1, n, cap1) *
+    mpd_store_Z(bp, val2, n, cap2) &&
+    n <= cap1 && n <= cap2
   Ensure
     val1 > val2 && __return == 1 ||
     val1 == val2 && __return == 0 ||
     val1 < val2 && __return == -1
 */
 {
+  /*@
+    mpd_store_Z(ap, val1, n, cap1) * mpd_store_Z(bp, val2, n, cap2)
+    which implies
+    exists l1 l2,
+    mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2) &&
+    list_store_Z(l1, val1) && list_store_Z(l2, val2) &&
+    n == Zlength(l1) && n == Zlength(l2)
+  */
+  /*@
+    Given l1 l2
+  */
+  --n;
+  /*@Inv
+    mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2) &&
+    list_store_Z(l1, val1) && list_store_Z(l2, val2) &&
+    n@pre == Zlength(l1) && n@pre == Zlength(l2) &&
+    sublist(n, n@pre, l1) == sublist(n, n@pre, l2)
+  */
+  while (n >= 0)
+    {
+      /*@
+        mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2)
+        which implies
+        store_uint_array(ap, n, l1) * store_uint_array(bp, n, l2) *
+        store_undef_uint_array(ap, n + 1, cap1) * store_uint_array(bp, n + 1, cap2) &&
+      */
+      if (ap[n] != bp[n])
+	      return ap[n] > bp[n] ? 1 : -1;
+      --n;
+    }
+  // Note: The parser cannot parse "--n" in loop so we paraphrased it.
+  /*
   while (--n >= 0)
     {
       if (ap[n] != bp[n])
 	return ap[n] > bp[n] ? 1 : -1;
     }
+  */
   return 0;
 }
 

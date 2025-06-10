@@ -37,7 +37,9 @@ PV_FILE_NAMES = \
 
 PV_FILES=$(PV_FILE_NAMES:%.v=$(PV_DIR)/%.v)
 
-GMP_FILES = ./projects/lib/GmpAux.v ./projects/lib/GmpNumber.v
+GMP_FILES = \
+	./projects/lib/GmpAux.v ./projects/lib/GmpNumber.v \
+	./projects/lib/gmp_goal.v
 
 FILES = $(PV_FILES) \
   $(GMP_FILES)

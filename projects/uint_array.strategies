@@ -9,7 +9,7 @@
 id : 1
 priority : core(1)
 left : store_uint_array(?p, ?n, ?l) at 0
-right : data_at(?p + (?i * sizeof(I32)), I32, ?v) at 1
+right : data_at(?p + (?i * sizeof(U32)), U32, ?v) at 1
 check : infer(0 <= i);
         infer(i < n);
 action : right_erase(1);
@@ -20,7 +20,7 @@ action : right_erase(1);
 id : 2
 priority : post(1)
 left : store_uint_array_missing_i_rec(?p, ?i, 0, ?n, ?l) at 0
-       data_at(p + i * sizeof(I32), I32, l[i]) at 1
+       data_at(p + i * sizeof(U32), U32, l[i]) at 1
 check : infer(0 <= i);
         infer(i < n);
 action : left_erase(1);
@@ -30,7 +30,7 @@ action : left_erase(1);
 id : 3
 priority : post(3)
 left : store_uint_array_missing_i_rec(?p, ?i, 0, ?n, ?l) at 0
-       data_at(p + i * sizeof(I32), I32, ?v) at 1
+       data_at(p + i * sizeof(U32), U32, ?v) at 1
 check : infer(0 <= i);
         infer(i < n);
 action : left_erase(1);
@@ -65,7 +65,7 @@ action : right_erase(1);
 id : 7
 priority : core(1)
 left : store_uint_array_rec(?p, ?x, ?y, ?l) at 0
-right : data_at(?p + (?i * sizeof(I32)), I32, ?v) at 1
+right : data_at(?p + (?i * sizeof(U32)), U32, ?v) at 1
 check : infer(x <= i);
         infer(i < y);
 action : right_erase(1);
@@ -108,7 +108,7 @@ action : right_erase(0);
 id : 11
 priority : post(1)
 left : store_uint_array_missing_i_rec(?p, ?i, ?x, ?y, ?l) at 0
-       data_at(p + ?i * sizeof(I32), I32, l[?i - ?x]) at 1
+       data_at(p + ?i * sizeof(U32), U32, l[?i - ?x]) at 1
 check : infer(x <= i);
         infer(i < y);
 action : left_erase(1);
@@ -118,7 +118,7 @@ action : left_erase(1);
 id : 12
 priority : post(4)
 left : store_uint_array_missing_i_rec(?p, ?i, ?x, ?y, ?l) at 0
-       data_at(p + ?i * sizeof(I32), I32, ?v) at 1
+       data_at(p + ?i * sizeof(U32), U32, ?v) at 1
 check : infer(x <= i);
         infer(i < y);
 action : left_erase(1);

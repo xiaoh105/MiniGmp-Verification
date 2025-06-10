@@ -100,5 +100,91 @@ Proof.
     rewrite IHl1.
     reflexivity.
 Qed.
+
+Lemma store_array_rec_false: forall x storeA lo hi (l: list Z),
+  lo > hi ->
+  store_array_rec storeA x lo hi l |-- [| False |].
+Proof.
+  intros.
+  revert x storeA lo hi H.
+  induction l; intros.
+  + simpl.
+    entailer!.
+  + simpl.
+    specialize (IHl x storeA (lo + 1) hi ltac:(lia)).
+    sep_apply IHl.
+    entailer!.
+Qed.
+
+Lemma store_array_rec_empty: forall x storeA lo (l: list Z),
+  store_array_rec storeA x lo lo l |-- emp && [| l = nil |].
+Proof.
+  intros.
+  destruct l.
+  + simpl.
+    entailer!.
+  + simpl.
+    sep_apply store_array_rec_false; [ entailer! | lia ].
+Qed.
+
+Lemma store_uint_array_rec_false: forall x lo hi l,
+  lo > hi ->
+  store_uint_array_rec x lo hi l |-- [| False |].
+Proof.
+  intros.
+  unfold store_uint_array_rec.
+  sep_apply store_array_rec_false; [ entailer! | lia ].
+Qed.
+
+Lemma store_uint_array_rec_empty: forall x lo l,
+  store_uint_array_rec x lo lo l |-- emp && [| l = nil |].
+Proof.
+  induction l.
+  + unfold store_uint_array_rec.
+    simpl.
+    entailer!.
+  + pose proof (store_uint_array_rec_false x (lo + 1) lo l ltac:(lia)).
+    unfold store_uint_array_rec in *.
+    simpl in *.
+    sep_apply H.
+    entailer!.
+Qed.
+
+Lemma store_uint_array_empty: forall x l,
+  store_uint_array x 0 l |-- emp && [| l = nil |].
+Proof.
+  intros x l.
+  revert x.
+  induction l; intros.
+  + unfold store_uint_array, store_array.
+    simpl.
+    entailer!.
+  + unfold store_uint_array, store_array.
+    simpl.
+    sep_apply store_array_rec_false; [ entailer! | lia ].
+Qed.
+
+Lemma store_uarray_rec_equals_store_uarray: forall x lo hi l,
+  lo < hi ->
+  store_uint_array_rec x lo hi l --||--
+    store_uint_array (x + sizeof(UINT) * lo) (hi - lo) l.
+Proof.
+  intros.
+  unfold store_uint_array_rec, store_uint_array, store_array.
+  pose proof (store_array_rec_base x 0 lo hi l (sizeof(UINT))
+    store_uint
+    (fun (x: addr) (lo a: Z) => 
+      (x + lo * sizeof(UINT)) # UInt |-> a) ltac:(reflexivity)).
+  assert (x + sizeof(UINT) * lo = x + lo * sizeof(UINT)). { lia. }
+  rewrite H1; clear H1.
+  assert (0 + lo = lo). { lia. }
+  repeat rewrite H1 in H0; clear H1.
+  destruct H0.
+  split.
+  + sep_apply H0.
+    entailer!.
+  + sep_apply H1.
+    entailer!.
+Qed.
       
 End Aux.
