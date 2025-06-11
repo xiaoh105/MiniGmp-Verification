@@ -101,6 +101,17 @@ Proof.
     reflexivity.
 Qed.
 
+Lemma list_app_single_l: forall (l: list Z) (a: Z),
+  ([a] ++ l)%list = a :: l.
+Proof.
+  intros.
+  induction l.
+  + simpl; reflexivity.
+  + rewrite list_app_cons.
+    simpl.
+    reflexivity.
+Qed.
+
 Lemma store_array_rec_false: forall x storeA lo hi (l: list Z),
   lo > hi ->
   store_array_rec storeA x lo hi l |-- [| False |].

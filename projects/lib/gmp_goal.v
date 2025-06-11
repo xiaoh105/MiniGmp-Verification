@@ -9,8 +9,8 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-Require Import GmpLib.GmpNumber. Import Internal.
 Require Import Logic.LogicGenerator.demo932.Interface.
+Require Import GmpLib.GmpNumber. Import Internal.
 Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
@@ -591,6 +591,562 @@ forall (cap2: Z) (l': (@list Z)) (l: (@list Z)) (i: Z) (n: Z) (d: Z) ,
   **  (store_uint_array d (i + 1 ) (app ((sublist (0) (i) (l))) ((cons (a) (nil)))) )
 .
 
+(*----- Function mpn_cmp -----*)
+
+Definition mpn_cmp_safety_wit_1 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) ,
+  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| ((n_pre - 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (n_pre - 1 )) |]
+.
+
+Definition mpn_cmp_safety_wit_2 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpn_cmp_safety_wit_3 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) <= (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| (1 <> (INT_MIN)) |]
+.
+
+Definition mpn_cmp_safety_wit_4 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) <= (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition mpn_cmp_safety_wit_5 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) > (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition mpn_cmp_safety_wit_6 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) = (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| ((n - 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (n - 1 )) |]
+.
+
+Definition mpn_cmp_safety_wit_7 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| (n < 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+  **  ((( &( "bp" ) )) # Ptr  |-> bp_pre)
+  **  ((( &( "ap" ) )) # Ptr  |-> ap_pre)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpn_cmp_entail_wit_1 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) ,
+  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  [| ((-1) <= (n_pre - 1 )) |] 
+  &&  [| ((n_pre - 1 ) < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist (((n_pre - 1 ) + 1 )) (n_pre) (l1)) = (sublist (((n_pre - 1 ) + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+.
+
+Definition mpn_cmp_entail_wit_2 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) = (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  [| ((-1) <= (n - 1 )) |] 
+  &&  [| ((n - 1 ) < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist (((n - 1 ) + 1 )) (n_pre) (l1)) = (sublist (((n - 1 ) + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+.
+
+Definition mpn_cmp_return_wit_1_1 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) <= (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  ([| (val1 < val2) |] 
+  &&  [| ((-1) = (-1)) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 = val2) |] 
+  &&  [| ((-1) = 0) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 > val2) |] 
+  &&  [| ((-1) = 1) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+.
+
+Definition mpn_cmp_return_wit_1_2 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| ((Znth n l1 0) > (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array bp_pre n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  ([| (val1 < val2) |] 
+  &&  [| (1 = (-1)) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 = val2) |] 
+  &&  [| (1 = 0) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 > val2) |] 
+  &&  [| (1 = 1) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+.
+
+Definition mpn_cmp_return_wit_2 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| (n < 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  ([| (val1 < val2) |] 
+  &&  [| (0 = (-1)) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 = val2) |] 
+  &&  [| (0 = 0) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+  ||
+  ([| (val1 > val2) |] 
+  &&  [| (0 = 1) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 ))
+.
+
+Definition mpn_cmp_partial_solve_wit_1 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) ,
+  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 )
+|--
+  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 )
+.
+
+Definition mpn_cmp_partial_solve_wit_2 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (((ap_pre + (n * sizeof(UINT) ) )) # UInt  |-> (Znth n l1 0))
+  **  (store_uint_array_missing_i_rec ap_pre n 0 n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+.
+
+Definition mpn_cmp_partial_solve_wit_3 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (l1: (@list Z)) (n: Z) ,
+  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+|--
+  [| (n >= 0) |] 
+  &&  [| ((-1) <= n) |] 
+  &&  [| (n < n_pre) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
+  &&  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre <= cap1) |] 
+  &&  [| (n_pre <= cap2) |] 
+  &&  [| (cap1 <= 100000000) |] 
+  &&  [| (cap2 <= 100000000) |]
+  &&  (((bp_pre + (n * sizeof(UINT) ) )) # UInt  |-> (Znth n l2 0))
+  **  (store_uint_array_missing_i_rec bp_pre n 0 n_pre l2 )
+  **  (store_uint_array ap_pre n_pre l1 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+.
+
+Definition mpn_cmp_which_implies_wit_1 := 
+forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (cap2: Z) (cap1: Z) ,
+  (mpd_store_Z ap_pre val1 n_pre cap1 )
+  **  (mpd_store_Z bp_pre val2 n_pre cap2 )
+|--
+  EX (l2: (@list Z))  (l1: (@list Z)) ,
+  [| (list_store_Z l1 val1 ) |] 
+  &&  [| (list_store_Z l2 val2 ) |] 
+  &&  [| (n_pre = (Zlength (l1))) |] 
+  &&  [| (n_pre = (Zlength (l2))) |]
+  &&  (store_uint_array ap_pre n_pre l1 )
+  **  (store_uint_array bp_pre n_pre l2 )
+  **  (store_undef_uint_array_rec ap_pre (n_pre + 1 ) cap1 )
+  **  (store_undef_uint_array_rec bp_pre (n_pre + 1 ) cap2 )
+.
+
 Module Type VC_Correct.
 
 Axiom proof_of_gmp_abs_safety_wit_1 : gmp_abs_safety_wit_1.
@@ -620,5 +1176,21 @@ Axiom proof_of_mpn_copyi_partial_solve_wit_5 : mpn_copyi_partial_solve_wit_5.
 Axiom proof_of_mpn_copyi_which_implies_wit_1 : mpn_copyi_which_implies_wit_1.
 Axiom proof_of_mpn_copyi_which_implies_wit_2 : mpn_copyi_which_implies_wit_2.
 Axiom proof_of_mpn_copyi_which_implies_wit_3 : mpn_copyi_which_implies_wit_3.
+Axiom proof_of_mpn_cmp_safety_wit_1 : mpn_cmp_safety_wit_1.
+Axiom proof_of_mpn_cmp_safety_wit_2 : mpn_cmp_safety_wit_2.
+Axiom proof_of_mpn_cmp_safety_wit_3 : mpn_cmp_safety_wit_3.
+Axiom proof_of_mpn_cmp_safety_wit_4 : mpn_cmp_safety_wit_4.
+Axiom proof_of_mpn_cmp_safety_wit_5 : mpn_cmp_safety_wit_5.
+Axiom proof_of_mpn_cmp_safety_wit_6 : mpn_cmp_safety_wit_6.
+Axiom proof_of_mpn_cmp_safety_wit_7 : mpn_cmp_safety_wit_7.
+Axiom proof_of_mpn_cmp_entail_wit_1 : mpn_cmp_entail_wit_1.
+Axiom proof_of_mpn_cmp_entail_wit_2 : mpn_cmp_entail_wit_2.
+Axiom proof_of_mpn_cmp_return_wit_1_1 : mpn_cmp_return_wit_1_1.
+Axiom proof_of_mpn_cmp_return_wit_1_2 : mpn_cmp_return_wit_1_2.
+Axiom proof_of_mpn_cmp_return_wit_2 : mpn_cmp_return_wit_2.
+Axiom proof_of_mpn_cmp_partial_solve_wit_1 : mpn_cmp_partial_solve_wit_1.
+Axiom proof_of_mpn_cmp_partial_solve_wit_2 : mpn_cmp_partial_solve_wit_2.
+Axiom proof_of_mpn_cmp_partial_solve_wit_3 : mpn_cmp_partial_solve_wit_3.
+Axiom proof_of_mpn_cmp_which_implies_wit_1 : mpn_cmp_which_implies_wit_1.
 
 End VC_Correct.

@@ -49,6 +49,19 @@ Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) (cap: Z): Assertion :=
   EX data,
     mpd_store_list ptr data cap && [| list_store_Z data n |] && [| size = Zlength data |].
 
+Lemma list_store_Z_injection: forall l1 l2 n1 n2,
+  list_store_Z l1 n1 ->
+  list_store_Z l2 n2 ->
+  l1 = l2 -> n1 = n2.
+Proof.
+  intros.
+  unfold list_store_Z in *.
+  destruct H, H0.
+  rewrite <-H, <-H0.
+  rewrite <-H1.
+  reflexivity.
+Qed.
+
 Lemma __list_within_bound_concat_r: forall (l1: list Z) (a: Z),
   list_within_bound l1 ->
   0 <= a < UINT_MOD ->
@@ -348,6 +361,93 @@ Proof.
       assert (1 + (i - 1) = i). { lia. }
       rewrite H6.
       reflexivity.
+Qed.
+
+Lemma list_store_Z_cmp: forall l1 l2 n1 n2 i,
+  0 <= i < Zlength l1 ->
+  Zlength l1 = Zlength l2 ->
+  list_store_Z l1 n1 ->
+  list_store_Z l2 n2 ->
+  sublist (i + 1) (Zlength l1) l1 = sublist (i + 1) (Zlength l2) l2 ->
+  Znth i l1 0 < Znth i l2 0 ->
+  n1 < n2.
+Proof.
+  intros.
+  assert (Zlength l1 = Z.of_nat (Datatypes.length l1)). { apply Zlength_correct. }
+  pose proof (sublist_split 0 (Zlength l1) i l1 ltac:(lia) ltac:(lia)).
+  assert (Zlength l2 = Z.of_nat (Datatypes.length l2)). { apply Zlength_correct. }
+  pose proof (sublist_split 0 (Zlength l2) i l2 ltac:(lia) ltac:(lia)).
+  clear H5 H7.
+  rewrite (sublist_self l1 (Zlength l1) ltac:(lia)) in H6.
+  rewrite (sublist_self l2 (Zlength l2) ltac:(lia)) in H8.
+  rewrite H6 in H1.
+  rewrite H8 in H2.
+  apply list_store_Z_split in H1, H2.
+  remember (Zlength l1) as n eqn:Hn.
+  assert (Zlength l2 = n). { lia. }
+  rewrite H5 in *.
+  rewrite Zlength_sublist0 in H1, H2; try lia.
+  destruct H1, H2.
+  remember (n1 mod UINT_MOD ^ i) as n1_lo eqn:Hn1_lo.
+  remember (n1 / UINT_MOD ^ i) as n1_hi eqn:Hn1_hi.
+  remember (n2 mod UINT_MOD ^ i) as n2_lo eqn:Hn2_lo.
+  remember (n2 / UINT_MOD ^ i) as n2_hi eqn:Hn2_hi.
+  remember (sublist 0 i l1) as l1_lo eqn:Hl1_lo.
+  remember (sublist i n l1) as l1_hi eqn:Hl1_hi.
+  remember (sublist 0 i l2) as l2_lo eqn:Hl2_lo.
+  remember (sublist i n l2) as l2_hi eqn:Hl2_hi.
+  assert (n1_lo - n2_lo < UINT_MOD ^ i). {
+    pose proof (list_store_Z_bound l1_lo n1_lo H1).
+    pose proof (list_store_Z_bound l2_lo n2_lo H2).
+    rewrite Hl1_lo, Zlength_sublist0 in H10; lia.
+  }
+  assert (n2_hi - n1_hi >= 1). {
+    assert (Zlength l1_hi >= 1 /\ Zlength l2_hi >= 1). {
+      pose proof (Zlength_sublist i n l1 ltac:(lia)).
+      pose proof (Zlength_sublist i n l2 ltac:(lia)).
+      rewrite <-Hl1_hi in H11.
+      rewrite <-Hl2_hi in H12.
+      lia.
+    }
+    destruct H11.
+    destruct l1_hi, l2_hi; try rewrite Zlength_nil in *; try lia.
+    unfold list_store_Z in H7, H9.
+    destruct H7, H9.
+    simpl in H7, H9.
+    assert (forall a (l0 l: list Z), 
+      a :: l0 = sublist i n l -> 
+      Zlength l = n -> 
+      l0 = sublist (i + 1) n l /\ a = Znth i l 0
+      ). {
+      intros.
+      assert (n = Z.of_nat(Datatypes.length l)). { rewrite <-Zlength_correct. lia. }
+      pose proof (sublist_split i n (i + 1) l ltac:(lia) ltac:(lia)).
+      rewrite (sublist_single i l 0) in H18; try lia.
+      rewrite <-H15 in H18.
+      rewrite Aux.list_app_single_l in H18.
+      injection H18; intros.
+      rewrite H19, H20.
+      split; reflexivity.
+    }
+    pose proof (H15 z0 l2_hi l2 Hl2_hi ltac:(lia)).
+    specialize (H15 z l1_hi l1 Hl1_hi ltac:(lia)).
+    destruct H15, H16.
+    rewrite H15, H17 in H7.
+    rewrite H16, H18 in H9.
+    rewrite <-H3 in H9.
+    lia.
+  }
+  pose proof (Zmod_eq_full n1 (UINT_MOD ^ i) ltac:(lia)).
+  pose proof (Zmod_eq_full n2 (UINT_MOD ^ i) ltac:(lia)).
+  rewrite <-Hn1_lo, <-Hn1_hi in H12.
+  rewrite <-Hn2_lo, <-Hn2_hi in H13.
+  assert (n2_hi * UINT_MOD ^ i - n1_hi * UINT_MOD ^ i >= UINT_MOD ^ i). {
+    rewrite <-Z.mul_sub_distr_r.
+    pose proof (Zmult_ge_compat_r (n2_hi - n1_hi) 1 (UINT_MOD ^ i) ltac:(lia) ltac:(lia)).
+    rewrite Z.mul_1_l in H14.
+    lia.
+  }
+  lia.
 Qed.
 
 End Internal.

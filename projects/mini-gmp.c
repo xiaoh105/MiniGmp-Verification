@@ -104,44 +104,46 @@ mpn_cmp (unsigned int *ap, unsigned int *bp, int n)
   Require
     mpd_store_Z(ap, val1, n, cap1) *
     mpd_store_Z(bp, val2, n, cap2) &&
-    n <= cap1 && n <= cap2
+    0 < n && n <= cap1 && n <= cap2 && 
+    cap1 <= 100000000 && cap2 <= 100000000
   Ensure
-    val1 > val2 && __return == 1 ||
+    (val1 > val2 && __return == 1 ||
     val1 == val2 && __return == 0 ||
-    val1 < val2 && __return == -1
+    val1 < val2 && __return == -1) &&
+    mpd_store_Z(ap@pre, val1, n@pre, cap1) *
+    mpd_store_Z(bp@pre, val2, n@pre, cap2)
 */
 {
   /*@
-    mpd_store_Z(ap, val1, n, cap1) * mpd_store_Z(bp, val2, n, cap2)
+    mpd_store_Z(ap@pre, val1, n@pre, cap1) * mpd_store_Z(bp@pre, val2, n@pre, cap2)
     which implies
     exists l1 l2,
-    mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2) &&
+    store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
+    store_undef_uint_array_rec(ap@pre, n@pre + 1, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre + 1, cap2) &&
     list_store_Z(l1, val1) && list_store_Z(l2, val2) &&
-    n == Zlength(l1) && n == Zlength(l2)
+    n@pre == Zlength(l1) && n@pre == Zlength(l2)
   */
   /*@
     Given l1 l2
   */
   --n;
   /*@Inv
-    mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2) &&
+    -1 <= n && n < n@pre &&
+    store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
+    store_undef_uint_array_rec(ap@pre, n@pre + 1, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre + 1, cap2) &&
     list_store_Z(l1, val1) && list_store_Z(l2, val2) &&
     n@pre == Zlength(l1) && n@pre == Zlength(l2) &&
-    sublist(n, n@pre, l1) == sublist(n, n@pre, l2)
+    sublist(n + 1, n@pre, l1) == sublist(n + 1, n@pre, l2)
   */
   while (n >= 0)
     {
-      /*@
-        mpd_store_list(ap, l1, cap1) * mpd_store_list(bp, l2, cap2)
-        which implies
-        store_uint_array(ap, n, l1) * store_uint_array(bp, n, l2) *
-        store_undef_uint_array(ap, n + 1, cap1) * store_uint_array(bp, n + 1, cap2) &&
-      */
       if (ap[n] != bp[n])
 	      return ap[n] > bp[n] ? 1 : -1;
       --n;
     }
-  // Note: The parser cannot parse "--n" in loop so we paraphrased it.
+  // Note: The parser cannot parse "--n" in loop condition so we paraphrased it.
   /*
   while (--n >= 0)
     {

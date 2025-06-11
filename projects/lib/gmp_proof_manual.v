@@ -150,3 +150,94 @@ Proof.
     rewrite <-H4.
     sep_apply store_uint_array_rec_tail_merge; [ reflexivity | lia ].
 Qed.
+
+Lemma proof_of_mpn_cmp_safety_wit_1 : mpn_cmp_safety_wit_1.
+Proof.
+  pre_process.
+Qed.
+
+Lemma proof_of_mpn_cmp_entail_wit_1 : mpn_cmp_entail_wit_1.
+Proof.
+  pre_process.
+  entailer!.
+  assert (n_pre - 1 + 1 = n_pre). { lia. }
+  rewrite H8; clear H8.
+  pose proof (Zlength_sublist n_pre n_pre l1 ltac:(lia)).
+  pose proof (Zlength_nil_inv (sublist n_pre n_pre l1) ltac:(lia)).
+  rewrite H9.
+  pose proof (Zlength_sublist n_pre n_pre l2 ltac:(lia)).
+  pose proof (Zlength_nil_inv (sublist n_pre n_pre l2) ltac:(lia)).
+  rewrite H11.
+  reflexivity.
+Qed.
+
+Lemma proof_of_mpn_cmp_entail_wit_2 : mpn_cmp_entail_wit_2.
+Proof.
+  pre_process.
+  entailer!; try lia.
+  assert (n - 1 + 1 = n). { lia. }
+  rewrite H17; clear H17.
+  assert (n_pre <= Z.of_nat (Datatypes.length l1)). {
+    rewrite <-Zlength_correct.
+    lia.
+  }
+  assert (n_pre <= Z.of_nat (Datatypes.length l2)). {
+    rewrite <-Zlength_correct.
+    lia.
+  }
+  rewrite (sublist_split n n_pre (n + 1) l1 ltac:(lia) ltac:(lia)).
+  rewrite (sublist_split n n_pre (n + 1) l2 ltac:(lia) ltac:(lia)).
+  rewrite (sublist_single n l1 0 ltac:(lia)).
+  rewrite (sublist_single n l2 0 ltac:(lia)).
+  rewrite H.
+  rewrite H7.
+  reflexivity.
+Qed.
+
+Lemma proof_of_mpn_cmp_return_wit_1_1 : mpn_cmp_return_wit_1_1.
+Proof.
+  pre_process.
+  entailer!.
+  repeat rewrite <-derivable1_orp_intros1.
+  entailer!.
+  + unfold mpd_store_Z.
+    Exists l1 l2.
+    unfold mpd_store_list.
+    entailer!.
+    rewrite <-H6, <-H7.
+    entailer!.
+  + assert (Znth n l1 0 < Znth n l2 0). { lia. }
+    clear H H0.
+    apply (list_store_Z_cmp l1 l2 val1 val2 n ltac:(lia) ltac:(lia) H4 H5).
+    - rewrite <-H6, <-H7.
+      tauto.
+    - lia.
+Qed.
+
+Lemma proof_of_mpn_cmp_return_wit_1_2 : mpn_cmp_return_wit_1_2.
+Proof.
+  pre_process.
+  rewrite <-derivable1_orp_intros2.
+  entailer!.
+  + unfold mpd_store_Z, mpd_store_list.
+    Exists l1 l2.
+    rewrite <-H6, <-H7.
+    entailer!.
+  + pose proof (list_store_Z_cmp l2 l1 val2 val1 n ltac:(lia) ltac:(lia) H5 H4).
+    rewrite <-H6, <-H7 in H18.
+    rewrite H8 in H18.
+    specialize (H18 ltac:(reflexivity) ltac:(lia)).
+    lia.
+Qed.
+
+Lemma proof_of_mpn_cmp_which_implies_wit_1 : mpn_cmp_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold mpd_store_Z.
+  Intros l1 l2.
+  Exists l2 l1.
+  unfold mpd_store_list.
+  entailer!.
+  rewrite <-H4, <-H6.
+  entailer!.
+Qed.

@@ -63,3 +63,33 @@ Proof. Admitted.
 Lemma proof_of_mpn_copyi_partial_solve_wit_5 : mpn_copyi_partial_solve_wit_5.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_cmp_safety_wit_1 : mpn_cmp_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_2 : mpn_cmp_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_3 : mpn_cmp_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_4 : mpn_cmp_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_5 : mpn_cmp_safety_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_6 : mpn_cmp_safety_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_safety_wit_7 : mpn_cmp_safety_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_partial_solve_wit_1 : mpn_cmp_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_partial_solve_wit_2 : mpn_cmp_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp_partial_solve_wit_3 : mpn_cmp_partial_solve_wit_3.
+Proof. Admitted. 
+
