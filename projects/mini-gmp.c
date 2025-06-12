@@ -59,7 +59,7 @@ mpn_copyi (unsigned int *d, unsigned int *s, int n)
       Zlength(l) == n &&
       cap1 <= 100000000 &&
       store_uint_array(s, n, l) *
-      store_undef_uint_array_rec(s, n + 1, cap1) &&
+      store_undef_uint_array_rec(s, n, cap1) &&
       list_store_Z(l, val)
   */
   /*@
@@ -74,7 +74,7 @@ mpn_copyi (unsigned int *d, unsigned int *s, int n)
     0 <= i && i <= n && Zlength(l) == n && 
     list_store_Z(l, val) && n <= cap1 && 
     store_uint_array(s, n, l) *
-    store_undef_uint_array_rec(s, n + 1, cap1) * 
+    store_undef_uint_array_rec(s, n, cap1) * 
     store_uint_array(d, i, sublist(0, i, l)) * 
     store_uint_array_rec(d, i, cap2, l')
   */
@@ -119,8 +119,8 @@ mpn_cmp (unsigned int *ap, unsigned int *bp, int n)
     which implies
     exists l1 l2,
     store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
-    store_undef_uint_array_rec(ap@pre, n@pre + 1, cap1) * 
-    store_undef_uint_array_rec(bp@pre, n@pre + 1, cap2) &&
+    store_undef_uint_array_rec(ap@pre, n@pre, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre, cap2) &&
     list_store_Z_compact(l1, val1) && list_store_Z_compact(l2, val2) &&
     n@pre == Zlength(l1) && n@pre == Zlength(l2)
   */
@@ -131,8 +131,8 @@ mpn_cmp (unsigned int *ap, unsigned int *bp, int n)
   /*@Inv
     -1 <= n && n < n@pre &&
     store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
-    store_undef_uint_array_rec(ap@pre, n@pre + 1, cap1) * 
-    store_undef_uint_array_rec(bp@pre, n@pre + 1, cap2) &&
+    store_undef_uint_array_rec(ap@pre, n@pre, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre, cap2) &&
     list_store_Z_compact(l1, val1) && list_store_Z_compact(l2, val2) &&
     n@pre == Zlength(l1) && n@pre == Zlength(l2) &&
     sublist(n + 1, n@pre, l1) == sublist(n + 1, n@pre, l2)
@@ -186,13 +186,41 @@ mpn_cmp4 (unsigned int *ap, int an, unsigned int *bp, int bn)
 
 
 /*返回非0的位数*/
-/*static int
+static int
 mpn_normalized_size (unsigned int *xp, int n)
+/*@
+  With cap val
+  Require
+    mpd_store_Z(xp, val, n, cap) &&
+    0 <= n && n <= cap && cap <= 100000000
+  Ensure
+    0 <= __return && __return <= cap &&
+    mpd_store_Z_compact(xp@pre, val, __return, cap)
+*/
 {
+  /*@
+    mpd_store_Z(xp@pre, val, n, cap)
+    which implies
+    exists l,
+    list_store_Z(sublist(0, n, l), val) &&
+    Zlength(l) == n &&
+    store_uint_array(xp@pre, n, sublist(0, n, l)) *
+    store_undef_uint_array_rec(xp@pre, n, cap)
+  */
+  /*@
+    Given l
+  */
+  /*@Inv
+    n >= 0 && n <= n@pre && 
+    n@pre >= 0 && n@pre <= cap && cap <= 100000000 &&
+    list_store_Z(sublist(0, n, l), val) &&
+    store_uint_array(xp@pre, n, sublist(0, n, l)) *
+    store_undef_uint_array_rec(xp@pre, n, cap)
+  */
   while (n > 0 && xp[n-1] == 0)
     --n;
   return n;
-}*/
+}
 
 /* 多精度数ap 加上单精度数b，返回最后产生的进位 */
 /*unsigned int

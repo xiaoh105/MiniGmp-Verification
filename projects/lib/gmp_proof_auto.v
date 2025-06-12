@@ -117,3 +117,27 @@ Proof. Admitted.
 Lemma proof_of_mpn_cmp4_which_implies_wit_1 : mpn_cmp4_which_implies_wit_1.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_normalized_size_safety_wit_1 : mpn_normalized_size_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_safety_wit_2 : mpn_normalized_size_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_safety_wit_3 : mpn_normalized_size_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_safety_wit_4 : mpn_normalized_size_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_safety_wit_5 : mpn_normalized_size_safety_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_entail_wit_1 : mpn_normalized_size_entail_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_partial_solve_wit_1 : mpn_normalized_size_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_normalized_size_partial_solve_wit_2 : mpn_normalized_size_partial_solve_wit_2.
+Proof. Admitted. 
+

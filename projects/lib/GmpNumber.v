@@ -28,7 +28,7 @@ Module Internal.
 Definition mpd_store_list (ptr: addr) (data: list Z) (cap: Z): Assertion :=
   [| Zlength data <= cap |] && [| cap <= LENGTH_MAX |] && 
   store_uint_array ptr (Zlength data) data **
-  store_undef_uint_array_rec ptr ((Zlength data) + 1) cap.
+  store_undef_uint_array_rec ptr (Zlength data) cap.
 
 Fixpoint list_to_Z (data: list Z): Z :=
   match data with
@@ -50,7 +50,7 @@ Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) (cap: Z): Assertion :=
     [| list_store_Z data n |] && [| size = Zlength data |] && mpd_store_list ptr data cap.
 
 Definition list_store_Z_compact (data: list Z) (n: Z): Prop :=
-  list_to_Z data = n /\ last data 0 >= 1 /\ list_within_bound data.
+  list_to_Z data = n /\ last data 1 >= 1 /\ list_within_bound data.
 
 Definition mpd_store_Z_compact (ptr: addr) (n size cap: Z): Assertion :=
   EX data,
@@ -58,7 +58,7 @@ Definition mpd_store_Z_compact (ptr: addr) (n size cap: Z): Assertion :=
 
 Lemma list_store_Z_normal_to_compact: forall (data: list Z) (n: Z),
   list_store_Z data n -> 
-  last data 0 >= 1 ->
+  last data 1 >= 1 ->
   list_store_Z_compact data n.
 Proof.
   unfold list_store_Z_compact, list_store_Z.
@@ -120,6 +120,29 @@ Proof.
     pose proof (__list_within_bound_concat_r l1 a H H0).
     specialize (IHl2 H1 (app l1 [a]) H2).
     tauto.
+Qed.
+
+Lemma list_within_bound_Znth: forall (l: list Z) (i: Z),
+  0 <= i < Zlength l ->
+  list_within_bound l ->
+  0 <= Znth i l 0 < UINT_MOD.
+Proof.
+  intros.
+  revert i H.
+  induction l; intros.
+  + rewrite Zlength_nil in H.
+    lia.
+  + assert (i = 0 \/ i > 0). { lia. }
+    destruct H1.
+    - rewrite H1.
+      rewrite (Znth0_cons a l 0).
+      simpl in H0.
+      lia.
+    - rewrite Znth_cons; try lia.
+      simpl in H0; destruct H0.
+      rewrite Zlength_cons in H; unfold Z.succ in H.
+      specialize (IHl H2 (i - 1) ltac:(lia)).
+      lia.
 Qed.
 
 Lemma __list_within_bound_split_r: forall (l1: list Z) (a: Z),
@@ -516,7 +539,7 @@ Proof.
       auto.
   }
   pose proof (list_store_Z_bound l2 n2 H1) as Hn2.
-  pose proof (@app_removelast_last Z l2 0 H4).
+  pose proof (@app_removelast_last Z l2 1 H4).
   rewrite H5 in H1.
   apply list_store_Z_split in H1; destruct H1.
   rewrite (Aux.Zlength_removelast l2) in H1, H6; try auto.

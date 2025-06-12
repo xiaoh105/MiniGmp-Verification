@@ -114,7 +114,7 @@ Qed.
 
 Lemma list_last_cons: forall (a: Z) (l: list Z),
   l <> nil ->
-  last (a :: l) 0 = last l 0.
+  last (a :: l) 1 = last l 1.
 Proof.
   intros.
   destruct l.
@@ -125,11 +125,11 @@ Qed.
 
 Lemma list_last_to_Znth: forall (l: list Z),
   l <> nil ->
-  last l 0 = Znth ((Zlength l) - 1) l 0.
+  last l 1 = Znth ((Zlength l) - 1) l 0.
 Proof.
   intros.
   induction l.
-  + auto.
+  + contradiction.
   + destruct l.
     - simpl.
       rewrite Znth0_cons.
@@ -236,8 +236,8 @@ Proof.
     sep_apply store_array_rec_false; [ entailer! | lia ].
 Qed.
 
-Lemma store_uarray_rec_equals_store_uarray: forall x lo hi l,
-  lo < hi ->
+Lemma uint_array_rec_to_uint_array: forall x lo hi l,
+  lo <= hi ->
   store_uint_array_rec x lo hi l --||--
     store_uint_array (x + sizeof(UINT) * lo) (hi - lo) l.
 Proof.
@@ -258,5 +258,88 @@ Proof.
   + sep_apply H1.
     entailer!.
 Qed.
-      
+
+Lemma store_uint_array_single: forall x n a,
+  store_uint_array_rec x n (n + 1) [a] --||--
+    (x + n * sizeof(UINT)) # UInt |-> a.
+Proof.
+  intros.
+  unfold store_uint_array_rec.
+  simpl.
+  split; entailer!.
+Qed.
+
+Lemma store_undef_uint_array_single: forall x n a,
+  (x + n * sizeof(UINT)) # UInt |-> a |--
+    store_undef_uint_array_rec x n (n + 1).
+Proof.
+  intros.
+  unfold store_undef_uint_array_rec.
+  assert (Z.to_nat (n + 1 - n) = S O). { lia. }
+  rewrite H; clear H.
+  simpl.
+  entailer!.
+  sep_apply store_uint_undef_store_uint.
+  entailer!.
+Qed.
+
+Lemma store_uint_array_single_to_undef: forall x n a,
+  store_uint_array_rec x n (n + 1) [a] |--
+    store_undef_uint_array_rec x n (n + 1).
+Proof.
+  intros.
+  pose proof (store_uint_array_single x n a).
+  destruct H as [H _].
+  sep_apply H.
+  sep_apply store_undef_uint_array_single.
+  entailer!.
+Qed.
+
+Lemma store_uint_array_divide_rec: forall x n l m,
+  0 <= m <= n ->
+  Zlength l = n ->
+  store_uint_array x n l --||--
+    store_uint_array x m (sublist 0 m l) **
+    store_uint_array_rec x m n (sublist m n l).
+Proof.
+  intros.
+  pose proof (store_uint_array_divide x n l m H H0).
+  pose proof (uint_array_rec_to_uint_array x m n (sublist m n l) ltac:(lia)).
+  destruct H2 .
+  destruct H1.
+  rewrite Z.mul_comm in H2, H3.
+  rewrite H3 in H1.
+  rewrite <-H2 in H4.
+  clear H2 H3.
+  split; tauto.
+Qed.
+
+Lemma store_undef_uint_array_rec_divide: forall x l mid r,
+  0 <= l <= r ->
+  l <= mid <= r ->
+  store_undef_uint_array_rec x l r --||--
+  store_undef_uint_array_rec x l mid ** store_undef_uint_array_rec x mid r.
+Proof.
+  intros.
+  unfold store_undef_uint_array_rec.
+  pose proof (store_undef_array_divide (x + l * sizeof(UINT)) (r - l) (mid - l) (sizeof(UINT))
+    (fun x => x # UInt |->_)
+    (fun x0 lo => (x0 + lo * sizeof(UINT)) # UInt |->_) ltac:(lia) ltac:(reflexivity)).
+  unfold store_undef_array in H1.
+  pose (fun (l: Z) (n: Z) (len: nat) => store_undef_array_rec_base x 0 l n len (sizeof(UINT))
+    (fun x => x # UInt |->_)
+    (fun x0 lo => (x0 + lo * sizeof(UINT)) # UInt |->_) ltac:(reflexivity)).
+  rewrite <-(l0 l r (Z.to_nat (r - l))) in H1.
+  rewrite <-(l0 l mid (Z.to_nat (mid - l))) in H1.
+  assert (r - l - (mid - l) = r - mid). { lia. }
+  rewrite H2 in H1; clear H2.
+  rewrite <-Z.add_assoc, <-Z.mul_add_distr_r in H1.
+  assert (l + (mid - l) = mid). { lia. }
+  rewrite H2 in H1; clear H2.
+  rewrite <-(l0 mid r (Z.to_nat (r - mid))) in H1.
+  repeat rewrite Z.add_0_l in H1.
+  clear l0.
+  rewrite H1.
+  split; entailer!.
+Qed.
 End Aux.
