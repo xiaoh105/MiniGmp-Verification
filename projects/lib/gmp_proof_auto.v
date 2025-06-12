@@ -93,3 +93,27 @@ Proof. Admitted.
 Lemma proof_of_mpn_cmp_partial_solve_wit_3 : mpn_cmp_partial_solve_wit_3.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_cmp4_safety_wit_1 : mpn_cmp4_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_safety_wit_2 : mpn_cmp4_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_safety_wit_3 : mpn_cmp4_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_partial_solve_wit_1_pure : mpn_cmp4_partial_solve_wit_1_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_partial_solve_wit_1 : mpn_cmp4_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_partial_solve_wit_2_pure : mpn_cmp4_partial_solve_wit_2_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_partial_solve_wit_2 : mpn_cmp4_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_cmp4_which_implies_wit_1 : mpn_cmp4_which_implies_wit_1.
+Proof. Admitted. 
+

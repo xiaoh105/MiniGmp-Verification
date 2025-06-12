@@ -198,9 +198,9 @@ Lemma proof_of_mpn_cmp_return_wit_1_1 : mpn_cmp_return_wit_1_1.
 Proof.
   pre_process.
   entailer!.
-  repeat rewrite <-derivable1_orp_intros1.
+  Left; Left.
   entailer!.
-  + unfold mpd_store_Z.
+  + unfold mpd_store_Z_compact.
     Exists l1 l2.
     unfold mpd_store_list.
     entailer!.
@@ -208,7 +208,7 @@ Proof.
     entailer!.
   + assert (Znth n l1 0 < Znth n l2 0). { lia. }
     clear H H0.
-    apply (list_store_Z_cmp l1 l2 val1 val2 n ltac:(lia) ltac:(lia) H4 H5).
+    apply (list_store_Z_compact_cmp l1 l2 val1 val2 n ltac:(lia) ltac:(lia) H4 H5).
     - rewrite <-H6, <-H7.
       tauto.
     - lia.
@@ -217,13 +217,13 @@ Qed.
 Lemma proof_of_mpn_cmp_return_wit_1_2 : mpn_cmp_return_wit_1_2.
 Proof.
   pre_process.
-  rewrite <-derivable1_orp_intros2.
+  Right.
   entailer!.
-  + unfold mpd_store_Z, mpd_store_list.
+  + unfold mpd_store_Z_compact, mpd_store_list.
     Exists l1 l2.
     rewrite <-H6, <-H7.
     entailer!.
-  + pose proof (list_store_Z_cmp l2 l1 val2 val1 n ltac:(lia) ltac:(lia) H5 H4).
+  + pose proof (list_store_Z_compact_cmp l2 l1 val2 val1 n ltac:(lia) ltac:(lia) H5 H4).
     rewrite <-H6, <-H7 in H18.
     rewrite H8 in H18.
     specialize (H18 ltac:(reflexivity) ltac:(lia)).
@@ -233,11 +233,67 @@ Qed.
 Lemma proof_of_mpn_cmp_which_implies_wit_1 : mpn_cmp_which_implies_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z.
+  unfold mpd_store_Z_compact.
   Intros l1 l2.
   Exists l2 l1.
   unfold mpd_store_list.
   entailer!.
-  rewrite <-H4, <-H6.
+  rewrite <-H0, <-H2.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpn_cmp4_return_wit_1_1 : mpn_cmp4_return_wit_1_1.
+Proof.
+  pre_process.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros l1 l2.
+  Exists l1 l2.
+  entailer!.
+  pose proof (list_store_Z_cmp_length l2 l1 val2 val1 ltac:(lia) H9 H7).
+  lia.
+Qed.
+
+Lemma proof_of_mpn_cmp4_return_wit_1_2 : mpn_cmp4_return_wit_1_2.
+Proof.
+  pre_process.
+  Left; Left.
+  unfold mpd_store_Z_compact.
+  entailer!.
+  Intros l1 l2.
+  Exists l1 l2.
+  entailer!.
+  pose proof (list_store_Z_cmp_length l1 l2 val1 val2 ltac:(lia) H7 H9).
+  lia.
+Qed.
+
+Lemma proof_of_mpn_cmp4_return_wit_2_1 : mpn_cmp4_return_wit_2_1.
+Proof.
+  pre_process.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros l1 l2.
+  Exists l1 l2.
+  entailer!.
+Qed.
+    
+
+Lemma proof_of_mpn_cmp4_return_wit_2_2 : mpn_cmp4_return_wit_2_2.
+Proof.
+  pre_process.
+  Left; Right.
+  unfold mpd_store_Z_compact.
+  Intros l1 l2.
+  Exists l1 l2.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpn_cmp4_return_wit_2_3 : mpn_cmp4_return_wit_2_3.
+Proof.
+  pre_process.
+  Left; Left.
+  unfold mpd_store_Z_compact.
+  Intros l1 l2.
+  Exists l1 l2.
   entailer!.
 Qed.

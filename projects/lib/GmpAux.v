@@ -112,6 +112,67 @@ Proof.
     reflexivity.
 Qed.
 
+Lemma list_last_cons: forall (a: Z) (l: list Z),
+  l <> nil ->
+  last (a :: l) 0 = last l 0.
+Proof.
+  intros.
+  destruct l.
+  + contradiction.
+  + simpl.
+    reflexivity.
+Qed.
+
+Lemma list_last_to_Znth: forall (l: list Z),
+  l <> nil ->
+  last l 0 = Znth ((Zlength l) - 1) l 0.
+Proof.
+  intros.
+  induction l.
+  + auto.
+  + destruct l.
+    - simpl.
+      rewrite Znth0_cons.
+      lia.
+    - pose proof (@nil_cons Z z l).
+      specialize (IHl ltac:(auto)); clear H0.
+      rewrite list_last_cons; [ | pose proof (@nil_cons Z z l); auto ].
+      rewrite IHl.
+      pose proof (Zlength_cons a (z :: l)).
+      unfold Z.succ in H0; rewrite H0; clear H0.
+      pose proof (Zlength_nonneg l).
+      pose proof (Zlength_cons z l); unfold Z.succ in H1.
+      pose proof (Znth_cons (Zlength (z :: l)) a (z :: l) 0 ltac:(lia)).
+      assert (Zlength (z :: l) + 1 - 1 = Zlength (z :: l)). { lia. }
+      rewrite H3; clear H3.
+      rewrite H2.
+      reflexivity.
+Qed.
+
+Lemma Zlength_removelast: forall (l: list Z),
+  l <> [] ->
+  Zlength (removelast l) = Zlength l - 1.
+Proof.
+  intros.
+  induction l.
+  + contradiction.
+  + destruct l.
+    - simpl.
+      rewrite Zlength_nil.
+      lia.
+    - pose proof (@nil_cons Z z l).
+      specialize (IHl ltac:(auto)).
+      assert (removelast (a :: z :: l) = a :: removelast(z :: l)). {
+        simpl.
+        reflexivity.
+      }
+      rewrite H1; clear H1.
+      repeat rewrite Zlength_cons; unfold Z.succ.
+      rewrite IHl.
+      rewrite Zlength_cons; unfold Z.succ.
+      lia.
+Qed.
+
 Lemma store_array_rec_false: forall x storeA lo hi (l: list Z),
   lo > hi ->
   store_array_rec storeA x lo hi l |-- [| False |].

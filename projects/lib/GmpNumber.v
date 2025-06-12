@@ -47,7 +47,34 @@ Definition list_store_Z (data: list Z) (n: Z): Prop :=
 
 Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) (cap: Z): Assertion :=
   EX data,
-    mpd_store_list ptr data cap && [| list_store_Z data n |] && [| size = Zlength data |].
+    [| list_store_Z data n |] && [| size = Zlength data |] && mpd_store_list ptr data cap.
+
+Definition list_store_Z_compact (data: list Z) (n: Z): Prop :=
+  list_to_Z data = n /\ last data 0 >= 1 /\ list_within_bound data.
+
+Definition mpd_store_Z_compact (ptr: addr) (n size cap: Z): Assertion :=
+  EX data,
+    [| list_store_Z_compact data n |] && [| size = Zlength data |] && mpd_store_list ptr data cap.
+
+Lemma list_store_Z_normal_to_compact: forall (data: list Z) (n: Z),
+  list_store_Z data n -> 
+  last data 0 >= 1 ->
+  list_store_Z_compact data n.
+Proof.
+  unfold list_store_Z_compact, list_store_Z.
+  intros.
+  tauto.
+Qed.
+
+Lemma list_store_Z_compact_to_normal: forall data n,
+  list_store_Z_compact data n ->
+  list_store_Z data n.
+Proof.
+  intros.
+  unfold list_store_Z_compact in H.
+  unfold list_store_Z.
+  tauto.
+Qed.
 
 Lemma list_store_Z_injection: forall l1 l2 n1 n2,
   list_store_Z l1 n1 ->
@@ -446,6 +473,95 @@ Proof.
     pose proof (Zmult_ge_compat_r (n2_hi - n1_hi) 1 (UINT_MOD ^ i) ltac:(lia) ltac:(lia)).
     rewrite Z.mul_1_l in H14.
     lia.
+  }
+  lia.
+Qed.
+
+Lemma list_store_Z_compact_cmp: forall l1 l2 n1 n2 i,
+  0 <= i < Zlength l1 ->
+  Zlength l1 = Zlength l2 ->
+  list_store_Z_compact l1 n1 ->
+  list_store_Z_compact l2 n2 ->
+  sublist (i + 1) (Zlength l1) l1 = sublist (i + 1) (Zlength l2) l2 ->
+  Znth i l1 0 < Znth i l2 0 ->
+  n1 < n2.
+Proof.
+  intros.
+  apply list_store_Z_compact_to_normal in H1, H2.
+  apply (list_store_Z_cmp l1 l2 n1 n2 i); tauto.
+Qed.
+
+Lemma list_store_Z_cmp_length: forall l1 l2 n1 n2,
+  Zlength l1 < Zlength l2 ->
+  list_store_Z_compact l1 n1 ->
+  list_store_Z_compact l2 n2 ->
+  n1 < n2.
+Proof.
+  intros.
+  unfold list_store_Z_compact in *.
+  destruct H0, H1, H2, H3.
+  assert (list_store_Z l1 n1 /\ list_store_Z l2 n2). {
+    unfold list_store_Z.
+    tauto.
+  }
+  clear H0 H1 H4 H5.
+  destruct H6.
+  assert (l2 <> []). {
+    pose proof (Zlength_nonneg l1).
+    assert (Zlength l2 >= 1). { lia. }
+    destruct l2.
+    + rewrite Zlength_nil in H5.
+      lia.
+    + pose proof (@nil_cons Z z l2).
+      auto.
+  }
+  pose proof (list_store_Z_bound l2 n2 H1) as Hn2.
+  pose proof (@app_removelast_last Z l2 0 H4).
+  rewrite H5 in H1.
+  apply list_store_Z_split in H1; destruct H1.
+  rewrite (Aux.Zlength_removelast l2) in H1, H6; try auto.
+  remember (Zlength l2 - 1) as n eqn:Hn.
+  unfold list_store_Z in H6; destruct H6.
+  simpl in H6.
+  assert (n2 >= UINT_MOD ^ n). {
+    assert (n2 / UINT_MOD ^ n >= 1). { lia. }
+    pose proof (Zmult_ge_compat_r (n2 / UINT_MOD ^ n) 1 (UINT_MOD ^ n) ltac:(lia) ltac:(lia)).
+    rewrite Z.mul_1_l in H9.
+    assert (n2 >= n2 / UINT_MOD ^ n * UINT_MOD ^ n). {
+      assert (n >= 0). { 
+        destruct l2.
+        + contradiction.
+        + rewrite Zlength_cons in Hn; unfold Z.succ in Hn.
+          pose proof (Zlength_nonneg l2).
+          lia.
+      }
+      pose proof (Zmod_eq n2 (UINT_MOD ^ n) ltac:(lia)).
+      assert (n2 mod UINT_MOD ^ n >= 0). {
+        pose proof (Z.mod_bound_pos n2 (UINT_MOD ^ n) ltac:(lia) ltac:(lia)).
+        lia.
+      }
+      lia.
+    }
+    lia.
+  }
+  assert (Zlength l1 <= n). { lia. }
+  pose proof (list_store_Z_bound l1 n1 H0).
+  assert (UINT_MOD ^ n >= UINT_MOD ^ (Zlength l1)). {
+    assert (Zlength l1 = n \/ Zlength l1 < n). { lia. }
+    destruct H11.
+    + rewrite H11.
+      lia.
+    + assert (n >= 0). { 
+        destruct l2.
+        + contradiction.
+        + rewrite Zlength_cons in Hn; unfold Z.succ in Hn.
+          pose proof (Zlength_nonneg l2).
+          lia.
+      }
+      pose proof (Z.pow_lt_mono_r_iff UINT_MOD (Zlength l1) n ltac:(lia) ltac:(lia)).
+      destruct H13 as [H13 _].
+      specialize (H13 H11).
+      lia.
   }
   lia.
 Qed.

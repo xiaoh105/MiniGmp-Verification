@@ -62,6 +62,9 @@ void mpz_set (mpz_t, const mpz_t);
   Extern Coq (Zabs : Z -> Z) 
              (Zmax : Z -> Z -> Z)
              (mpd_store_Z : Z -> Z -> Z -> Z -> Assertion)
+             (mpd_store_Z_compact: Z -> Z -> Z -> Z -> Assertion)
              (mpd_store_list : Z -> list Z -> Z -> Assertion)
              (list_store_Z : list Z -> Z -> Prop)
+             (list_store_Z_compact: list Z -> Z -> Prop)
+             (last: list Z -> Z -> Z)
 */
