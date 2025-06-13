@@ -1,14 +1,36 @@
 #include "mini-gmp.h"
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
 
-mp_size_t gmp_abs(mp_size_t x) {
+int gmp_abs(int x)
+/*@
+  Require INT_MIN < x && x <= INT_MAX
+  Ensure __return == Zabs(x)
+*/
+{
   return x >= 0 ? x : -x;
 }
 
-mp_size_t gmp_max(mp_size_t a, mp_size_t b) {
+int gmp_max(int a, int b)
+/*@
+  Require emp
+  Ensure __return == Zmax(a, b)
+*/
+{
   return a > b ? a : b;
 }
 
-int gmp_cmp(mp_size_t a, mp_size_t b) {
+int gmp_cmp(int a, int b)
+/*@
+  Require emp
+  Ensure 
+    emp * 
+    (a > b && __return == 1 || 
+    a == b && __return == 0 ||
+    a < b && __return == -1)
+*/
+{
   return (a > b) - (a < b);
 }
 
@@ -16,73 +38,219 @@ int gmp_cmp(mp_size_t a, mp_size_t b) {
 
 /* 从 低地址向高地址 顺序复制 */
 void
-mpn_copyi (mp_ptr d, mp_srcptr s, mp_size_t n)
+mpn_copyi (unsigned int *d, unsigned int *s, int n)
+/*@
+  With val l2 cap1 cap2
+  Require
+    mpd_store_Z(s, val, n, cap1) *
+    store_uint_array(d, cap2, l2) &&
+    Zlength(l2) == cap2 &&
+    cap2 >= n
+  Ensure 
+    mpd_store_Z(s, val, n, cap1) *
+    mpd_store_Z(d, val, n, cap2)
+*/
 {
-  mp_size_t i;
-  for (i = 0; i < n; i++)
-    d[i] = s[i];
+  /*@
+    mpd_store_Z(s, val, n, cap1)
+    which implies
+    exists l,
+      n <= cap1 && 
+      Zlength(l) == n &&
+      cap1 <= 100000000 &&
+      store_uint_array(s, n, l) *
+      store_undef_uint_array_rec(s, n, cap1) &&
+      list_store_Z(l, val)
+  */
+  /*@
+    store_uint_array(d, cap2, l2) && Zlength(l2) == cap2
+    which implies
+    store_uint_array_rec(d, 0, cap2, l2) * store_uint_array(d, 0, nil) &&
+    Zlength(l2) == cap2
+  */
+  int i;
+    /*@ Inv
+    exists l l',
+    0 <= i && i <= n && Zlength(l) == n && 
+    list_store_Z(l, val) && n <= cap1 && 
+    store_uint_array(s, n, l) *
+    store_undef_uint_array_rec(s, n, cap1) * 
+    store_uint_array(d, i, sublist(0, i, l)) * 
+    store_uint_array_rec(d, i, cap2, l')
+  */
+  for (i = 0; i < n; i++) {
+      /*@
+        Given l l'
+      */
+      /*@
+        0 <= i && i < n && n <= cap2 &&
+        store_uint_array_rec(d, i, cap2, l') *
+        store_uint_array(d, i, sublist(0, i, l))
+        which implies
+        exists a l2',
+        l' == cons(a, l2') && i < n && n <= cap2 &&
+        store_uint_array_rec(d, i + 1, cap2, l2') *
+        store_uint_array(d, i + 1, app(sublist(0, i, l), cons(a, nil)))
+      */
+      d[i] = s[i];
+  }
 }
 
 /* 大于返回1，小于返回-1，等于返回0 */
 int
-mpn_cmp (mp_srcptr ap, mp_srcptr bp, mp_size_t n)
+mpn_cmp (unsigned int *ap, unsigned int *bp, int n)
+/*@
+  With cap1 cap2 val1 val2
+  Require
+    mpd_store_Z_compact(ap, val1, n, cap1) *
+    mpd_store_Z_compact(bp, val2, n, cap2) &&
+    0 <= n && n <= cap1 && n <= cap2 && 
+    cap1 <= 100000000 && cap2 <= 100000000
+  Ensure
+    (val1 > val2 && __return == 1 ||
+    val1 == val2 && __return == 0 ||
+    val1 < val2 && __return == -1) &&
+    mpd_store_Z_compact(ap@pre, val1, n@pre, cap1) *
+    mpd_store_Z_compact(bp@pre, val2, n@pre, cap2)
+*/
 {
+  /*@
+    mpd_store_Z_compact(ap@pre, val1, n@pre, cap1) * mpd_store_Z_compact(bp@pre, val2, n@pre, cap2)
+    which implies
+    exists l1 l2,
+    store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
+    store_undef_uint_array_rec(ap@pre, n@pre, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre, cap2) &&
+    list_store_Z_compact(l1, val1) && list_store_Z_compact(l2, val2) &&
+    n@pre == Zlength(l1) && n@pre == Zlength(l2)
+  */
+  /*@
+    Given l1 l2
+  */
+  --n;
+  /*@Inv
+    -1 <= n && n < n@pre &&
+    store_uint_array(ap@pre, n@pre, l1) * store_uint_array(bp@pre, n@pre, l2) *
+    store_undef_uint_array_rec(ap@pre, n@pre, cap1) * 
+    store_undef_uint_array_rec(bp@pre, n@pre, cap2) &&
+    list_store_Z_compact(l1, val1) && list_store_Z_compact(l2, val2) &&
+    n@pre == Zlength(l1) && n@pre == Zlength(l2) &&
+    sublist(n + 1, n@pre, l1) == sublist(n + 1, n@pre, l2)
+  */
+  while (n >= 0)
+    {
+      if (ap[n] != bp[n])
+	      return ap[n] > bp[n] ? 1 : -1;
+      --n;
+    }
+  // Note: The parser cannot parse "--n" in loop condition so we paraphrased it.
+  /*
   while (--n >= 0)
     {
       if (ap[n] != bp[n])
 	return ap[n] > bp[n] ? 1 : -1;
     }
+  */
   return 0;
 }
 
 /*处理位数不同的情况*/
 static int
-mpn_cmp4 (mp_srcptr ap, mp_size_t an, mp_srcptr bp, mp_size_t bn)
+mpn_cmp4 (unsigned int *ap, int an, unsigned int *bp, int bn)
+/*@
+  With cap1 cap2 val1 val2
+  Require
+    mpd_store_Z_compact(ap, val1, an, cap1) *
+    mpd_store_Z_compact(bp, val2, bn, cap2) &&
+    an >= 0 && bn >= 0 && an <= cap1 && bn <= cap2 &&
+    cap1 <= 100000000 && cap2 <= 100000000
+  Ensure
+    (val1 > val2 && __return == 1 ||
+    val1 == val2 && __return == 0 ||
+    val1 < val2 && __return == -1) &&
+    mpd_store_Z_compact(ap@pre, val1, an@pre, cap1) *
+    mpd_store_Z_compact(bp@pre, val2, bn@pre, cap2)
+*/
 {
   if (an != bn)
     return an < bn ? -1 : 1;
-  else
+  else {
+    /*@
+      an@pre == bn@pre && bn@pre <= cap2
+      which implies
+      an@pre <= cap2
+    */
     return mpn_cmp (ap, bp, an);
+  }
 }
 
+
 /*返回非0的位数*/
-static mp_size_t
-mpn_normalized_size (mp_srcptr xp, mp_size_t n)
+static int
+mpn_normalized_size (unsigned int *xp, int n)
+/*@
+  With cap val
+  Require
+    mpd_store_Z(xp, val, n, cap) &&
+    0 <= n && n <= cap && cap <= 100000000
+  Ensure
+    0 <= __return && __return <= cap &&
+    mpd_store_Z_compact(xp@pre, val, __return, cap)
+*/
 {
+  /*@
+    mpd_store_Z(xp@pre, val, n, cap)
+    which implies
+    exists l,
+    list_store_Z(sublist(0, n, l), val) &&
+    Zlength(l) == n &&
+    store_uint_array(xp@pre, n, sublist(0, n, l)) *
+    store_undef_uint_array_rec(xp@pre, n, cap)
+  */
+  /*@
+    Given l
+  */
+  /*@Inv
+    n >= 0 && n <= n@pre && 
+    n@pre >= 0 && n@pre <= cap && cap <= 100000000 &&
+    list_store_Z(sublist(0, n, l), val) &&
+    store_uint_array(xp@pre, n, sublist(0, n, l)) *
+    store_undef_uint_array_rec(xp@pre, n, cap)
+  */
   while (n > 0 && xp[n-1] == 0)
     --n;
   return n;
 }
 
 /* 多精度数ap 加上单精度数b，返回最后产生的进位 */
-mp_limb_t
-mpn_add_1 (mp_ptr rp, mp_srcptr ap, mp_size_t n, mp_limb_t b)
+/*unsigned int
+mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
 {
-  mp_size_t i;
+  int i;
   //assert (n > 0);
   i = 0;
   do
     {
-      mp_limb_t r = ap[i] + b;
-      /* Carry out */
+      unsigned int r = ap[i] + b;
+      // Carry out
       b = (r < b);
       rp[i] = r;
     }
   while (++i < n);
 
   return b;
-}
+}*/
 
 /* 位数相同的多精度数ap 加上多精度数bp，返回最后产生的进位 */
-mp_limb_t
-mpn_add_n (mp_ptr rp, mp_srcptr ap, mp_srcptr bp, mp_size_t n)
+/*unsigned int
+mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
 {
-  mp_size_t i;
-  mp_limb_t cy;
+  int i;
+  unsigned int cy;
 
   for (i = 0, cy = 0; i < n; i++)
     {
-      mp_limb_t a, b, r;
+      unsigned int a, b, r;
       a = ap[i]; b = bp[i];
       r = a + cy;
       cy = (r < cy);
@@ -91,48 +259,48 @@ mpn_add_n (mp_ptr rp, mp_srcptr ap, mp_srcptr bp, mp_size_t n)
       rp[i] = r;
     }
   return cy;
-}
+}*/
 
 /*不同位数的多精度数相加，返回最后的进位*/
-mp_limb_t
-mpn_add (mp_ptr rp, mp_srcptr ap, mp_size_t an, mp_srcptr bp, mp_size_t bn)
+/*unsigned int
+mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
 {
-  mp_limb_t cy;
+  unsigned int cy;
   //assert (an >= bn);
   cy = mpn_add_n (rp, ap, bp, bn);
   if (an > bn)
     cy = mpn_add_1 (rp + bn, ap + bn, an - bn, cy);
   return cy;
-}
+}*/
 
-mp_limb_t
-mpn_sub_1 (mp_ptr rp, mp_srcptr ap, mp_size_t n, mp_limb_t b)
+/*unsigned int
+mpn_sub_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
 {
-  mp_size_t i;
+  int i;
   //assert (n > 0);
   i = 0;
   do
     {
-      mp_limb_t a = ap[i];
-      /* Carry out */
-      mp_limb_t cy = a < b;
+      unsigned int a = ap[i];
+      // Carry out
+      unsigned int cy = a < b;
       rp[i] = a - b;
       b = cy;
     }
   while (++i < n);
 
   return b;
-}
+}*/
 
-mp_limb_t
-mpn_sub_n (mp_ptr rp, mp_srcptr ap, mp_srcptr bp, mp_size_t n)
+/*unsigned int
+mpn_sub_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
 {
-  mp_size_t i;
-  mp_limb_t cy;
+  int i;
+  unsigned int cy;
 
   for (i = 0, cy = 0; i < n; i++)
     {
-      mp_limb_t a, b;
+      unsigned int a, b;
       a = ap[i]; b = bp[i];
       b += cy;
       cy = (b < cy);
@@ -140,30 +308,30 @@ mpn_sub_n (mp_ptr rp, mp_srcptr ap, mp_srcptr bp, mp_size_t n)
       rp[i] = a - b;
     }
   return cy;
-}
+}*/
 
-mp_limb_t
-mpn_sub (mp_ptr rp, mp_srcptr ap, mp_size_t an, mp_srcptr bp, mp_size_t bn)
+/*unsigned int
+mpn_sub (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
 {
-  mp_limb_t cy;
+  unsigned int cy;
   //assert (an >= bn);
   cy = mpn_sub_n (rp, ap, bp, bn);
   if (an > bn)
     cy = mpn_sub_1 (rp + bn, ap + bn, an - bn, cy);
   return cy;
-}
+}*/
 
 /* MPZ interface */
 
-void
+/*void
 mpz_clear (mpz_t r)
 {
   if (r->_mp_alloc)
     gmp_free_limbs (r->_mp_d, r->_mp_alloc);
-}
+}*/
 
-static mp_ptr
-mpz_realloc (mpz_t r, mp_size_t size)
+/*static unsigned int *
+mpz_realloc (mpz_t r, int size)
 {
   size = gmp_max (size, 1);
 
@@ -177,42 +345,42 @@ mpz_realloc (mpz_t r, mp_size_t size)
     r->_mp_size = 0;
 
   return r->_mp_d;
-}
+}*/
 
 /* Realloc for an mpz_t WHAT if it has less than NEEDED limbs.  */
-mp_ptr mrz_realloc_if(mpz_t z,mp_size_t n) {
+/*unsigned int *mrz_realloc_if(mpz_t z,int n) {
   return n > z->_mp_alloc ? mpz_realloc(z, n) : z->_mp_d;
-}
+}*/
 
 /* MPZ comparisons and the like. */
-int
+/*int
 mpz_sgn (const mpz_t u)
 {
   return gmp_cmp (u->_mp_size, 0);
-}
+}*/
 
-void
+/*void
 mpz_swap (mpz_t u, mpz_t v)
 {
-  mp_size_t_swap (u->_mp_alloc, v->_mp_alloc);
-  mp_ptr_swap(u->_mp_d, v->_mp_d);
-  mp_size_t_swap (u->_mp_size, v->_mp_size);
-}
+  int_swap (u->_mp_alloc, v->_mp_alloc);
+  unsigned int *_swap(u->_mp_d, v->_mp_d);
+  int_swap (u->_mp_size, v->_mp_size);
+}*/
 
 /* MPZ addition and subtraction */
 
-static mp_size_t
+/*static int
 mpz_abs_add (mpz_t r, const mpz_t a, const mpz_t b)
 {
-  mp_size_t an = gmp_abs (a->_mp_size);
-  mp_size_t bn = gmp_abs (b->_mp_size);
-  mp_ptr rp;
-  mp_limb_t cy;
+  int an = gmp_abs (a->_mp_size);
+  int bn = gmp_abs (b->_mp_size);
+  unsigned int *rp;
+  unsigned int cy;
 
   if (an < bn)
     {
       mpz_srcptr_swap (a, b);
-      mp_size_t_swap (an, bn);
+      int_swap (an, bn);
     }
 
   rp = mrz_realloc_if (r, an + 1);
@@ -221,15 +389,15 @@ mpz_abs_add (mpz_t r, const mpz_t a, const mpz_t b)
   rp[an] = cy;
 
   return an + cy;
-}
+}*/
 
-static mp_size_t
+/*static int
 mpz_abs_sub (mpz_t r, const mpz_t a, const mpz_t b)
 {
-  mp_size_t an = gmp_abs (a->_mp_size);
-  mp_size_t bn = gmp_abs (b->_mp_size);
+  int an = gmp_abs (a->_mp_size);
+  int bn = gmp_abs (b->_mp_size);
   int cmp;
-  mp_ptr rp;
+  unsigned int *rp;
 
   cmp = mpn_cmp4 (a->_mp_d, an, b->_mp_d, bn);
   if (cmp > 0)
@@ -246,12 +414,12 @@ mpz_abs_sub (mpz_t r, const mpz_t a, const mpz_t b)
     }
   else
     return 0;
-}
+}*/
 
-void
+/*void
 mpz_add (mpz_t r, const mpz_t a, const mpz_t b)
 {
-  mp_size_t rn;
+  int rn;
 
   if ( (a->_mp_size ^ b->_mp_size) >= 0)
     rn = mpz_abs_add (r, a, b);
@@ -259,12 +427,12 @@ mpz_add (mpz_t r, const mpz_t a, const mpz_t b)
     rn = mpz_abs_sub (r, a, b);
 
   r->_mp_size = a->_mp_size >= 0 ? rn : - rn;
-}
+}*/
 
-void
+/*void
 mpz_sub (mpz_t r, const mpz_t a, const mpz_t b)
 {
-  mp_size_t rn;
+  int rn;
 
   if ( (a->_mp_size ^ b->_mp_size) >= 0)
     rn = mpz_abs_sub (r, a, b);
@@ -272,4 +440,4 @@ mpz_sub (mpz_t r, const mpz_t a, const mpz_t b)
     rn = mpz_abs_add (r, a, b);
 
   r->_mp_size = a->_mp_size >= 0 ? rn : - rn;
-}
+}*/

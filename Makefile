@@ -15,7 +15,9 @@ SETS_FLAG = -R $(SETS_DIR) SetsClass
 
 COMPCERT_FLAG = -R $(COMPCERT_DIR) compcert.lib
 
-DEP_FLAG = -R $(PV_DIR) PV -R $(SETS_DIR) SetsClass -R $(COMPCERT_DIR) compcert.lib
+GMP_FLAG = $(shell grep -E '^-([RQ])' _CoqProject)
+
+DEP_FLAG = $(GMP_FLAG)
 
 SETS_FILE_NAMES = \
    SetsClass.v SetsDomain.v SetElement.v RelsDomain.v SetElementProperties.v SetProd.v SetsClass_AxiomFree.v SetsDomain_Classic.v
@@ -35,21 +37,20 @@ PV_FILE_NAMES = \
 
 PV_FILES=$(PV_FILE_NAMES:%.v=$(PV_DIR)/%.v)
 
+GMP_FILES = \
+	./projects/lib/GmpAux.v ./projects/lib/GmpNumber.v \
+	./projects/lib/gmp_goal.v
+
 FILES = $(PV_FILES) \
-  $(SETS_FILES) \
-  $(COMPCERT_FILES)
-
-$(SETS_FILES:%.v=%.vo): %.vo: %.v
-	@echo COQC $<
-	@$(COQC) $(SETS_FLAG) $<
-
-$(COMPCERT_FILES:%.v=%.vo): %.vo: %.v
-	@echo COQC $<
-	@$(COQC) $(COMPCERT_FLAG) $<
+  $(GMP_FILES)
 			
 $(PV_FILES:%.v=%.vo): %.vo: %.v
 	@echo COQC $(<F)
-	@$(COQC) $(PV_FLAG) $<
+	@$(COQC) $(GMP_FLAG) $<
+
+$(GMP_FILES:%.v=%.vo): %.vo: %.v
+	@echo COQC $(<F)
+	@$(COQC) $(GMP_FLAG) $<
 
 all: $(FILES:%.v=%.vo)
 
