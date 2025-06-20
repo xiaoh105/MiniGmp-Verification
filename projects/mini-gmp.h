@@ -58,9 +58,12 @@ void mpz_sub (mpz_t, const mpz_t, const mpz_t);
 
 void mpz_set (mpz_t, const mpz_t);
 
+/*@ Import Coq Require Import Coq.ZArith.ZArith */
+/*@ Import Coq Local Open Scope Z_scope */
+
 /*@ 
   Extern Coq (Zabs : Z -> Z) 
-             (Zmax : Z -> Z -> Z)
+             (Z::max : Z -> Z -> Z)
              (mpd_store_Z : Z -> Z -> Z -> Z -> Assertion)
              (mpd_store_Z_compact: Z -> Z -> Z -> Z -> Assertion)
              (mpd_store_list : Z -> list Z -> Z -> Assertion)

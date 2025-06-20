@@ -30,17 +30,11 @@ Proof. pre_process. Qed.
 Lemma proof_of_gmp_max_return_wit_1_1 : gmp_max_return_wit_1_1.
 Proof. 
   pre_process.
-  entailer!.
-  unfold Zmax.
-  rewrite Z.max_r; lia.
 Qed.
 
 Lemma proof_of_gmp_max_return_wit_1_2 : gmp_max_return_wit_1_2.
 Proof.
   pre_process.
-  entailer!.
-  unfold Zmax.
-  rewrite Z.max_l; lia.
 Qed.
 
 Lemma proof_of_gmp_cmp_return_wit_1_2 : gmp_cmp_return_wit_1_2.
@@ -411,3 +405,21 @@ Proof.
   + rewrite sublist_self; try lia.
     tauto.
 Qed.
+
+Lemma proof_of_mpn_add_1_entail_wit_1 : mpn_add_1_entail_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_entail_wit_2_1 : mpn_add_1_entail_wit_2_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_return_wit_1 : mpn_add_1_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_which_implies_wit_1 : mpn_add_1_which_implies_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_which_implies_wit_2 : mpn_add_1_which_implies_wit_2.
+Proof. Admitted. 
