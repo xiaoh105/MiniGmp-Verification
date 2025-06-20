@@ -11,7 +11,7 @@ Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From GmpLib Require Import gmp_goal.
 Require Import GmpLib.GmpNumber. Import Internal.
-Require Import GmpLib.GmpAux.
+Require Import GmpLib.GmpAux. Import Aux.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
@@ -416,7 +416,40 @@ Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
 Proof. Admitted. 
 
 Lemma proof_of_mpn_add_1_return_wit_1 : mpn_add_1_return_wit_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact.
+  unfold mpd_store_list.
+  Exists val2.
+  pose proof (list_store_Z_compact_reverse_injection l l_2 val val).
+  apply H19 in H2; try tauto.
+  rewrite <-H2 in H10.
+  assert (i = n_pre) by lia.
+  rewrite H20 in H4.
+  rewrite <- H10 in H4.
+  rewrite (sublist_self l (Zlength l)) in H4; try tauto.
+  rewrite <-H2 in H12.
+  assert (list_store_Z l val). { apply list_store_Z_compact_to_normal. tauto. }
+  pose proof (list_store_Z_injection l l val1 val).
+  apply H22 in H4; try tauto.
+  rewrite H4 in H6.
+  entailer!.
+  Exists l.
+  entailer!.
+  entailer!; try rewrite H20; try tauto.
+  - rewrite H10.
+    entailer!.
+    unfold mpd_store_Z.
+    unfold mpd_store_list.
+    Exists l'.
+    rewrite H7.
+    subst i.
+    entailer!.
+    rewrite H20.
+    entailer!.
+    apply store_uint_array_rec_def2undef.
+  - rewrite <- H20. tauto.
+Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_1 : mpn_add_1_which_implies_wit_1.
 Proof. Admitted. 

@@ -314,6 +314,11 @@ Proof.
   split; tauto.
 Qed.
 
+Lemma store_uint_array_rec_def2undef: forall x a b l,
+  store_uint_array_rec x a b l |--
+  store_undef_uint_array_rec x a b.
+Proof. Admitted.
+
 Lemma store_undef_uint_array_rec_divide: forall x l mid r,
   0 <= l <= r ->
   l <= mid <= r ->

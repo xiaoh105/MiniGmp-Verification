@@ -89,6 +89,12 @@ Proof.
   reflexivity.
 Qed.
 
+Lemma list_store_Z_compact_reverse_injection: forall l1 l2 n1 n2,
+  list_store_Z_compact l1 n1 ->
+  list_store_Z_compact l2 n2 ->
+  n1 = n2 -> l1 = l2.
+Proof. Admitted.
+
 Lemma __list_within_bound_concat_r: forall (l1: list Z) (a: Z),
   list_within_bound l1 ->
   0 <= a < UINT_MOD ->

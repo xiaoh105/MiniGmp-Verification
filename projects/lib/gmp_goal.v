@@ -1781,8 +1781,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
 .
 
 Definition mpn_add_1_safety_wit_2 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) >= b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) >= b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -1790,7 +1790,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -1802,9 +1803,9 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (cap2 <= 100000000) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (n_pre <= cap1) |]
-  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32))) (l'')) )
+  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32))) (l'')) )
   **  (store_uint_array ap_pre n_pre l_2 )
-  **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)))
+  **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth i l_2 0) + b )) (32)))
   **  ((( &( "i" ) )) # Int  |-> i)
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre i l' )
@@ -1818,8 +1819,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
 .
 
 Definition mpn_add_1_safety_wit_3 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) < b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) < b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -1827,7 +1828,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -1839,9 +1841,9 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (cap2 <= 100000000) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (n_pre <= cap1) |]
-  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32))) (l'')) )
+  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32))) (l'')) )
   **  (store_uint_array ap_pre n_pre l_2 )
-  **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)))
+  **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth i l_2 0) + b )) (32)))
   **  ((( &( "i" ) )) # Int  |-> i)
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre i l' )
@@ -1879,7 +1881,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (0) (l)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD 0) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b_pre * (Z.pow (UINT_MOD) (0)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = 0) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -1898,8 +1901,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
 .
 
 Definition mpn_add_1_entail_wit_2_1 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (l''_2: (@list Z)) (l'_2: (@list Z)) (val2_2: Z) (val1_2: Z) (l_3: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_3 0) + b_pre )) (32)) < b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (b: Z) (l''_2: (@list Z)) (l'_2: (@list Z)) (val2_2: Z) (val1_2: Z) (l_3: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_3 0) + b )) (32)) < b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -1907,7 +1910,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_3)) val1_2 ) |] 
   &&  [| (list_store_Z l'_2 val2_2 ) |] 
-  &&  [| ((val2_2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1_2 + b_pre )) |] 
+  &&  [| ((val2_2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1_2 + b_pre )) |] 
+  &&  [| ((Zlength (l'_2)) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -1919,11 +1923,10 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (cap2 <= 100000000) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (n_pre <= cap1) |]
-  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_3 0) + b_pre )) (32))) (l''_2)) )
+  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_3 0) + b )) (32))) (l''_2)) )
   **  (store_uint_array ap_pre n_pre l_3 )
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre i l'_2 )
-  **  ((( &( "b" ) )) # UInt  |-> 1)
 |--
   EX (l'': (@list Z))  (l': (@list Z))  (val2: Z)  (val1: Z)  (l: (@list Z)) ,
   [| (0 <= (i + 1 )) |] 
@@ -1932,7 +1935,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) ((i + 1 )) (l)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD (i + 1 )) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (1 * (Z.pow (UINT_MOD) ((i + 1 ))) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = (i + 1 )) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -1948,12 +1952,11 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre (i + 1 ) l' )
   **  (store_uint_array_rec rp_pre (i + 1 ) cap2 l'' )
-  **  ((( &( "b" ) )) # UInt  |-> b_pre)
 .
 
 Definition mpn_add_1_entail_wit_2_2 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (l''_2: (@list Z)) (l'_2: (@list Z)) (val2_2: Z) (val1_2: Z) (l_3: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_3 0) + b_pre )) (32)) >= b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (b: Z) (l''_2: (@list Z)) (l'_2: (@list Z)) (val2_2: Z) (val1_2: Z) (l_3: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_3 0) + b )) (32)) >= b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -1961,7 +1964,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_3)) val1_2 ) |] 
   &&  [| (list_store_Z l'_2 val2_2 ) |] 
-  &&  [| ((val2_2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1_2 + b_pre )) |] 
+  &&  [| ((val2_2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1_2 + b_pre )) |] 
+  &&  [| ((Zlength (l'_2)) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -1973,11 +1977,10 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (cap2 <= 100000000) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (n_pre <= cap1) |]
-  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_3 0) + b_pre )) (32))) (l''_2)) )
+  &&  (store_uint_array_rec rp_pre i cap2 (replace_Znth ((i - i )) ((unsigned_last_nbits (((Znth i l_3 0) + b )) (32))) (l''_2)) )
   **  (store_uint_array ap_pre n_pre l_3 )
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre i l'_2 )
-  **  ((( &( "b" ) )) # UInt  |-> 0)
 |--
   EX (l'': (@list Z))  (l': (@list Z))  (val2: Z)  (val1: Z)  (l: (@list Z)) ,
   [| (0 <= (i + 1 )) |] 
@@ -1986,7 +1989,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) ((i + 1 )) (l)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD (i + 1 )) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (0 * (Z.pow (UINT_MOD) ((i + 1 ))) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = (i + 1 )) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -2002,11 +2006,10 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   **  (store_undef_uint_array_rec ap_pre n_pre cap1 )
   **  (store_uint_array rp_pre (i + 1 ) l' )
   **  (store_uint_array_rec rp_pre (i + 1 ) cap2 l'' )
-  **  ((( &( "b" ) )) # UInt  |-> b_pre)
 .
 
 Definition mpn_add_1_return_wit_1 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l: (@list Z)) (i: Z) ,
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l_2: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l: (@list Z)) (i: Z) ,
   [| (i >= n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2014,7 +2017,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l_2)) = n_pre) |] 
@@ -2032,9 +2036,9 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   **  (store_uint_array_rec rp_pre i cap2 l'' )
 |--
   EX (val': Z) ,
-  [| ((val' + (b_pre * (Z.lxor UINT_MOD n_pre) ) ) = (val + b_pre )) |]
+  [| ((val' + (b * (Z.pow (UINT_MOD) (n_pre)) ) ) = (val + b_pre )) |]
   &&  (mpd_store_Z_compact ap_pre val n_pre cap1 )
-  **  (mpd_store_Z_compact rp_pre val' n_pre cap2 )
+  **  (mpd_store_Z rp_pre val' n_pre cap2 )
 .
 
 Definition mpn_add_1_partial_solve_wit_1 := 
@@ -2117,7 +2121,7 @@ forall (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (v
 Definition mpn_add_1_partial_solve_wit_2 := mpn_add_1_partial_solve_wit_2_pure -> mpn_add_1_partial_solve_wit_2_aux.
 
 Definition mpn_add_1_partial_solve_wit_3 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
   [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2125,7 +2129,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -2149,7 +2154,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -2169,8 +2175,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
 .
 
 Definition mpn_add_1_partial_solve_wit_4 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) < b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) < b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2178,7 +2184,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -2195,7 +2202,7 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   **  (store_uint_array rp_pre i l' )
   **  (store_uint_array_rec rp_pre i cap2 l'' )
 |--
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) < b_pre) |] 
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) < b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2203,7 +2210,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -2223,8 +2231,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
 .
 
 Definition mpn_add_1_partial_solve_wit_5 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) >= b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@list Z)) (val: Z) (l: (@list Z)) (b: Z) (l'': (@list Z)) (l': (@list Z)) (val2: Z) (val1: Z) (l_2: (@list Z)) (i: Z) ,
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) >= b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2232,7 +2240,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
@@ -2249,7 +2258,7 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   **  (store_uint_array rp_pre i l' )
   **  (store_uint_array_rec rp_pre i cap2 l'' )
 |--
-  [| ((unsigned_last_nbits (((Znth i l_2 0) + b_pre )) (32)) >= b_pre) |] 
+  [| ((unsigned_last_nbits (((Znth i l_2 0) + b )) (32)) >= b) |] 
   &&  [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= n_pre) |] 
@@ -2257,7 +2266,8 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (cap2: Z) (cap1: Z) (l2: (@
   &&  [| (n_pre <= cap1) |] 
   &&  [| (list_store_Z (sublist (0) (i) (l_2)) val1 ) |] 
   &&  [| (list_store_Z l' val2 ) |] 
-  &&  [| ((val2 + (b_pre * (Z.lxor UINT_MOD i) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((val2 + (b * (Z.pow (UINT_MOD) (i)) ) ) = (val1 + b_pre )) |] 
+  &&  [| ((Zlength (l')) = i) |] 
   &&  [| ((Zlength (l2)) = cap2) |] 
   &&  [| (n_pre <= cap1) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
