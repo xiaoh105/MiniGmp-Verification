@@ -31,3 +31,4 @@ sets
 _CoqProject
 
 .devcontainer/
+.vscode/

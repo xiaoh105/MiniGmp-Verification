@@ -38,7 +38,7 @@ void mpn_copyi (unsigned int *d, unsigned int *s, int n);
 
 int mpn_cmp (unsigned int *ap, unsigned int *bp, int n);
 
-unsigned int mpn_add_1 (unsigned int *, unsigned int *, int, unsigned int);
+unsigned int mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b);
 unsigned int mpn_add_n (unsigned int *, unsigned int *, unsigned int *, int);
 unsigned int mpn_add (unsigned int *, unsigned int *, int, unsigned int *, int);
 
@@ -67,4 +67,5 @@ void mpz_set (mpz_t, const mpz_t);
              (list_store_Z : list Z -> Z -> Prop)
              (list_store_Z_compact: list Z -> Z -> Prop)
              (last: list Z -> Z -> Z)
+             (UINT_MOD: Z)
 */

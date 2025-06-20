@@ -223,23 +223,82 @@ mpn_normalized_size (unsigned int *xp, int n)
 }
 
 /* 多精度数ap 加上单精度数b，返回最后产生的进位 */
-/*unsigned int
+unsigned int
 mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
+/*@
+  With val l2 cap1 cap2
+  Require
+    mpd_store_Z_compact(ap, val, n, cap1) *
+    store_uint_array(rp, cap2, l2) &&
+    Zlength(l2) == cap2 &&
+    cap2 >= n &&
+    cap1 <= 100000000 &&
+    cap2 <= 100000000 &&
+    n > 0 && n <= cap1
+  Ensure
+    exists val',
+    mpd_store_Z_compact(ap@pre, val, n@pre, cap1) *
+    mpd_store_Z_compact(rp@pre, val', n@pre, cap2) &&
+    (val' + __return * (UINT_MOD ^ n@pre) == val + b@pre)
+*/
 {
+  /*@
+    mpd_store_Z_compact(ap@pre, val, n@pre, cap1)
+    which implies
+    exists l,
+      n@pre <= cap1 && 
+      Zlength(l) == n@pre &&
+      cap1 <= 100000000 &&
+      store_uint_array(ap@pre, n@pre, l) *
+      store_undef_uint_array_rec(ap@pre, n@pre, cap1) &&
+      list_store_Z_compact(l, val)
+  */
   int i;
   //assert (n > 0);
   i = 0;
+  /*
   do
     {
       unsigned int r = ap[i] + b;
       // Carry out
       b = (r < b);
       rp[i] = r;
+      ++i;
     }
-  while (++i < n);
+  while (i < n);
+  */
+
+  /*@
+    store_uint_array(rp@pre, cap2, l2) && Zlength(l2) == cap2
+    which implies
+    store_uint_array_rec(rp@pre, 0, cap2, l2) * store_uint_array(rp@pre, 0, nil) &&
+    Zlength(l2) == cap2
+  */
+
+  /*@Inv
+    exists l l' l'' val1 val2,
+    0 <= i && i <= n@pre &&
+    list_store_Z_compact(l, val) && n@pre <= cap1 &&
+    store_uint_array(ap@pre, n@pre, l) *
+    store_undef_uint_array_rec(ap@pre, n@pre, cap1) &&
+    list_store_Z(sublist(0, i, l), val1) &&
+    list_store_Z(l', val2) &&
+    store_uint_array(rp@pre, i, l') *
+    store_uint_array_rec(rp@pre, i, cap2, l'') &&
+    (val2 + b@pre * (UINT_MOD ^ i) == val1 + b@pre)
+  */
+  while (i<n) {
+    /*@
+      Given l l' l'' val1 val2
+    */
+    unsigned int r = ap[i] + b;
+    b = (r < b);
+    rp[i] = r;
+    ++i;
+  }
 
   return b;
-}*/
+}
 
 /* 位数相同的多精度数ap 加上多精度数bp，返回最后产生的进位 */
 /*unsigned int
