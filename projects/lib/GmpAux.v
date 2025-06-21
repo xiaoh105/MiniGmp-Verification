@@ -27,6 +27,12 @@ Lemma Z_mod_add_carry: forall (a b m: Z),
    a + b = (a + b) mod m + m.
 Proof. Admitted.
 
+Lemma Z_mod_add_uncarry: forall (a b m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m ->
+  (a + b) mod m >= b ->
+  a + b = (a + b) mod m.
+Proof. Admitted.
+
 Lemma Z_of_nat_succ: forall (n: nat),
   Z.of_nat (S n) = Z.of_nat n + 1.
 Proof. lia. Qed.
