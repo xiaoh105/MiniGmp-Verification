@@ -164,9 +164,21 @@ Proof. Admitted.
 Lemma proof_of_mpn_add_1_partial_solve_wit_3 : mpn_add_1_partial_solve_wit_3.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_add_1_partial_solve_wit_4_pure : mpn_add_1_partial_solve_wit_4_pure.
+Proof. Admitted. 
+
 Lemma proof_of_mpn_add_1_partial_solve_wit_4 : mpn_add_1_partial_solve_wit_4.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_add_1_partial_solve_wit_5_pure : mpn_add_1_partial_solve_wit_5_pure.
+Proof. Admitted. 
+
 Lemma proof_of_mpn_add_1_partial_solve_wit_5 : mpn_add_1_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_partial_solve_wit_6 : mpn_add_1_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_1_partial_solve_wit_7 : mpn_add_1_partial_solve_wit_7.
 Proof. Admitted. 
 

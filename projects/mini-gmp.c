@@ -238,8 +238,8 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
   Ensure
     exists val',
     mpd_store_Z_compact(ap@pre, val, n@pre, cap1) *
-    mpd_store_Z_compact(rp@pre, val', n@pre, cap2) &&
-    (val' + __return * (UINT_MOD ^ n@pre) == val + b@pre)
+    mpd_store_Z(rp@pre, val', n@pre, cap2) &&
+    (val' + __return * Z::pow(UINT_MOD, n@pre) == val + b@pre)
 */
 {
   /*@
@@ -285,14 +285,26 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
     list_store_Z(l', val2) &&
     store_uint_array(rp@pre, i, l') *
     store_uint_array_rec(rp@pre, i, cap2, l'') &&
-    (val2 + b@pre * (UINT_MOD ^ i) == val1 + b@pre)
+    (val2 + b * Z::pow(UINT_MOD, i) == val1 + b@pre) &&
+    Zlength(l') == i
   */
   while (i<n) {
     /*@
       Given l l' l'' val1 val2
     */
     unsigned int r = ap[i] + b;
+    /*@ 0 <= b && b <= UINT_MAX by local */
     b = (r < b);
+    /*@
+      0 <= i && i < n@pre && n@pre <= cap2 &&
+      store_uint_array(rp@pre, i, l') *
+      store_uint_array_rec(rp@pre, i, cap2, l'') 
+      which implies
+      exists a l''',
+      l'' == cons(a, l''') && 0<= i  && i<n@pre && n@pre <=cap2 &&
+      store_uint_array_rec(rp@pre, i+1, cap2, l''') *
+      store_uint_array(rp@pre, i+1, app(l', cons(a, nil)))
+     */
     rp[i] = r;
     ++i;
   }
