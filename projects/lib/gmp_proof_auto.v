@@ -180,6 +180,78 @@ Proof. Admitted.
 Lemma proof_of_mpn_add_1_partial_solve_wit_7 : mpn_add_1_partial_solve_wit_7.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_add_n_safety_wit_1 : mpn_add_n_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_safety_wit_2 : mpn_add_n_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_safety_wit_3 : mpn_add_n_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_safety_wit_4 : mpn_add_n_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_safety_wit_5 : mpn_add_n_safety_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_safety_wit_6 : mpn_add_n_safety_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_1 : mpn_add_n_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_2 : mpn_add_n_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_3_pure : mpn_add_n_partial_solve_wit_3_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_3 : mpn_add_n_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_4 : mpn_add_n_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_5 : mpn_add_n_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_6_pure : mpn_add_n_partial_solve_wit_6_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_6 : mpn_add_n_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_7_pure : mpn_add_n_partial_solve_wit_7_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_7 : mpn_add_n_partial_solve_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_8_pure : mpn_add_n_partial_solve_wit_8_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_8 : mpn_add_n_partial_solve_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_9_pure : mpn_add_n_partial_solve_wit_9_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_9 : mpn_add_n_partial_solve_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_10 : mpn_add_n_partial_solve_wit_10.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_11 : mpn_add_n_partial_solve_wit_11.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_12 : mpn_add_n_partial_solve_wit_12.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_partial_solve_wit_13 : mpn_add_n_partial_solve_wit_13.
+Proof. Admitted. 
+
 Lemma proof_of_mpz_clear_return_wit_1_3 : mpz_clear_return_wit_1_3.
 Proof. Admitted. 
 

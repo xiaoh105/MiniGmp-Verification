@@ -807,6 +807,39 @@ Proof.
     lia.
 Qed.
 
+Lemma proof_of_mpn_add_n_entail_wit_1 : mpn_add_n_entail_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_entail_wit_2 : mpn_add_n_entail_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_entail_wit_3_1 : mpn_add_n_entail_wit_3_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_entail_wit_3_2 : mpn_add_n_entail_wit_3_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_entail_wit_3_3 : mpn_add_n_entail_wit_3_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_entail_wit_3_4 : mpn_add_n_entail_wit_3_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_return_wit_1 : mpn_add_n_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_which_implies_wit_1 : mpn_add_n_which_implies_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_which_implies_wit_2 : mpn_add_n_which_implies_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_which_implies_wit_3 : mpn_add_n_which_implies_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_n_which_implies_wit_4 : mpn_add_n_which_implies_wit_4.
+Proof. Admitted. 
+
 Lemma proof_of_mpz_clear_return_wit_1_1 : mpz_clear_return_wit_1_1.
 Proof.
   pre_process.
