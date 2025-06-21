@@ -29,3 +29,6 @@ qualifiedcprogramming
 sets
 .gitmodules
 _CoqProject
+
+.devcontainer/
+.vscode/

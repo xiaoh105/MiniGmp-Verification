@@ -21,6 +21,18 @@ Local Open Scope sac.
 
 Module Aux.
 
+Lemma Z_mod_add_carry: forall (a b m: Z),
+   m > 0 -> 0 <= a < m -> 0 <= b < m ->
+   (a + b) mod m < b ->
+   a + b = (a + b) mod m + m.
+Proof. Admitted.
+
+Lemma Z_mod_add_uncarry: forall (a b m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m ->
+  (a + b) mod m >= b ->
+  a + b = (a + b) mod m.
+Proof. Admitted.
+
 Lemma Z_of_nat_succ: forall (n: nat),
   Z.of_nat (S n) = Z.of_nat n + 1.
 Proof. lia. Qed.
@@ -313,6 +325,11 @@ Proof.
   clear H2 H3.
   split; tauto.
 Qed.
+
+Lemma store_uint_array_rec_def2undef: forall x a b l,
+  store_uint_array_rec x a b l |--
+  store_undef_uint_array_rec x a b.
+Proof. Admitted.
 
 Lemma store_undef_uint_array_rec_divide: forall x l mid r,
   0 <= l <= r ->
