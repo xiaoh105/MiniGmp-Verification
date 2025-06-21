@@ -294,6 +294,16 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
     */
     unsigned int r = ap[i] + b;
     b = (r < b);
+    /*@
+      0 <= i && i < n@pre && n@pre <= cap2 &&
+      store_uint_array(rp@pre, i, l') *
+      store_uint_array_rec(rp@pre, i, cap2, l'') 
+      which implies
+      exists a l''',
+      l'' == cons(a, l''') && 0<= i  && i<n@pre && n@pre <=cap2 &&
+      store_uint_array_rec(rp@pre, i+1, cap2, l''') *
+      store_uint_array(rp@pre, i+1, app(l', cons(a, nil)))
+     */
     rp[i] = r;
     ++i;
   }
