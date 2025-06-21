@@ -597,20 +597,10 @@ Record bigint_ent: Type := {
     sign: Prop;
 }.
 
-Definition store_bigint_ent (x: addr) (n: bigint_ent): Assertion :=
-    EX size, 
-      &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> size &&
-      ([| size < 0 |] && [| sign n |] && [| size = -Zlength (data n) |] ||
-        [| size >= 0 |] && [| ~(sign n) |] && [| size = Zlength (data n) |]) **
-    &(x # "__mpz_struct" ->ₛ "_mp_alloc") # Int |-> cap n **
-    EX p, 
-      &(x # "__mpz_struct" ->ₛ "_mp_d") # Ptr |-> p **
-    Internal.mpd_store_list p (data n) (cap n).
-
-Definition bigint_ent_store_Z (n: bigint_ent) (x: Z): Assertion :=
-  [| sign n |] && [| Internal.list_store_Z (data n) (-x) |] ||
-    [| ~(sign n) |] && [| Internal.list_store_Z (data n) x |].
-
 Definition store_Z (x: addr) (n: Z): Assertion :=
-  EX ent,
-    store_bigint_ent x ent && bigint_ent_store_Z ent n.
+  EX (ptr: addr) (cap size: Z),
+    (([| size < 0 |] && [| n < 0 |] && Internal.mpd_store_Z_compact ptr (-n) (-size) cap) ||
+      ([| size >= 0 |] && [| n >= 0 |] && Internal.mpd_store_Z_compact ptr n size cap)) **
+    &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> size **
+    &(x # "__mpz_struct" ->ₛ "_mp_alloc") # Int |-> cap **
+    &(x # "__mpz_struct" ->ₛ "_mp_d") # Ptr |-> ptr.

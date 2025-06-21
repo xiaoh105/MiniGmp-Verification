@@ -1753,6 +1753,1034 @@ forall (xp_pre: Z) (val: Z) (cap: Z) (n: Z) ,
   **  (store_undef_uint_array_rec xp_pre n cap )
 .
 
+(*----- Function mpz_clear -----*)
+
+Definition mpz_clear_return_wit_1_1 := 
+forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
+  [| (cap_2 = 0) |] 
+  &&  [| (size_2 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_2 (-n) (-size_2) cap_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
+|--
+  EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_return_wit_1_2 := 
+forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
+  [| (cap_2 = 0) |] 
+  &&  [| (size_2 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_2 n size_2 cap_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
+|--
+  EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_return_wit_1_3 := 
+forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
+  [| (cap_2 <> 0) |] 
+  &&  [| (size_2 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
+|--
+  EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_return_wit_1_4 := 
+forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
+  [| (cap_2 <> 0) |] 
+  &&  [| (size_2 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
+|--
+  EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_partial_solve_wit_1 := 
+forall (r_pre: Z) (n: Z) ,
+  (store_Z r_pre n )
+|--
+  (store_Z r_pre n )
+.
+
+Definition mpz_clear_partial_solve_wit_2 := 
+forall (r_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap <> 0) |] 
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_partial_solve_wit_3 := 
+forall (r_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap <> 0) |] 
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_which_implies_wit_1 := 
+forall (r_pre: Z) (n: Z) ,
+  (store_Z r_pre n )
+|--
+  (EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr))
+  ||
+  (EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr))
+.
+
+(*----- Function mpz_realloc -----*)
+
+Definition mpz_realloc_safety_wit_1 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) ,
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> size_pre)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition mpz_realloc_safety_wit_2 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) ,
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> size_pre)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition mpz_realloc_safety_wit_3 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_realloc_safety_wit_4 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_realloc_safety_wit_5 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval_3 (-n) (-old) retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_realloc_safety_wit_6 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval_3 n old retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_realloc_return_wit_1_1 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval_3 n old retval_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_2 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval_3 (-n) (-old) retval_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_3 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_4 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_5 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_6 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval_3 retval_2 )
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_7 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval_3 (-n) (-old) retval_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_return_wit_1_8 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3: Z) (retval: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval = (Zabs (old))) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval_3 n old retval_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_3)
+|--
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr_new (-n) (-old) c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+  ||
+  (EX (ptr_new: Z)  (c: Z) ,
+  [| (c >= size_pre) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr_new n old c )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> c)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_new))
+.
+
+Definition mpz_realloc_partial_solve_wit_1 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) ,
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_2 := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) ,
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_3_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> retval)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap >= 0) |] 
+  &&  [| (retval >= cap) |] 
+  &&  [| ((Zmax (size_pre) (1)) >= cap) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_3_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap >= 0) |] 
+  &&  [| (retval >= cap) |] 
+  &&  [| ((Zmax (size_pre) (1)) >= cap) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_3 := mpz_realloc_partial_solve_wit_3_pure -> mpz_realloc_partial_solve_wit_3_aux.
+
+Definition mpz_realloc_partial_solve_wit_4_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> retval)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap >= 0) |] 
+  &&  [| (retval >= cap) |] 
+  &&  [| ((Zmax (size_pre) (1)) >= cap) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_4_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (cap >= 0) |] 
+  &&  [| (retval >= cap) |] 
+  &&  [| ((Zmax (size_pre) (1)) >= cap) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_4 := mpz_realloc_partial_solve_wit_4_pure -> mpz_realloc_partial_solve_wit_4_aux.
+
+Definition mpz_realloc_partial_solve_wit_5_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> retval)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (retval >= 0) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_5_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (retval >= 0) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_5 := mpz_realloc_partial_solve_wit_5_pure -> mpz_realloc_partial_solve_wit_5_aux.
+
+Definition mpz_realloc_partial_solve_wit_6_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((( &( "size" ) )) # Int  |-> retval)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (retval >= 0) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_6_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (retval >= 0) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_realloc_partial_solve_wit_6 := mpz_realloc_partial_solve_wit_6_pure -> mpz_realloc_partial_solve_wit_6_aux.
+
+Definition mpz_realloc_partial_solve_wit_7_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+|--
+  [| (old <= INT_MAX) |] 
+  &&  [| (INT_MIN < old) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_7_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (retval_2: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval_2 retval )
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+|--
+  [| (old <= INT_MAX) |] 
+  &&  [| (INT_MIN < old) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_undef_uint_array retval_2 retval )
+  **  (mpd_store_Z_compact ptr (-n) (-old) cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+.
+
+Definition mpz_realloc_partial_solve_wit_7 := mpz_realloc_partial_solve_wit_7_pure -> mpz_realloc_partial_solve_wit_7_aux.
+
+Definition mpz_realloc_partial_solve_wit_8_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+|--
+  [| (INT_MIN < old) |] 
+  &&  [| (old <= INT_MAX) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_8_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (retval_2: Z) ,
+  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval_2 retval )
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+|--
+  [| (INT_MIN < old) |] 
+  &&  [| (old <= INT_MAX) |] 
+  &&  [| (cap = 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_undef_uint_array retval_2 retval )
+  **  (mpd_store_Z_compact ptr n old cap )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+.
+
+Definition mpz_realloc_partial_solve_wit_8 := mpz_realloc_partial_solve_wit_8_pure -> mpz_realloc_partial_solve_wit_8_aux.
+
+Definition mpz_realloc_partial_solve_wit_9_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval (-n) (-old) retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+|--
+  [| (old <= INT_MAX) |] 
+  &&  [| (INT_MIN < old) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_9_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval_2 (-n) (-old) retval )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+|--
+  [| (old <= INT_MAX) |] 
+  &&  [| (INT_MIN < old) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact retval_2 (-n) (-old) retval )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+.
+
+Definition mpz_realloc_partial_solve_wit_9 := mpz_realloc_partial_solve_wit_9_pure -> mpz_realloc_partial_solve_wit_9_aux.
+
+Definition mpz_realloc_partial_solve_wit_10_pure := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval n old retval_2 )
+  **  ((( &( "size" ) )) # Int  |-> retval_2)
+  **  ((( &( "r" ) )) # Ptr  |-> r_pre)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+|--
+  [| (INT_MIN < old) |] 
+  &&  [| (old <= INT_MAX) |]
+.
+
+Definition mpz_realloc_partial_solve_wit_10_aux := 
+forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: Z) ,
+  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval_2 n old retval )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+|--
+  [| (INT_MIN < old) |] 
+  &&  [| (old <= INT_MAX) |] 
+  &&  [| (cap <> 0) |] 
+  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap) |] 
+  &&  [| (size_pre <= 100000000) |] 
+  &&  [| (cap >= 0) |] 
+  &&  [| (cap <= 100000000) |] 
+  &&  [| (old >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact retval_2 n old retval )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval_2)
+.
+
+Definition mpz_realloc_partial_solve_wit_10 := mpz_realloc_partial_solve_wit_10_pure -> mpz_realloc_partial_solve_wit_10_aux.
+
 Module Type VC_Correct.
 
 Axiom proof_of_gmp_abs_safety_wit_1 : gmp_abs_safety_wit_1.
@@ -1823,5 +2851,45 @@ Axiom proof_of_mpn_normalized_size_return_wit_1_2 : mpn_normalized_size_return_w
 Axiom proof_of_mpn_normalized_size_partial_solve_wit_1 : mpn_normalized_size_partial_solve_wit_1.
 Axiom proof_of_mpn_normalized_size_partial_solve_wit_2 : mpn_normalized_size_partial_solve_wit_2.
 Axiom proof_of_mpn_normalized_size_which_implies_wit_1 : mpn_normalized_size_which_implies_wit_1.
+Axiom proof_of_mpz_clear_return_wit_1_1 : mpz_clear_return_wit_1_1.
+Axiom proof_of_mpz_clear_return_wit_1_2 : mpz_clear_return_wit_1_2.
+Axiom proof_of_mpz_clear_return_wit_1_3 : mpz_clear_return_wit_1_3.
+Axiom proof_of_mpz_clear_return_wit_1_4 : mpz_clear_return_wit_1_4.
+Axiom proof_of_mpz_clear_partial_solve_wit_1 : mpz_clear_partial_solve_wit_1.
+Axiom proof_of_mpz_clear_partial_solve_wit_2 : mpz_clear_partial_solve_wit_2.
+Axiom proof_of_mpz_clear_partial_solve_wit_3 : mpz_clear_partial_solve_wit_3.
+Axiom proof_of_mpz_clear_which_implies_wit_1 : mpz_clear_which_implies_wit_1.
+Axiom proof_of_mpz_realloc_safety_wit_1 : mpz_realloc_safety_wit_1.
+Axiom proof_of_mpz_realloc_safety_wit_2 : mpz_realloc_safety_wit_2.
+Axiom proof_of_mpz_realloc_safety_wit_3 : mpz_realloc_safety_wit_3.
+Axiom proof_of_mpz_realloc_safety_wit_4 : mpz_realloc_safety_wit_4.
+Axiom proof_of_mpz_realloc_safety_wit_5 : mpz_realloc_safety_wit_5.
+Axiom proof_of_mpz_realloc_safety_wit_6 : mpz_realloc_safety_wit_6.
+Axiom proof_of_mpz_realloc_return_wit_1_1 : mpz_realloc_return_wit_1_1.
+Axiom proof_of_mpz_realloc_return_wit_1_2 : mpz_realloc_return_wit_1_2.
+Axiom proof_of_mpz_realloc_return_wit_1_3 : mpz_realloc_return_wit_1_3.
+Axiom proof_of_mpz_realloc_return_wit_1_4 : mpz_realloc_return_wit_1_4.
+Axiom proof_of_mpz_realloc_return_wit_1_5 : mpz_realloc_return_wit_1_5.
+Axiom proof_of_mpz_realloc_return_wit_1_6 : mpz_realloc_return_wit_1_6.
+Axiom proof_of_mpz_realloc_return_wit_1_7 : mpz_realloc_return_wit_1_7.
+Axiom proof_of_mpz_realloc_return_wit_1_8 : mpz_realloc_return_wit_1_8.
+Axiom proof_of_mpz_realloc_partial_solve_wit_1 : mpz_realloc_partial_solve_wit_1.
+Axiom proof_of_mpz_realloc_partial_solve_wit_2 : mpz_realloc_partial_solve_wit_2.
+Axiom proof_of_mpz_realloc_partial_solve_wit_3_pure : mpz_realloc_partial_solve_wit_3_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_3 : mpz_realloc_partial_solve_wit_3.
+Axiom proof_of_mpz_realloc_partial_solve_wit_4_pure : mpz_realloc_partial_solve_wit_4_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_4 : mpz_realloc_partial_solve_wit_4.
+Axiom proof_of_mpz_realloc_partial_solve_wit_5_pure : mpz_realloc_partial_solve_wit_5_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_5 : mpz_realloc_partial_solve_wit_5.
+Axiom proof_of_mpz_realloc_partial_solve_wit_6_pure : mpz_realloc_partial_solve_wit_6_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_6 : mpz_realloc_partial_solve_wit_6.
+Axiom proof_of_mpz_realloc_partial_solve_wit_7_pure : mpz_realloc_partial_solve_wit_7_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_7 : mpz_realloc_partial_solve_wit_7.
+Axiom proof_of_mpz_realloc_partial_solve_wit_8_pure : mpz_realloc_partial_solve_wit_8_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_8 : mpz_realloc_partial_solve_wit_8.
+Axiom proof_of_mpz_realloc_partial_solve_wit_9_pure : mpz_realloc_partial_solve_wit_9_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_9 : mpz_realloc_partial_solve_wit_9.
+Axiom proof_of_mpz_realloc_partial_solve_wit_10_pure : mpz_realloc_partial_solve_wit_10_pure.
+Axiom proof_of_mpz_realloc_partial_solve_wit_10 : mpz_realloc_partial_solve_wit_10.
 
 End VC_Correct.

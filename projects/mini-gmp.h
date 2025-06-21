@@ -1,4 +1,16 @@
-typedef struct
+/*@ 
+  Extern Coq (Zabs : Z -> Z) 
+             (Zmax : Z -> Z -> Z)
+             (mpd_store_Z : Z -> Z -> Z -> Z -> Assertion)
+             (mpd_store_Z_compact: Z -> Z -> Z -> Z -> Assertion)
+             (mpd_store_list : Z -> list Z -> Z -> Assertion)
+             (store_Z: Z -> Z -> Assertion)
+             (list_store_Z : list Z -> Z -> Prop)
+             (list_store_Z_compact: list Z -> Z -> Prop)
+             (last: list Z -> Z -> Z)
+*/
+
+typedef struct __mpz_struct
 {
   int _mp_alloc;		/* Number of *limbs* allocated and pointed
 				   to by the _mp_d field.  */
@@ -16,7 +28,14 @@ typedef const __mpz_struct *mpz_srcptr;
 /* BEGIN Given Functions */
 
 /* Swap functions. */
-void int_swap(int x, int y);
+void int_swap(int x, int y)
+/*@
+  Require
+    emp
+  Ensure
+    x == y@pre && y == x@pre
+*/
+;
 
 void mp_ptr_swap(unsigned int *x, unsigned int *y);
 
@@ -24,13 +43,37 @@ void mpz_srcptr_swap(mpz_srcptr x, mpz_srcptr y);
 
 /* Memory allocation functions. */
 static unsigned int *
-gmp_alloc_limbs (int size);
+gmp_alloc_limbs (int size)
+/*@
+  Require
+    size >= 0
+  Ensure
+    store_undef_uint_array(__return, size)
+*/;
 
 static unsigned int *
-gmp_realloc_limbs (unsigned int *old, int old_size, int size);
+gmp_realloc_limbs (unsigned int *old, int old_size, int size)
+/*@
+  With
+    len n
+  Require
+    old_size >= 0 && size >= old_size &&
+    mpd_store_Z_compact(old, n, len, old_size)
+  Ensure
+    mpd_store_Z_compact(__return, n, len, size)
+*/;
 
 static void
-gmp_free_limbs (unsigned int *old, int size);
+gmp_free_limbs (unsigned int *old, int size)
+/*@
+  With
+    n len
+  Require
+    mpd_store_Z_compact(old, n, len, size)
+  Ensure
+    emp
+*/
+;
 
 /* END Given Functions  */
 
@@ -46,7 +89,7 @@ unsigned int mpn_sub_1 (unsigned int *, unsigned int *, int, unsigned int);
 unsigned int mpn_sub_n (unsigned int *, unsigned int *, unsigned int *, int);
 unsigned int mpn_sub (unsigned int *, unsigned int *, int, unsigned int *, int);
 
-void mpz_clear (mpz_t);
+void mpz_clear (mpz_t r);
 
 int mpz_sgn (const mpz_t);
 
@@ -58,13 +101,3 @@ void mpz_sub (mpz_t, const mpz_t, const mpz_t);
 
 void mpz_set (mpz_t, const mpz_t);
 
-/*@ 
-  Extern Coq (Zabs : Z -> Z) 
-             (Zmax : Z -> Z -> Z)
-             (mpd_store_Z : Z -> Z -> Z -> Z -> Assertion)
-             (mpd_store_Z_compact: Z -> Z -> Z -> Z -> Assertion)
-             (mpd_store_list : Z -> list Z -> Z -> Assertion)
-             (list_store_Z : list Z -> Z -> Prop)
-             (list_store_Z_compact: list Z -> Z -> Prop)
-             (last: list Z -> Z -> Z)
-*/

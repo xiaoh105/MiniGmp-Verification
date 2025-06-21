@@ -323,15 +323,53 @@ mpn_sub (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
 
 /* MPZ interface */
 
-/*void
+void
 mpz_clear (mpz_t r)
+/*@
+  With
+    n
+  Require
+    store_Z(r, n)
+  Ensure
+    exists size cap ptr,
+      r@pre -> _mp_size == size && r@pre -> _mp_alloc == cap && r@pre -> _mp_d == ptr
+*/
 {
+  /*@
+    store_Z(r@pre, n)
+    which implies
+    exists ptr size cap,
+      (size < 0 && n < 0 && mpd_store_Z_compact(ptr, -n, -size, cap) ||
+        size >= 0 && n >= 0 && mpd_store_Z_compact(ptr, n, size, cap)) &&
+      r@pre -> _mp_size == size &&
+      r@pre -> _mp_alloc == cap &&
+      r@pre -> _mp_d == ptr
+  */
   if (r->_mp_alloc)
     gmp_free_limbs (r->_mp_d, r->_mp_alloc);
-}*/
+}
 
-/*static unsigned int *
+static unsigned int *
 mpz_realloc (mpz_t r, int size)
+/*@
+  With
+    ptr old cap n
+  Require
+    size >= cap && size <= 100000000 && cap >= 0 && cap <= 100000000 &&
+    (old < 0 && n < 0 && mpd_store_Z_compact(ptr, -n, -old, cap) ||
+        old >= 0 && n >= 0 && mpd_store_Z_compact(ptr, n, old, cap)) &&
+      r -> _mp_size == old &&
+      r -> _mp_alloc == cap &&
+      r -> _mp_d == ptr
+  Ensure
+    exists c ptr_new,
+    c >= size@pre && 
+    (n < 0 && mpd_store_Z_compact(ptr_new, -n, -old, c) ||
+      n >= 0 && mpd_store_Z_compact(ptr_new, n, old, c)) &&
+    r -> _mp_size == old &&
+    r@pre -> _mp_alloc == c &&
+    r@pre -> _mp_d == ptr_new
+*/
 {
   size = gmp_max (size, 1);
 
@@ -345,7 +383,7 @@ mpz_realloc (mpz_t r, int size)
     r->_mp_size = 0;
 
   return r->_mp_d;
-}*/
+}
 
 /* Realloc for an mpz_t WHAT if it has less than NEEDED limbs.  */
 /*unsigned int *mrz_realloc_if(mpz_t z,int n) {
@@ -363,7 +401,7 @@ mpz_sgn (const mpz_t u)
 mpz_swap (mpz_t u, mpz_t v)
 {
   int_swap (u->_mp_alloc, v->_mp_alloc);
-  unsigned int *_swap(u->_mp_d, v->_mp_d);
+  mp_ptr_swap(u->_mp_d, v->_mp_d);
   int_swap (u->_mp_size, v->_mp_size);
 }*/
 

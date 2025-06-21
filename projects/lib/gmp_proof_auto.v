@@ -141,3 +141,66 @@ Proof. Admitted.
 Lemma proof_of_mpn_normalized_size_partial_solve_wit_2 : mpn_normalized_size_partial_solve_wit_2.
 Proof. Admitted. 
 
+Lemma proof_of_mpz_clear_return_wit_1_3 : mpz_clear_return_wit_1_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_clear_return_wit_1_4 : mpz_clear_return_wit_1_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_clear_partial_solve_wit_1 : mpz_clear_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_clear_partial_solve_wit_2 : mpz_clear_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_clear_partial_solve_wit_3 : mpz_clear_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_1 : mpz_realloc_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_2 : mpz_realloc_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_3 : mpz_realloc_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_4 : mpz_realloc_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_5 : mpz_realloc_safety_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_safety_wit_6 : mpz_realloc_safety_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_1 : mpz_realloc_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_2 : mpz_realloc_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_3 : mpz_realloc_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_4 : mpz_realloc_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_5 : mpz_realloc_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_6 : mpz_realloc_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_7 : mpz_realloc_partial_solve_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_8 : mpz_realloc_partial_solve_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_9 : mpz_realloc_partial_solve_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_10 : mpz_realloc_partial_solve_wit_10.
+Proof. Admitted. 
+

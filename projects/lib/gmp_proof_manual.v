@@ -411,3 +411,298 @@ Proof.
   + rewrite sublist_self; try lia.
     tauto.
 Qed.
+
+
+Lemma proof_of_mpz_clear_return_wit_1_1 : mpz_clear_return_wit_1_1.
+Proof.
+  pre_process.
+  Exists ptr_2 cap_2 size_2.
+  entailer!.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  unfold mpd_store_list.
+  subst.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_clear_return_wit_1_2 : mpz_clear_return_wit_1_2.
+Proof.
+  pre_process.
+  Exists ptr_2 cap_2 size_2.
+  entailer!.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  unfold mpd_store_list.
+  entailer!.
+  assert (size_2 = 0). {
+    pose proof (Zlength_nonneg data).
+    lia.
+  }
+  rewrite H6 in *.
+  rewrite <-H3 in *.
+  unfold store_uint_array, store_undef_uint_array_rec.
+  unfold store_array.
+  assert (cap_2 - 0 = 0). { lia. }
+  rewrite H7; clear H7.
+  pose proof (Zlength_nil_inv data ltac:(lia)).
+  rewrite H7 in *; clear H7.
+  simpl.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_clear_return_wit_1_3 : mpz_clear_return_wit_1_3.
+Proof.
+  pre_process.
+  Exists ptr_2 cap_2 size_2.
+  entailer!.
+Qed.
+
+
+Lemma proof_of_mpz_clear_return_wit_1_4 : mpz_clear_return_wit_1_4.
+Proof.
+  pre_process.
+  Exists ptr_2 cap_2 size_2.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_clear_which_implies_wit_1 : mpz_clear_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Intros ptr cap size.
+  entailer!.
+  rewrite orp_sepcon_left.
+  Split.
+  + Right.
+    Exists ptr cap size.
+    entailer!.
+  + Left.
+    Exists ptr cap size.
+    entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_1 : mpz_realloc_return_wit_1_1.
+Proof.
+  pre_process.
+  Right.
+  Exists retval_3 retval_2.
+  entailer!.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_2 : mpz_realloc_return_wit_1_2.
+Proof.
+  pre_process.
+  Left.
+  Exists retval_3 retval_2.
+  entailer!.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_3 : mpz_realloc_return_wit_1_3.
+Proof.
+  pre_process.
+  Right.
+  Exists retval_3 retval_2.
+  entailer!.
+  + subst.
+    unfold mpd_store_Z_compact.
+    Intros data.
+    Exists data.
+    unfold mpd_store_list, store_undef_uint_array_rec.
+    entailer!.
+    - assert (Zlength data = 0). {
+        pose proof (Zlength_nonneg data).
+        lia.
+      }
+      rewrite H8 in *.
+      simpl.
+      entailer!.
+      pose proof (Zlength_nil_inv data H8).
+      repeat subst.
+      unfold store_uint_array, store_array; simpl; entailer!.
+      unfold store_undef_uint_array, store_undef_array.
+      rewrite Z.sub_0_r.
+      reflexivity.
+    - unfold Zmax in *.
+      assert (size_pre < 1 \/ size_pre >= 1). { lia. }
+      destruct H8.
+      * rewrite (Z.max_r size_pre 1 ltac:(lia)); lia.
+      * rewrite (Z.max_l size_pre 1 ltac:(lia)); lia.
+  + pose proof (Z.le_max_l size_pre 1).
+    unfold Zmax in *.
+    lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_4 : mpz_realloc_return_wit_1_4.
+Proof.
+  pre_process.
+  Left.
+  Exists retval_3 retval_2.
+  entailer!.
+  + subst.
+    unfold mpd_store_Z_compact, mpd_store_list.
+    Intros data.
+    Exists data.
+    assert (Zlength data = 0). {
+      pose proof (Zlength_nonneg data).
+      lia.
+    }
+    rewrite H8 in *; clear H2.
+    pose proof (Zlength_nil_inv data H8).
+    rewrite H2 in *; clear H2 H8.
+    unfold store_uint_array, store_array.
+    simpl.
+    entailer!.
+  + pose proof (Z.le_max_l size_pre 1).
+    unfold Zmax in *.
+    lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_5 : mpz_realloc_return_wit_1_5.
+Proof.
+  pre_process.
+  Left.
+  Exists retval_3 retval_2.
+  entailer!.
+  + subst.
+    unfold mpd_store_Z_compact, mpd_store_list.
+    Intros data.
+    Exists data.
+    unfold store_uint_array, store_array.
+    simpl.
+    entailer!.
+  + pose proof (Z.le_max_l size_pre 1).
+    unfold Zmax in *.
+    lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_6 : mpz_realloc_return_wit_1_6.
+Proof.
+  pre_process.
+  Right.
+  Exists retval_3 retval_2.
+  subst.
+  entailer!.
+  + unfold mpd_store_Z_compact, mpd_store_list.
+    Intros data; Exists data.
+    unfold store_uint_array, store_array.
+    assert (Zlength data = 0). {
+      pose proof (Zlength_nonneg data).
+      lia.
+    }
+    rewrite H8 in *; clear H2.
+    pose proof (Zlength_nil_inv data H8).
+    rewrite H2 in *; clear H2 H8.
+    unfold store_undef_uint_array, store_undef_uint_array_rec, store_undef_array.
+    subst.
+    simpl.
+    entailer!.
+    - rewrite Z.sub_0_r.
+      entailer!.
+    - pose proof (Z.le_max_r size_pre 1).
+      simpl in H.
+      unfold Zmax in *.
+      lia.
+  + unfold Zmax in *.
+    pose proof (Z.le_max_l size_pre 1).
+    lia.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_7 : mpz_realloc_return_wit_1_7.
+Proof.
+  pre_process.
+  Left.
+  Exists retval_3 retval_2.
+  subst.
+  unfold Zmax in *.
+  rewrite (Z.abs_neq old ltac:(lia)) in H.
+  pose proof (Z.le_max_l size_pre 1).
+  unfold mpd_store_Z_compact.
+  Intros data; entailer!.
+  unfold mpd_store_list.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_1_8 : mpz_realloc_return_wit_1_8.
+Proof.
+  pre_process.
+  Right.
+  Exists retval_3 retval_2.
+  subst.
+  unfold Zmax in *.
+  rewrite (Z.abs_eq old ltac:(lia)) in H.
+  pose proof (Z.le_max_l size_pre 1).
+  unfold mpd_store_Z_compact.
+  Intros data; entailer!.
+  unfold mpd_store_list.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_3_pure : mpz_realloc_partial_solve_wit_3_pure.
+Proof.
+  pre_process.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_4_pure : mpz_realloc_partial_solve_wit_4_pure.
+Proof.
+  pre_process.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_5_pure : mpz_realloc_partial_solve_wit_5_pure.
+Proof.
+  pre_process.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_6_pure : mpz_realloc_partial_solve_wit_6_pure.
+Proof.
+  pre_process.
+  unfold Zmax in *.
+  pose proof (Z.le_max_l size_pre 1).
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_7_pure : mpz_realloc_partial_solve_wit_7_pure.
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact, mpd_store_list.
+  Intros data.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_8_pure : mpz_realloc_partial_solve_wit_8_pure.
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact, mpd_store_list.
+  Intros data.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_9_pure : mpz_realloc_partial_solve_wit_9_pure.
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact, mpd_store_list.
+  Intros data.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_realloc_partial_solve_wit_10_pure : mpz_realloc_partial_solve_wit_10_pure.
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact, mpd_store_list.
+  Intros data.
+  entailer!.
+Qed.
