@@ -422,14 +422,20 @@ Proof.
     + simpl. tauto.
 Qed.
 
-Lemma proof_of_mpn_add_1_entail_wit_2_1 : mpn_add_1_entail_wit_2_1.
+Lemma proof_of_mpn_add_1_entail_wit_2 : mpn_add_1_entail_wit_2.
+Proof.
+  pre_process.
+  entailer!.
+Admitted. 
+
+Lemma proof_of_mpn_add_1_entail_wit_3_1 : mpn_add_1_entail_wit_3_1.
 Proof.
   pre_process.
   rewrite replace_Znth_app_r.
   - Exists l'''.
-    rewrite H12.
+    rewrite H14.
     assert (i - i = 0) by lia.
-    rewrite H24.
+    rewrite H26.
     set (new_b := (unsigned_last_nbits (Znth i l_3 0 + b) 32)).
     rewrite replace_Znth_nothing; try lia.
     assert (replace_Znth 0 new_b (a :: nil) = new_b :: nil). {
@@ -438,85 +444,108 @@ Proof.
       unfold replace_nth.
       reflexivity.
     }
-    rewrite H25.
+    rewrite H27.
     Exists (l'_2 ++ new_b :: nil).
     Exists (val2_2 + new_b * (UINT_MOD^ i)).
     Exists (val1_2 + (Znth i l_3 0) * (UINT_MOD^ i)).
     Exists l_3.
     entailer!.
     + rewrite Zlength_app.
-      rewrite H12.
+      rewrite H14.
       unfold Zlength.
       unfold Zlength_aux.
       lia.
     + assert (val1_2 + Znth i l_3 0 * 4294967296 ^ i + b_pre = (val1_2 + b_pre) + Znth i l_3 0 * 4294967296 ^ i) by lia.
-      rewrite H26.
-      rewrite <- H11.
+      rewrite H28.
+      rewrite <- H13.
       assert (Znth i l_3 0 + b = new_b + UINT_MOD).
       {
         subst new_b.
         unfold unsigned_last_nbits.
         unfold unsigned_last_nbits in H3.
         assert (2^32 = 4294967296). { nia. }
-        rewrite H27 in *.
-        admit.
+        rewrite H29 in *.
+        assert (0 <= Znth i l_3 0 < 4294967296). {
+          assert (l_2=l_3).
+          {
+            pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+            apply H30 in H9; try tauto.
+          }
+          assert (i < Zlength l_3). {
+            subst l_3.
+            rewrite H17.
+            tauto.
+          }
+          unfold list_store_Z_compact in H9.
+          apply list_within_bound_Znth.
+          lia.
+          tauto.
+        }
+        apply Z_mod_add_carry; try lia; try tauto.
       }
-      admit.
+      assert (b * 4294967296 ^ i + Znth i l_3 0 * 4294967296 ^ i = new_b * 4294967296 ^ i + 1 * 4294967296 ^ (i + 1)).
+      {
+        subst new_b.
+        Search [ Zmult Zplus "distr" ].
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
     + pose proof (__list_store_Z_concat_r l'_2 val2_2 new_b).
-      apply H26 in H10.
-      rewrite H12 in H10.
+      apply H28 in H12.
+      rewrite H14 in H12.
       assert (new_b * 4294967296 ^ i + val2_2 = (val2_2 + new_b * 4294967296 ^ i)) by lia.
-      rewrite H27 in H10.
+      rewrite H29 in H12.
       tauto.
       subst new_b.
       unfold unsigned_last_nbits.
       assert (2 ^ 32 = 4294967296). { nia. }
-      rewrite H27.
+      rewrite H29.
       apply Z.mod_pos_bound.
       lia.
       + assert (l_2=l_3).
         {
           pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
-          apply H26 in H7; try tauto.
+          apply H28 in H9; try tauto.
         }
 
         assert (i < Zlength l_3). {
           subst l_3.
-          rewrite H15.
+          rewrite H17.
           tauto.
         }
 
         assert((sublist 0 (i + 1) l_3) = (sublist 0 i l_3) ++ (Znth i l_3 0)  :: nil). {
           pose proof (sublist_split 0 (i+1) i l_3).
           pose proof (sublist_single i l_3 0).
-          rewrite <-H29.
-          apply H28.
+          rewrite <-H31.
+          apply H30.
           lia.
           subst l_3.
-          rewrite Zlength_correct in H27.
+          rewrite Zlength_correct in H29.
           lia.
-          rewrite Zlength_correct in H27.
+          rewrite Zlength_correct in H29.
           lia.
         }
-        rewrite H28.
-        pose proof (__list_store_Z_concat_r (sublist 0 i l_3) val1_2 (Znth i l_3 0)).
-        apply H29 in H9.
-        rewrite Zlength_sublist0 in H9.
-        assert (val1_2 + Znth i l_3 0 * 4294967296 ^ i = Znth i l_3 0 * 4294967296 ^ i + val1_2) by lia.
         rewrite H30.
+        pose proof (__list_store_Z_concat_r (sublist 0 i l_3) val1_2 (Znth i l_3 0)).
+        apply H31 in H11.
+        rewrite Zlength_sublist0 in H11.
+        assert (val1_2 + Znth i l_3 0 * 4294967296 ^ i = Znth i l_3 0 * 4294967296 ^ i + val1_2) by lia.
+        rewrite H32.
         tauto.
         subst l_3.
-        rewrite H15.
+        rewrite H17.
         lia.
         apply list_within_bound_Znth.
         lia.
-        unfold list_store_Z_compact in H7.
+        unfold list_store_Z_compact in H9.
         tauto.
   - pose proof (Zlength_sublist0 i l'_2).
     lia.
-Admitted. 
+Qed.
 
-Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
+Lemma proof_of_mpn_add_1_entail_wit_3_2 : mpn_add_1_entail_wit_3_2.
 Proof.
   pre_process.
 Admitted. 

@@ -293,6 +293,7 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
       Given l l' l'' val1 val2
     */
     unsigned int r = ap[i] + b;
+    /*@ 0 <= b && b <= UINT_MAX by local */
     b = (r < b);
     /*@
       0 <= i && i < n@pre && n@pre <= cap2 &&
