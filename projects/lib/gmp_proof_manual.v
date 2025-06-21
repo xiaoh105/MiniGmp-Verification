@@ -425,8 +425,9 @@ Qed.
 Lemma proof_of_mpn_add_1_entail_wit_2 : mpn_add_1_entail_wit_2.
 Proof.
   pre_process.
+  prop_apply (store_uint_range &("b") b).
   entailer!.
-Admitted. 
+Qed.
 
 Lemma proof_of_mpn_add_1_entail_wit_3_1 : mpn_add_1_entail_wit_3_1.
 Proof.
@@ -733,4 +734,77 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_3 : mpn_add_1_which_implies_wit_3.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  destruct l''. {
+    unfold store_uint_array_rec.
+    simpl.
+    entailer!.
+  }
+  pose proof (store_uint_array_rec_cons rp_pre i cap2  z l'' ltac:(lia)).
+  sep_apply H2.
+  Exists z l''.
+  entailer!.
+  assert (i = 0 \/ i > 0). { lia. }
+  destruct H3.
+  + subst.
+    simpl.
+    entailer!.
+    simpl in H2.
+    assert (rp_pre + 0 = rp_pre). { lia. }
+    rewrite H3.
+    rewrite H3 in H2.
+    clear H3.
+    pose proof (store_uint_array_empty rp_pre l').
+    sep_apply H3.
+    rewrite logic_equiv_andp_comm.
+    rewrite logic_equiv_coq_prop_andp_sepcon.
+    Intros.
+    subst l'.
+    rewrite app_nil_l.
+    unfold store_uint_array.
+    unfold store_array.
+    unfold store_array_rec.
+    simpl.
+    assert (rp_pre + 0 = rp_pre). { lia. }
+    rewrite H4; clear H4.
+    entailer!.
+  + pose proof (Aux.uint_array_rec_to_uint_array rp_pre 0 i (sublist 0 i l') ltac:(lia)).
+    destruct H4 as [_ H4].
+    assert (rp_pre + sizeof(UINT) * 0 = rp_pre). { lia. }
+    rewrite H5 in H4; clear H5.
+    assert (i - 0 = i). { lia. }
+    rewrite H5 in H4; clear H5.
+    pose proof (Aux.uint_array_rec_to_uint_array rp_pre 0 (i + 1) (sublist 0 i l' ++ z :: nil) ltac:(lia)).
+    destruct H5 as [H5 _].
+    assert (i + 1 - 0 = i + 1). { lia. }
+    rewrite H6 in H5; clear H6.
+    assert (rp_pre + sizeof(UINT) * 0 = rp_pre). { lia. }
+    rewrite H6 in H5; clear H6.
+    pose proof (uint_array_rec_to_uint_array rp_pre 0 i l').
+    specialize (H6 H).
+    assert ((rp_pre + sizeof ( UINT ) * 0) = rp_pre) by lia.
+    rewrite H7 in H6; clear H7.
+    assert ((i-0) = i) by lia.
+    rewrite H7 in H6; clear H7.
+    destruct H6 as [_ H6].
+    sep_apply H6.
+    (* pose proof (uint_array_rec_to_uint_array rp_pre 0 (i+1) (l' ++ z :: nil)).
+    assert (H_i_plus_1 : 0 <= i + 1) by lia.
+    specialize (H7 H_i_plus_1); clear H_i_plus_1.
+    destruct H7 as [H7 _].
+    assert (i + 1 - 0 = i + 1) by lia.
+    rewrite H8 in H7; clear H8.
+    assert ((rp_pre + sizeof ( UINT ) * 0) = rp_pre) by lia.
+    rewrite H8 in H7; clear H8.
+    rewrite <-H7.
+    clear H6.
+    clear H7. *)
+    pose proof (store_uint_array_divide_rec rp_pre (i+1) (l' ++ z :: nil) i).
+    assert (H_tmp: 0 <= i <= i+1) by lia.
+    specialize (H7 H_tmp); clear H_tmp.
+    rewrite <- store_uint_array_single.
+    sep_apply store_uint_array_rec_divide_rev.
+    entailer!.
+    lia.
+Qed.
