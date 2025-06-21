@@ -699,10 +699,38 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_1 : mpn_add_1_which_implies_wit_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact.
+  Intros l.
+  Exists l.
+  unfold mpd_store_list.
+  entailer!.
+  subst n_pre.
+  entailer!.
+Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_2 : mpn_add_1_which_implies_wit_2.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  pose proof (store_uint_array_divide rp_pre cap2 l2 0).
+  pose proof (Zlength_nonneg l2).
+  specialize (H0 ltac:(lia) ltac:(lia)).
+  destruct H0 as [H0 _].
+  simpl in H0.
+  entailer!.
+  rewrite (sublist_nil l2 0 0) in H0; [ | lia].
+  sep_apply H0.
+  entailer!.
+  unfold store_uint_array, store_uint_array_rec.
+  unfold store_array.
+  rewrite (sublist_self l2 cap2); [ | lia ].
+  assert (rp_pre + 0 = rp_pre). { lia. }
+  rewrite H2; clear H2.
+  assert (cap2 - 0 = cap2). { lia. }
+  rewrite H2; clear H2.
+  reflexivity.
+Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_3 : mpn_add_1_which_implies_wit_3.
 Proof. Admitted. 
