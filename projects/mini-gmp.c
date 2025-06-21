@@ -15,7 +15,7 @@ int gmp_abs(int x)
 int gmp_max(int a, int b)
 /*@
   Require emp
-  Ensure __return == Zmax(a, b)
+  Ensure __return == Z::max(a, b)
 */
 {
   return a > b ? a : b;

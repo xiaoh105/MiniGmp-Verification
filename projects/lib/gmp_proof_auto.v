@@ -15,8 +15,6 @@ Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
-Require Import Coq.ZArith.ZArith.
-Local Open Scope Z_scope.
 Import naive_C_Rules.
 Local Open Scope sac.
 
@@ -243,4 +241,5 @@ Lemma proof_of_mpz_realloc_partial_solve_wit_9 : mpz_realloc_partial_solve_wit_9
 Proof. Admitted. 
 
 Lemma proof_of_mpz_realloc_partial_solve_wit_10 : mpz_realloc_partial_solve_wit_10.
-Proof. Admitted.
+Proof. Admitted. 
+

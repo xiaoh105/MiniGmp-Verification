@@ -2826,7 +2826,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2850,7 +2850,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2874,7 +2874,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2897,7 +2897,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2920,7 +2920,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval <= retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2954,7 +2954,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval <= retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -2988,7 +2988,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval <= retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3023,7 +3023,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval <= retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3058,7 +3058,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3093,7 +3093,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3128,7 +3128,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3162,7 +3162,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval_3
   [| (retval > retval_2) |] 
   &&  [| (retval = (Zabs (old))) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3244,7 +3244,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) ,
 Definition mpz_realloc_partial_solve_wit_3_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3260,13 +3260,13 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (cap >= 0) |] 
   &&  [| (retval >= cap) |] 
-  &&  [| ((Zmax (size_pre) (1)) >= cap) |]
+  &&  [| ((Z.max (size_pre) (1)) >= cap) |]
 .
 
 Definition mpz_realloc_partial_solve_wit_3_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3280,9 +3280,9 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (cap >= 0) |] 
   &&  [| (retval >= cap) |] 
-  &&  [| ((Zmax (size_pre) (1)) >= cap) |] 
+  &&  [| ((Z.max (size_pre) (1)) >= cap) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3300,7 +3300,7 @@ Definition mpz_realloc_partial_solve_wit_3 := mpz_realloc_partial_solve_wit_3_pu
 Definition mpz_realloc_partial_solve_wit_4_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3316,13 +3316,13 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (cap >= 0) |] 
   &&  [| (retval >= cap) |] 
-  &&  [| ((Zmax (size_pre) (1)) >= cap) |]
+  &&  [| ((Z.max (size_pre) (1)) >= cap) |]
 .
 
 Definition mpz_realloc_partial_solve_wit_4_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3336,9 +3336,9 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (cap >= 0) |] 
   &&  [| (retval >= cap) |] 
-  &&  [| ((Zmax (size_pre) (1)) >= cap) |] 
+  &&  [| ((Z.max (size_pre) (1)) >= cap) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3356,7 +3356,7 @@ Definition mpz_realloc_partial_solve_wit_4 := mpz_realloc_partial_solve_wit_4_pu
 Definition mpz_realloc_partial_solve_wit_5_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3376,7 +3376,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 Definition mpz_realloc_partial_solve_wit_5_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3390,7 +3390,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (retval >= 0) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3408,7 +3408,7 @@ Definition mpz_realloc_partial_solve_wit_5 := mpz_realloc_partial_solve_wit_5_pu
 Definition mpz_realloc_partial_solve_wit_6_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3428,7 +3428,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 Definition mpz_realloc_partial_solve_wit_6_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3442,7 +3442,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) ,
 |--
   [| (retval >= 0) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3460,7 +3460,7 @@ Definition mpz_realloc_partial_solve_wit_6 := mpz_realloc_partial_solve_wit_6_pu
 Definition mpz_realloc_partial_solve_wit_7_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3482,7 +3482,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
 Definition mpz_realloc_partial_solve_wit_7_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (retval_2: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3498,7 +3498,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (r
   [| (old <= INT_MAX) |] 
   &&  [| (INT_MIN < old) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3517,7 +3517,7 @@ Definition mpz_realloc_partial_solve_wit_7 := mpz_realloc_partial_solve_wit_7_pu
 Definition mpz_realloc_partial_solve_wit_8_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) (retval: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3539,7 +3539,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval_2: Z) 
 Definition mpz_realloc_partial_solve_wit_8_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (retval_2: Z) ,
   [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3555,7 +3555,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (ptr: Z) (retval: Z) (r
   [| (INT_MIN < old) |] 
   &&  [| (old <= INT_MAX) |] 
   &&  [| (cap = 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3574,7 +3574,7 @@ Definition mpz_realloc_partial_solve_wit_8 := mpz_realloc_partial_solve_wit_8_pu
 Definition mpz_realloc_partial_solve_wit_9_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3595,7 +3595,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: 
 Definition mpz_realloc_partial_solve_wit_9_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3610,7 +3610,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: 
   [| (old <= INT_MAX) |] 
   &&  [| (INT_MIN < old) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3628,7 +3628,7 @@ Definition mpz_realloc_partial_solve_wit_9 := mpz_realloc_partial_solve_wit_9_pu
 Definition mpz_realloc_partial_solve_wit_10_pure := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval_2 = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3649,7 +3649,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval_2: Z) (retval: 
 Definition mpz_realloc_partial_solve_wit_10_aux := 
 forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: Z) ,
   [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
@@ -3664,7 +3664,7 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: 
   [| (INT_MIN < old) |] 
   &&  [| (old <= INT_MAX) |] 
   &&  [| (cap <> 0) |] 
-  &&  [| (retval = (Zmax (size_pre) (1))) |] 
+  &&  [| (retval = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap) |] 
   &&  [| (size_pre <= 100000000) |] 
   &&  [| (cap >= 0) |] 
