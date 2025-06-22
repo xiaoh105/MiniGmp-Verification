@@ -33,6 +33,34 @@ Lemma Z_mod_add_uncarry: forall (a b m: Z),
   a + b = (a + b) mod m.
 Proof. Admitted.
 
+Lemma Z_mod_3add_carry10: forall (a b c m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
+  (a + c) mod m < c ->
+  ((a + c) mod m + b) mod m >= b ->
+  a + b + c = ((a + c) mod m + b) mod m + m.
+Proof. Admitted.
+
+Lemma Z_mod_3add_carry01: forall (a b c m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
+  (a + c) mod m >= c ->
+  ((a + c) mod m + b) mod m < b ->
+  a + b + c = ((a + c) mod m + b) mod m + m.
+Proof. Admitted.
+
+Lemma Z_mod_3add_carry11: forall (a b c m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
+  (a + c) mod m < c ->
+  ((a + c) mod m + b) mod m < b ->
+  a + b + c = ((a + c) mod m + b) mod m + m * 2.
+Proof. Admitted.
+
+Lemma Z_mod_3add_carry00: forall (a b c m: Z),
+  m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
+  (a + c) mod m >= c ->
+  ((a + c) mod m + b) mod m >= b ->
+  a + b + c = ((a + c) mod m + b) mod m.
+Proof. Admitted.
+
 Lemma Z_of_nat_succ: forall (n: nat),
   Z.of_nat (S n) = Z.of_nat n + 1.
 Proof. lia. Qed.

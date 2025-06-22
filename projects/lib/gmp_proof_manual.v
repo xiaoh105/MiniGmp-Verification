@@ -469,7 +469,7 @@ Proof.
         assert (0 <= Znth i l_3 0 < 4294967296). {
           assert (l_2=l_3).
           {
-            pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+            pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
             apply H30 in H9; try tauto.
           }
           assert (i < Zlength l_3). {
@@ -477,7 +477,7 @@ Proof.
             rewrite H17.
             tauto.
           }
-          unfold list_store_Z_compact in H9.
+          unfold list_store_Z in H9.
           apply list_within_bound_Znth.
           lia.
           tauto.
@@ -505,7 +505,7 @@ Proof.
       lia.
       + assert (l_2=l_3).
         {
-          pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+          pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
           apply H28 in H9; try tauto.
         }
 
@@ -539,7 +539,7 @@ Proof.
         lia.
         apply list_within_bound_Znth.
         lia.
-        unfold list_store_Z_compact in H9.
+        unfold list_store_Z in H9.
         tauto.
   - pose proof (Zlength_sublist0 i l'_2).
     lia.
@@ -585,7 +585,7 @@ Proof.
         assert (0 <= Znth i l_3 0 < 4294967296). {
           assert (l_2=l_3).
           {
-            pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+            pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
             apply H30 in H9; try tauto.
           }
           assert (i < Zlength l_3). {
@@ -593,7 +593,7 @@ Proof.
             rewrite H17.
             tauto.
           }
-          unfold list_store_Z_compact in H9.
+          unfold list_store_Z in H9.
           apply list_within_bound_Znth.
           lia.
           tauto.
@@ -621,7 +621,7 @@ Proof.
       lia.
       + assert (l_2=l_3).
         {
-          pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+          pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
           apply H28 in H9; try tauto.
         }
 
@@ -655,7 +655,7 @@ Proof.
         lia.
         apply list_within_bound_Znth.
         lia.
-        unfold list_store_Z_compact in H9.
+        unfold list_store_Z in H9.
         tauto.
   - pose proof (Zlength_sublist0 i l'_2).
     lia.
@@ -664,10 +664,10 @@ Qed.
 Lemma proof_of_mpn_add_1_return_wit_1 : mpn_add_1_return_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   unfold mpd_store_list.
   Exists val2.
-  pose proof (list_store_Z_compact_reverse_injection l l_2 val val).
+  pose proof (list_store_Z_reverse_injection l l_2 val val).
   apply H19 in H2; try tauto.
   rewrite <-H2 in H10.
   assert (i = n_pre) by lia.
@@ -675,32 +675,33 @@ Proof.
   rewrite <- H10 in H4.
   rewrite (sublist_self l (Zlength l)) in H4; try tauto.
   rewrite <-H2 in H12.
-  assert (list_store_Z l val). { apply list_store_Z_compact_to_normal. tauto. }
   pose proof (list_store_Z_injection l l val1 val).
-  apply H22 in H4; try tauto.
+  apply H21 in H4; try tauto.
   rewrite H4 in H6.
   entailer!.
   Exists l.
   entailer!.
   entailer!; try rewrite H20; try tauto.
-  - rewrite H10.
-    entailer!.
-    unfold mpd_store_Z.
-    unfold mpd_store_list.
-    Exists l'.
-    rewrite H7.
-    subst i.
-    entailer!.
-    rewrite H20.
-    entailer!.
-    apply store_uint_array_rec_def2undef.
-  - rewrite <- H20. tauto.
+  rewrite H10.
+  entailer!.
+  unfold mpd_store_Z.
+  unfold mpd_store_list.
+  Exists l'.
+  rewrite H7.
+  subst i.
+  entailer!.
+  rewrite H20.
+  entailer!.
+  apply store_uint_array_rec_def2undef.
+  assert (Zlength l' = n_pre) by lia.
+  rewrite <- H7.
+  tauto.
 Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_1 : mpn_add_1_which_implies_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   Intros l.
   Exists l.
   unfold mpd_store_list.
@@ -799,6 +800,605 @@ Proof.
     clear H6.
     clear H7. *)
     pose proof (store_uint_array_divide_rec rp_pre (i+1) (l' ++ z :: nil) i).
+    assert (H_tmp: 0 <= i <= i+1) by lia.
+    specialize (H7 H_tmp); clear H_tmp.
+    rewrite <- store_uint_array_single.
+    sep_apply store_uint_array_rec_divide_rev.
+    entailer!.
+    lia.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_1 : mpn_add_n_entail_wit_1.
+Proof.
+  pre_process.
+  Exists l_r nil 0 0 0.
+  Exists l_b_2 l_a_2.
+  entailer!.
+  - unfold list_store_Z.
+    simpl.
+    tauto.
+  - rewrite sublist_nil; try lia; try tauto.
+    unfold list_store_Z.
+    simpl.
+    tauto.
+  - rewrite sublist_nil; try lia; try tauto.
+    unfold list_store_Z.
+    simpl.
+    tauto.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_2 : mpn_add_n_entail_wit_2.
+Proof.
+  pre_process.
+  prop_apply (store_uint_range &("cy") cy).
+  entailer!.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_3_1 : mpn_add_n_entail_wit_3_1.
+Proof.
+  pre_process.
+  rewrite replace_Znth_app_r.
+  assert (l_a_3 = l_a_2). {
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
+    specialize (H37 H13 H28).
+    apply H37.
+    reflexivity.
+  }
+  subst l_a_3.
+  assert (l_b_3 = l_b_2). {
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
+    specialize (H37 H14 H24).
+    apply H37.
+    reflexivity.
+  }
+  subst l_b_3.
+  - Exists l_r_suffix'.
+    rewrite H29.
+    rewrite H18.
+    assert (i - i = 0) by lia.
+    rewrite H37; clear H37.
+    set (partial_result_1 := (unsigned_last_nbits (Znth i l_a_2 0 + cy) 32)).
+    set (partial_result_2 := (unsigned_last_nbits (partial_result_1 + Znth i l_b_2 0) 32)).
+    rewrite replace_Znth_nothing; try lia.
+    assert ((replace_Znth 0 partial_result_2 (a :: nil)) = partial_result_2 :: nil). {
+      unfold replace_Znth.
+      simpl.
+      reflexivity.
+    }
+    rewrite H37; clear H37.
+    Exists (l_r_prefix_2 ++ partial_result_2 :: nil).
+    Exists (val_r_prefix_2 + partial_result_2 * (UINT_MOD ^ i)).
+    Exists (val_b_prefix_2 + (Znth i l_b_2 0) * (UINT_MOD ^ i)).
+    Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
+    Exists l_b_2 l_a_2.
+    entailer!.
+    + assert ( (val_a_prefix_2 + Znth i l_a_2 0 * 4294967296 ^ i +(val_b_prefix_2 + Znth i l_b_2 0 * 4294967296 ^ i)) = (val_a_prefix_2 + val_b_prefix_2) + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i).
+      {
+        lia.
+      }
+      rewrite H37; clear H37.
+      rewrite <- H19.
+      assert ( (Znth i l_a_2 0) + (Znth i l_b_2 0) + cy = partial_result_2 + UINT_MOD). {
+        unfold unsigned_last_nbits in H4, H3.
+        assert (2 ^ 32 = 4294967296). { nia. }
+        rewrite H37 in H4, H3; clear H37.
+        apply Z_mod_3add_carry10; try lia; try tauto;
+        try unfold list_store_Z in H13, H14;
+        try apply list_within_bound_Znth;
+        try lia;
+        try tauto.
+      }
+      assert ( partial_result_2 * 4294967296 ^ i + (1 + 0) * 4294967296 ^ (i + 1) = cy * 4294967296 ^ i + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i). {
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
+    + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
+      assert (Zlength (partial_result_2 :: nil) = 1). {
+        unfold Zlength.
+        simpl.
+        reflexivity.
+      }
+      rewrite H38 in H37; clear H38.
+      rewrite H18 in H37.
+      apply H37.
+    + pose proof (list_store_Z_concat l_r_prefix_2 (partial_result_2 :: nil) val_r_prefix_2 partial_result_2).
+      rewrite H18 in H37.
+      apply H37.
+      tauto.
+      unfold list_store_Z.
+      simpl.
+      split.
+      reflexivity.
+      split.
+      unfold partial_result_2.
+      unfold unsigned_last_nbits.
+      assert (2 ^ 32 = 4294967296). { nia. }
+      rewrite H38; clear H38.
+      apply Z.mod_pos_bound.
+      lia.
+      tauto.
+    + pose proof (list_store_Z_list_append l_b_2 i val_b_prefix_2 val_b).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+    + pose proof (list_store_Z_list_append l_a_2 i val_a_prefix_2 val_a).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+  - pose proof (Zlength_sublist0 i l_r_prefix_2).
+    lia.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_3_2 : mpn_add_n_entail_wit_3_2.
+Proof.
+  pre_process.
+  rewrite replace_Znth_app_r.
+  assert (l_a_3 = l_a_2). {
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
+    specialize (H37 H13 H28).
+    apply H37.
+    reflexivity.
+  }
+  subst l_a_3.
+  assert (l_b_3 = l_b_2). {
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
+    specialize (H37 H14 H24).
+    apply H37.
+    reflexivity.
+  }
+  subst l_b_3.
+  - Exists l_r_suffix'.
+    rewrite H29.
+    rewrite H18.
+    assert (i - i = 0) by lia.
+    rewrite H37; clear H37.
+    set (partial_result_1 := (unsigned_last_nbits (Znth i l_a_2 0 + cy) 32)).
+    set (partial_result_2 := (unsigned_last_nbits (partial_result_1 + Znth i l_b_2 0) 32)).
+    rewrite replace_Znth_nothing; try lia.
+    assert ((replace_Znth 0 partial_result_2 (a :: nil)) = partial_result_2 :: nil). {
+      unfold replace_Znth.
+      simpl.
+      reflexivity.
+    }
+    rewrite H37; clear H37.
+    Exists (l_r_prefix_2 ++ partial_result_2 :: nil).
+    Exists (val_r_prefix_2 + partial_result_2 * (UINT_MOD ^ i)).
+    Exists (val_b_prefix_2 + (Znth i l_b_2 0) * (UINT_MOD ^ i)).
+    Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
+    Exists l_b_2 l_a_2.
+    entailer!.
+    + assert ( (val_a_prefix_2 + Znth i l_a_2 0 * 4294967296 ^ i +(val_b_prefix_2 + Znth i l_b_2 0 * 4294967296 ^ i)) = (val_a_prefix_2 + val_b_prefix_2) + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i).
+      {
+        lia.
+      }
+      rewrite H37; clear H37.
+      rewrite <- H19.
+      assert ( (Znth i l_a_2 0) + (Znth i l_b_2 0) + cy = partial_result_2 + UINT_MOD * 2). {
+        unfold unsigned_last_nbits in H4, H3.
+        assert (2 ^ 32 = 4294967296). { nia. }
+        rewrite H37 in H4, H3; clear H37.
+        apply Z_mod_3add_carry11; try lia; try tauto;
+        try unfold list_store_Z in H13, H14;
+        try apply list_within_bound_Znth;
+        try lia;
+        try tauto.
+      }
+      assert ( partial_result_2 * 4294967296 ^ i + (1 + 1) * 4294967296 ^ (i + 1) = cy * 4294967296 ^ i + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i). {
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
+    + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
+      assert (Zlength (partial_result_2 :: nil) = 1). {
+        unfold Zlength.
+        simpl.
+        reflexivity.
+      }
+      rewrite H38 in H37; clear H38.
+      rewrite H18 in H37.
+      apply H37.
+    + pose proof (list_store_Z_concat l_r_prefix_2 (partial_result_2 :: nil) val_r_prefix_2 partial_result_2).
+      rewrite H18 in H37.
+      apply H37.
+      tauto.
+      unfold list_store_Z.
+      simpl.
+      split.
+      reflexivity.
+      split.
+      unfold partial_result_2.
+      unfold unsigned_last_nbits.
+      assert (2 ^ 32 = 4294967296). { nia. }
+      rewrite H38; clear H38.
+      apply Z.mod_pos_bound.
+      lia.
+      tauto.
+    + pose proof (list_store_Z_list_append l_b_2 i val_b_prefix_2 val_b).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+    + pose proof (list_store_Z_list_append l_a_2 i val_a_prefix_2 val_a).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+  - pose proof (Zlength_sublist0 i l_r_prefix_2).
+    lia.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_3_3 : mpn_add_n_entail_wit_3_3.
+Proof.
+  pre_process.
+  rewrite replace_Znth_app_r.
+  assert (l_a_3 = l_a_2). {
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
+    specialize (H37 H13 H28).
+    apply H37.
+    reflexivity.
+  }
+  subst l_a_3.
+  assert (l_b_3 = l_b_2). {
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
+    specialize (H37 H14 H24).
+    apply H37.
+    reflexivity.
+  }
+  subst l_b_3.
+  - Exists l_r_suffix'.
+    rewrite H29.
+    rewrite H18.
+    assert (i - i = 0) by lia.
+    rewrite H37; clear H37.
+    set (partial_result_1 := (unsigned_last_nbits (Znth i l_a_2 0 + cy) 32)).
+    set (partial_result_2 := (unsigned_last_nbits (partial_result_1 + Znth i l_b_2 0) 32)).
+    rewrite replace_Znth_nothing; try lia.
+    assert ((replace_Znth 0 partial_result_2 (a :: nil)) = partial_result_2 :: nil). {
+      unfold replace_Znth.
+      simpl.
+      reflexivity.
+    }
+    rewrite H37; clear H37.
+    Exists (l_r_prefix_2 ++ partial_result_2 :: nil).
+    Exists (val_r_prefix_2 + partial_result_2 * (UINT_MOD ^ i)).
+    Exists (val_b_prefix_2 + (Znth i l_b_2 0) * (UINT_MOD ^ i)).
+    Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
+    Exists l_b_2 l_a_2.
+    entailer!.
+    + assert ( (val_a_prefix_2 + Znth i l_a_2 0 * 4294967296 ^ i +(val_b_prefix_2 + Znth i l_b_2 0 * 4294967296 ^ i)) = (val_a_prefix_2 + val_b_prefix_2) + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i).
+      {
+        lia.
+      }
+      rewrite H37; clear H37.
+      rewrite <- H19.
+      assert ( (Znth i l_a_2 0) + (Znth i l_b_2 0) + cy = partial_result_2). {
+        unfold unsigned_last_nbits in H4, H3.
+        assert (2 ^ 32 = 4294967296). { nia. }
+        rewrite H37 in H4, H3; clear H37.
+        apply Z_mod_3add_carry00; try lia; try tauto;
+        try unfold list_store_Z in H13, H14;
+        try apply list_within_bound_Znth;
+        try lia;
+        try tauto.
+      }
+      assert ( partial_result_2 * 4294967296 ^ i + (0 + 0) * 4294967296 ^ (i + 1) = cy * 4294967296 ^ i + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i). {
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
+    + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
+      assert (Zlength (partial_result_2 :: nil) = 1). {
+        unfold Zlength.
+        simpl.
+        reflexivity.
+      }
+      rewrite H38 in H37; clear H38.
+      rewrite H18 in H37.
+      apply H37.
+    + pose proof (list_store_Z_concat l_r_prefix_2 (partial_result_2 :: nil) val_r_prefix_2 partial_result_2).
+      rewrite H18 in H37.
+      apply H37.
+      tauto.
+      unfold list_store_Z.
+      simpl.
+      split.
+      reflexivity.
+      split.
+      unfold partial_result_2.
+      unfold unsigned_last_nbits.
+      assert (2 ^ 32 = 4294967296). { nia. }
+      rewrite H38; clear H38.
+      apply Z.mod_pos_bound.
+      lia.
+      tauto.
+    + pose proof (list_store_Z_list_append l_b_2 i val_b_prefix_2 val_b).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+    + pose proof (list_store_Z_list_append l_a_2 i val_a_prefix_2 val_a).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+  - pose proof (Zlength_sublist0 i l_r_prefix_2).
+    lia.
+Qed.
+
+Lemma proof_of_mpn_add_n_entail_wit_3_4 : mpn_add_n_entail_wit_3_4.
+Proof.
+  pre_process.
+  rewrite replace_Znth_app_r.
+  assert (l_a_3 = l_a_2). {
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
+    specialize (H37 H13 H28).
+    apply H37.
+    reflexivity.
+  }
+  subst l_a_3.
+  assert (l_b_3 = l_b_2). {
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
+    specialize (H37 H14 H24).
+    apply H37.
+    reflexivity.
+  }
+  subst l_b_3.
+  - Exists l_r_suffix'.
+    rewrite H29.
+    rewrite H18.
+    assert (i - i = 0) by lia.
+    rewrite H37; clear H37.
+    set (partial_result_1 := (unsigned_last_nbits (Znth i l_a_2 0 + cy) 32)).
+    set (partial_result_2 := (unsigned_last_nbits (partial_result_1 + Znth i l_b_2 0) 32)).
+    rewrite replace_Znth_nothing; try lia.
+    assert ((replace_Znth 0 partial_result_2 (a :: nil)) = partial_result_2 :: nil). {
+      unfold replace_Znth.
+      simpl.
+      reflexivity.
+    }
+    rewrite H37; clear H37.
+    Exists (l_r_prefix_2 ++ partial_result_2 :: nil).
+    Exists (val_r_prefix_2 + partial_result_2 * (UINT_MOD ^ i)).
+    Exists (val_b_prefix_2 + (Znth i l_b_2 0) * (UINT_MOD ^ i)).
+    Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
+    Exists l_b_2 l_a_2.
+    entailer!.
+    + assert ( (val_a_prefix_2 + Znth i l_a_2 0 * 4294967296 ^ i +(val_b_prefix_2 + Znth i l_b_2 0 * 4294967296 ^ i)) = (val_a_prefix_2 + val_b_prefix_2) + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i).
+      {
+        lia.
+      }
+      rewrite H37; clear H37.
+      rewrite <- H19.
+      assert ( (Znth i l_a_2 0) + (Znth i l_b_2 0) + cy = partial_result_2 + UINT_MOD). {
+        unfold unsigned_last_nbits in H4, H3.
+        assert (2 ^ 32 = 4294967296). { nia. }
+        rewrite H37 in H4, H3; clear H37.
+        apply Z_mod_3add_carry01; try lia; try tauto;
+        try unfold list_store_Z in H13, H14;
+        try apply list_within_bound_Znth;
+        try lia;
+        try tauto.
+      }
+      assert ( partial_result_2 * 4294967296 ^ i + (0 + 1) * 4294967296 ^ (i + 1) = cy * 4294967296 ^ i + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i). {
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
+    + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
+      assert (Zlength (partial_result_2 :: nil) = 1). {
+        unfold Zlength.
+        simpl.
+        reflexivity.
+      }
+      rewrite H38 in H37; clear H38.
+      rewrite H18 in H37.
+      apply H37.
+    + pose proof (list_store_Z_concat l_r_prefix_2 (partial_result_2 :: nil) val_r_prefix_2 partial_result_2).
+      rewrite H18 in H37.
+      apply H37.
+      tauto.
+      unfold list_store_Z.
+      simpl.
+      split.
+      reflexivity.
+      split.
+      unfold partial_result_2.
+      unfold unsigned_last_nbits.
+      assert (2 ^ 32 = 4294967296). { nia. }
+      rewrite H38; clear H38.
+      apply Z.mod_pos_bound.
+      lia.
+      tauto.
+    + pose proof (list_store_Z_list_append l_b_2 i val_b_prefix_2 val_b).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+    + pose proof (list_store_Z_list_append l_a_2 i val_a_prefix_2 val_a).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+  - pose proof (Zlength_sublist0 i l_r_prefix_2).
+    lia.
+Qed.
+
+Lemma proof_of_mpn_add_n_return_wit_1 : mpn_add_n_return_wit_1.
+Proof.
+  pre_process.
+  assert (l_a_2 = l_a). {
+    pose proof (list_store_Z_reverse_injection l_a_2 l_a val_a val_a).
+    specialize (H29 H20 H5).
+    apply H29.
+    reflexivity.
+  }
+  subst l_a_2.
+  assert (l_b_2 = l_b). {
+    pose proof (list_store_Z_reverse_injection l_b_2 l_b val_b val_b).
+    specialize (H29 H16 H6).
+    apply H29.
+    reflexivity.
+  }
+  subst l_b_2.
+  assert (i = n_pre) by lia.
+  Exists val_r_prefix.
+  unfold mpd_store_Z.
+  unfold mpd_store_list.
+  Exists l_a.
+  Exists l_b.
+  entailer!.
+  rewrite H14.
+  rewrite H18.
+  entailer!.
+  unfold mpd_store_Z.
+  Exists l_r_prefix.
+  rewrite H29 in *.
+  entailer!.
+  unfold mpd_store_list.
+  entailer!.
+  rewrite H10.
+  entailer!.
+  apply store_uint_array_rec_def2undef.
+  rewrite <- H29.
+  assert (val_a_prefix = val_a). {
+    rewrite <-H18 in H7.
+    rewrite sublist_self in H7.
+    unfold list_store_Z in H5.
+    unfold list_store_Z in H7.
+    lia.
+    reflexivity.
+  }
+  rewrite <- H30; clear H30.
+  assert (val_b_prefix = val_b). {
+    rewrite <-H14 in H8.
+    rewrite sublist_self in H8.
+    unfold list_store_Z in H6.
+    unfold list_store_Z in H8.
+    lia.
+    reflexivity.
+  }
+  rewrite <- H30; clear H30.
+  rewrite H29.
+  tauto.
+Qed.
+
+Lemma proof_of_mpn_add_n_which_implies_wit_1 : mpn_add_n_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold mpd_store_Z.
+  Intros l.
+  Exists l.
+  unfold mpd_store_list.
+  entailer!.
+  subst n_pre.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpn_add_n_which_implies_wit_2 : mpn_add_n_which_implies_wit_2.
+Proof.
+  pre_process.
+  unfold mpd_store_Z.
+  Intros l.
+  Exists l.
+  unfold mpd_store_list.
+  entailer!.
+  subst n_pre.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpn_add_n_which_implies_wit_3 : mpn_add_n_which_implies_wit_3.
+Proof.
+  pre_process.
+  pose proof (store_uint_array_divide rp_pre cap_r l_r 0).
+  pose proof (Zlength_nonneg l_r).
+  specialize (H0 ltac:(lia) ltac:(lia)).
+  destruct H0 as [H0 _].
+  simpl in H0.
+  entailer!.
+  rewrite (sublist_nil l_r 0 0) in H0; [ | lia].
+  sep_apply H0.
+  entailer!.
+  unfold store_uint_array, store_uint_array_rec.
+  unfold store_array.
+  rewrite (sublist_self l_r cap_r); [ | lia ].
+  assert (rp_pre + 0 = rp_pre). { lia. }
+  rewrite H2; clear H2.
+  assert (cap_r - 0 = cap_r). { lia. }
+  rewrite H2; clear H2.
+  reflexivity.
+Qed.
+
+Lemma proof_of_mpn_add_n_which_implies_wit_4 : mpn_add_n_which_implies_wit_4.
+Proof.
+  pre_process.
+  destruct l_r_suffix. {
+    unfold store_uint_array_rec.
+    simpl.
+    entailer!.
+  }
+  pose proof (store_uint_array_rec_cons rp_pre i cap_r z l_r_suffix ltac:(lia)).
+  sep_apply H2.
+  Exists z l_r_suffix.
+  entailer!.
+  assert (i = 0 \/ i > 0). { lia. }
+  destruct H3.
+  + subst.
+    simpl.
+    entailer!.
+    simpl in H2.
+    assert (rp_pre + 0 = rp_pre). { lia. }
+    rewrite H3.
+    rewrite H3 in H2.
+    clear H3.
+    pose proof (store_uint_array_empty rp_pre l_r_prefix).
+    sep_apply H3.
+    rewrite logic_equiv_andp_comm.
+    rewrite logic_equiv_coq_prop_andp_sepcon.
+    Intros.
+    subst l_r_prefix.
+    rewrite app_nil_l.
+    unfold store_uint_array.
+    unfold store_array.
+    unfold store_array_rec.
+    simpl.
+    assert (rp_pre + 0 = rp_pre). { lia. }
+    rewrite H4; clear H4.
+    entailer!.
+  + pose proof (Aux.uint_array_rec_to_uint_array rp_pre 0 i (sublist 0 i l_r_prefix) ltac:(lia)).
+    destruct H4 as [_ H4].
+    assert (rp_pre + sizeof(UINT) * 0 = rp_pre). { lia. }
+    rewrite H5 in H4; clear H5.
+    assert (i - 0 = i). { lia. }
+    rewrite H5 in H4; clear H5.
+    pose proof (Aux.uint_array_rec_to_uint_array rp_pre 0 (i + 1) (sublist 0 i l_r_prefix ++ z :: nil) ltac:(lia)).
+    destruct H5 as [H5 _].
+    assert (i + 1 - 0 = i + 1). { lia. }
+    rewrite H6 in H5; clear H6.
+    assert (rp_pre + sizeof(UINT) * 0 = rp_pre). { lia. }
+    rewrite H6 in H5; clear H6.
+    pose proof (uint_array_rec_to_uint_array rp_pre 0 i l_r_prefix).
+    specialize (H6 H).
+    assert ((rp_pre + sizeof ( UINT ) * 0) = rp_pre) by lia.
+    rewrite H7 in H6; clear H7.
+    assert ((i-0) = i) by lia.
+    rewrite H7 in H6; clear H7.
+    destruct H6 as [_ H6].
+    sep_apply H6.
+    (* pose proof (uint_array_rec_to_uint_array rp_pre 0 (i+1) (l' ++ z :: nil)).
+    assert (H_i_plus_1 : 0 <= i + 1) by lia.
+    specialize (H7 H_i_plus_1); clear H_i_plus_1.
+    destruct H7 as [H7 _].
+    assert (i + 1 - 0 = i + 1) by lia.
+    rewrite H8 in H7; clear H8.
+    assert ((rp_pre + sizeof ( UINT ) * 0) = rp_pre) by lia.
+    rewrite H8 in H7; clear H8.
+    rewrite <-H7.
+    clear H6.
+    clear H7. *)
+    pose proof (store_uint_array_divide_rec rp_pre (i+1) (l_r_prefix ++ z :: nil) i).
     assert (H_tmp: 0 <= i <= i+1) by lia.
     specialize (H7 H_tmp); clear H_tmp.
     rewrite <- store_uint_array_single.
