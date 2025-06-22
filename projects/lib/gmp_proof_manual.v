@@ -871,7 +871,27 @@ Proof.
     Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
     Exists l_b_2 l_a_2.
     entailer!.
-    + admit.
+    + assert ( (val_a_prefix_2 + Znth i l_a_2 0 * 4294967296 ^ i +(val_b_prefix_2 + Znth i l_b_2 0 * 4294967296 ^ i)) = (val_a_prefix_2 + val_b_prefix_2) + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i).
+      {
+        lia.
+      }
+      rewrite H37; clear H37.
+      rewrite <- H19.
+      assert ( (Znth i l_a_2 0) + (Znth i l_b_2 0) + cy = partial_result_2 + UINT_MOD). {
+        unfold unsigned_last_nbits in H4, H3.
+        assert (2 ^ 32 = 4294967296). { nia. }
+        rewrite H37 in H4, H3; clear H37.
+        apply Z_mod_3add_carry10; try lia; try tauto;
+        try unfold list_store_Z_compact in H13, H14;
+        try apply list_within_bound_Znth;
+        try lia;
+        try tauto.
+      }
+      assert ( partial_result_2 * 4294967296 ^ i + (1 + 0) * 4294967296 ^ (i + 1) = cy * 4294967296 ^ i + Znth i l_a_2 0 * 4294967296 ^ i + Znth i l_b_2 0 * 4294967296 ^ i). {
+        rewrite <- Z.mul_add_distr_r.
+        rewrite (Zpow_add_1 4294967296 i); try lia.
+      }
+      lia.
     + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
       assert (Zlength (partial_result_2 :: nil) = 1). {
         unfold Zlength.
@@ -909,7 +929,7 @@ Proof.
       tauto.
   - pose proof (Zlength_sublist0 i l_r_prefix_2).
     lia.
-Admitted. 
+Qed.
 
 Lemma proof_of_mpn_add_n_entail_wit_3_2 : mpn_add_n_entail_wit_3_2.
 Proof. Admitted. 
