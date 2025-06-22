@@ -834,7 +834,82 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_n_entail_wit_3_1 : mpn_add_n_entail_wit_3_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  rewrite replace_Znth_app_r.
+  assert (l_a_3 = l_a_2). {
+    pose proof (list_store_Z_compact_reverse_injection l_a_3 l_a_2 val_a val_a).
+    specialize (H37 H13 H28).
+    apply H37.
+    reflexivity.
+  }
+  subst l_a_3.
+  assert (l_b_3 = l_b_2). {
+    pose proof (list_store_Z_compact_reverse_injection l_b_3 l_b_2 val_b val_b).
+    specialize (H37 H14 H24).
+    apply H37.
+    reflexivity.
+  }
+  subst l_b_3.
+  - Exists l_r_suffix'.
+    rewrite H29.
+    rewrite H18.
+    assert (i - i = 0) by lia.
+    rewrite H37; clear H37.
+    set (partial_result_1 := (unsigned_last_nbits (Znth i l_a_2 0 + cy) 32)).
+    set (partial_result_2 := (unsigned_last_nbits (partial_result_1 + Znth i l_b_2 0) 32)).
+    rewrite replace_Znth_nothing; try lia.
+    assert ((replace_Znth 0 partial_result_2 (a :: nil)) = partial_result_2 :: nil). {
+      unfold replace_Znth.
+      simpl.
+      reflexivity.
+    }
+    rewrite H37; clear H37.
+    Exists (l_r_prefix_2 ++ partial_result_2 :: nil).
+    Exists (val_r_prefix_2 + partial_result_2 * (UINT_MOD ^ i)).
+    Exists (val_b_prefix_2 + (Znth i l_b_2 0) * (UINT_MOD ^ i)).
+    Exists (val_a_prefix_2 + (Znth i l_a_2 0) * (UINT_MOD ^ i)).
+    Exists l_b_2 l_a_2.
+    entailer!.
+    + admit.
+    + pose proof (Zlength_app l_r_prefix_2 (partial_result_2 :: nil)).
+      assert (Zlength (partial_result_2 :: nil) = 1). {
+        unfold Zlength.
+        simpl.
+        reflexivity.
+      }
+      rewrite H38 in H37; clear H38.
+      rewrite H18 in H37.
+      apply H37.
+    + pose proof (list_store_Z_concat l_r_prefix_2 (partial_result_2 :: nil) val_r_prefix_2 partial_result_2).
+      rewrite H18 in H37.
+      apply H37.
+      tauto.
+      unfold list_store_Z.
+      simpl.
+      split.
+      reflexivity.
+      split.
+      unfold partial_result_2.
+      unfold unsigned_last_nbits.
+      assert (2 ^ 32 = 4294967296). { nia. }
+      rewrite H38; clear H38.
+      apply Z.mod_pos_bound.
+      lia.
+      tauto.
+    + pose proof (list_store_Z_list_append l_b_2 i val_b_prefix_2 val_b).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+    + pose proof (list_store_Z_list_append l_a_2 i val_a_prefix_2 val_a).
+      apply H37.
+      lia.
+      tauto.
+      tauto.
+  - pose proof (Zlength_sublist0 i l_r_prefix_2).
+    lia.
+Admitted. 
 
 Lemma proof_of_mpn_add_n_entail_wit_3_2 : mpn_add_n_entail_wit_3_2.
 Proof. Admitted. 

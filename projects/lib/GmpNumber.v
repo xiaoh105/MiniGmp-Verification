@@ -282,6 +282,41 @@ Proof.
     pose proof (Zlength_nonneg l1); lia.
 Qed.
 
+Lemma list_store_Z_list_append: forall (l: list Z) (i: Z) (val_prefix: Z) (val_full: Z),
+  0 <= i < Zlength l ->
+  list_store_Z_compact l val_full ->
+  list_store_Z (sublist 0 i l) val_prefix ->
+  list_store_Z (sublist 0 (i+1) l) (val_prefix + Znth i l 0 * UINT_MOD ^ i).
+Proof.
+  intros.
+  assert ((sublist 0 (i + 1) l) = ((sublist 0 i l) ++ ((Znth i l 0) :: nil)))%list. {
+    pose proof (sublist_split 0 (i+1) i l).
+    pose proof (sublist_single i l 0).
+    rewrite <-H3; try rewrite <- Zlength_correct.
+    apply H2; try rewrite <- Zlength_correct.
+    lia. lia. lia.
+  }
+  rewrite H2.
+  pose proof (list_store_Z_concat (sublist 0 i l) (Znth i l 0 :: nil) (val_prefix) (Znth i l 0)).
+  assert (Zlength (sublist 0 i l) = i). {
+    rewrite Zlength_sublist0.
+    lia.
+    lia.
+  }
+  rewrite H4 in H3.
+  apply H3.
+  tauto.
+  unfold list_store_Z.
+  simpl.
+  split.
+  reflexivity.
+  split; try tauto.
+  apply list_within_bound_Znth.
+  lia.
+  unfold list_store_Z_compact in H0.
+  tauto.
+Qed.
+
 Lemma list_store_Z_split: forall (l1 l2: list Z) (n: Z),
   list_store_Z (l1 ++ l2) n ->
   list_store_Z l1 (n mod UINT_MOD ^ (Zlength l1)) /\
