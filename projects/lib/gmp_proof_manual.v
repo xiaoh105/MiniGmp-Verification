@@ -808,10 +808,30 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_n_entail_wit_1 : mpn_add_n_entail_wit_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  Exists l_r nil 0 0 0.
+  Exists l_b_2 l_a_2.
+  entailer!.
+  - unfold list_store_Z.
+    simpl.
+    tauto.
+  - rewrite sublist_nil; try lia; try tauto.
+    unfold list_store_Z.
+    simpl.
+    tauto.
+  - rewrite sublist_nil; try lia; try tauto.
+    unfold list_store_Z.
+    simpl.
+    tauto.
+Qed.
 
 Lemma proof_of_mpn_add_n_entail_wit_2 : mpn_add_n_entail_wit_2.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  prop_apply (store_uint_range &("cy") cy).
+  entailer!.
+Qed.
 
 Lemma proof_of_mpn_add_n_entail_wit_3_1 : mpn_add_n_entail_wit_3_1.
 Proof. Admitted. 
