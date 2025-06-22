@@ -313,24 +313,104 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
 }
 
 /* 位数相同的多精度数ap 加上多精度数bp，返回最后产生的进位 */
-/*unsigned int
+unsigned int
 mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
+/*@
+ With cap_a cap_b cap_r val_a val_b l_r
+ Require
+   mpd_store_Z_compact(ap, val_a, n, cap_a) *
+   mpd_store_Z_compact(bp, val_b, n, cap_b) *
+   store_uint_array(rp, cap_r, l_r) &&
+   Zlength(l_r) == cap_r &&
+   cap_a <= 100000000 &&
+   cap_b <= 100000000 &&
+   cap_r <= 100000000 &&
+   n > 0 && n <= cap_a && n <= cap_b && n <= cap_r
+ Ensure
+   exists val_r_out,
+   mpd_store_Z_compact(ap@pre, val_a, n@pre, cap_a) *
+   mpd_store_Z_compact(bp@pre, val_b, n@pre, cap_b) *
+   mpd_store_Z(rp@pre, val_r_out, n@pre, cap_r) &&
+   (val_r_out + __return * Z::pow(UINT_MOD, n@pre) == val_a + val_b)
+*/
 {
+  /*@
+    mpd_store_Z_compact(ap@pre, val_a, n@pre, cap_a)
+    which implies
+    exists l_a,
+      n@pre <= cap_a &&
+      Zlength(l_a) == n@pre &&
+      cap_a <= 100000000 &&
+      store_uint_array(ap@pre, n@pre, l_a) *
+      store_undef_uint_array_rec(ap@pre, n@pre, cap_a) &&
+      list_store_Z_compact(l_a, val_a)
+  */
+  /*@
+    mpd_store_Z_compact(bp@pre, val_b, n@pre, cap_b)
+    which implies
+    exists l_b,
+      n@pre <= cap_b &&
+      Zlength(l_b) == n@pre &&
+      cap_b <= 100000000 &&
+      store_uint_array(bp@pre, n@pre, l_b) *
+      store_undef_uint_array_rec(bp@pre, n@pre, cap_b) &&
+      list_store_Z_compact(l_b, val_b)
+  */
   int i;
   unsigned int cy;
 
-  for (i = 0, cy = 0; i < n; i++)
+  /*@
+  store_uint_array(rp@pre, cap_r, l_r) && Zlength(l_r) == cap_r
+  which implies
+    store_uint_array_rec(rp@pre, 0, cap_r, l_r) * store_uint_array(rp@pre, 0, nil) &&
+    Zlength(l_r) == cap_r
+  */
+  i = 0;
+  cy = 0;
+  /*@Inv
+    exists l_a l_b l_r_prefix l_r_suffix val_a_prefix val_b_prefix val_r_prefix,
+      0 <= i && i <= n@pre && n@pre <= cap_a && n@pre <= cap_b && n@pre <= cap_r &&
+      list_store_Z_compact(l_a, val_a) &&
+      list_store_Z_compact(l_b, val_b) &&
+      list_store_Z(sublist(0, i, l_a), val_a_prefix) &&
+      list_store_Z(sublist(0, i, l_b), val_b_prefix) &&
+      list_store_Z(l_r_prefix, val_r_prefix) &&
+      Zlength(l_r_prefix) == i &&
+      (val_r_prefix + cy * Z::pow(UINT_MOD, i) == val_a_prefix + val_b_prefix) &&
+      store_uint_array(ap@pre, n@pre, l_a) *
+      store_undef_uint_array_rec(ap@pre, n@pre, cap_a) *
+      store_uint_array(bp@pre, n@pre, l_b) *
+      store_undef_uint_array_rec(bp@pre, n@pre, cap_b) *
+      store_uint_array(rp@pre, i, l_r_prefix) *
+      store_uint_array_rec(rp@pre, i, cap_r, l_r_suffix)
+  */
+  while (i < n)
     {
+      /*@
+        Given l_a l_b l_r_prefix l_r_suffix val_a_prefix val_b_prefix val_r_prefix
+      */
+      /*@ 0 <= cy && cy <= UINT_MAX by local */
       unsigned int a, b, r;
       a = ap[i]; b = bp[i];
       r = a + cy;
       cy = (r < cy);
       r += b;
       cy += (r < b);
+      /*@
+        0 <= i && i < n@pre && n@pre <= cap_r &&
+        store_uint_array(rp@pre, i, l_r_prefix) *
+        store_uint_array_rec(rp@pre, i, cap_r, l_r_suffix)
+        which implies
+        exists a l_r_suffix',
+        l_r_suffix == cons(a, l_r_suffix') && 0 <= i && i < n@pre && n@pre <= cap_r &&
+        store_uint_array_rec(rp@pre, i+1, cap_r, l_r_suffix') *
+        store_uint_array(rp@pre, i+1, app(l_r_prefix, cons(a, nil)))
+      */
       rp[i] = r;
+      ++i;
     }
   return cy;
-}*/
+}
 
 /*不同位数的多精度数相加，返回最后的进位*/
 /*unsigned int
