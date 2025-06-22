@@ -30,18 +30,38 @@ typedef const __mpz_struct *mpz_srcptr;
 /* BEGIN Given Functions */
 
 /* Swap functions. */
-void int_swap(int x, int y)
+void int_swap(int *x, int *y)
 /*@
+  With
+    px py
   Require
-    emp
+    *x == px && *y == py
   Ensure
-    x == y@pre && y == x@pre
+    *x@pre == py && *y@pre == px
 */
 ;
 
-void mp_ptr_swap(unsigned int *x, unsigned int *y);
+void mp_ptr_swap(unsigned int **x, unsigned int **y)
+/*@
+  With
+    px py
+  Require
+    *x == px && *y == py
+  Ensure
+    *x@pre == py && *y@pre == px
+*/
+;
 
-void mpz_srcptr_swap(mpz_srcptr x, mpz_srcptr y);
+void mpz_srcptr_swap(mpz_srcptr *x, mpz_srcptr *y)
+/*@
+  With
+    px py
+  Require
+    *x == px && *y == py
+  Ensure
+    *x@pre == py && *y@pre == px
+*/
+;
 
 /* Memory allocation functions. */
 static unsigned int *
@@ -93,10 +113,10 @@ unsigned int mpn_sub (unsigned int *, unsigned int *, int, unsigned int *, int);
 
 void mpz_clear (mpz_t r);
 
-int mpz_sgn (const mpz_t);
+int mpz_sgn (const mpz_t u);
 
 void mpz_neg (mpz_t, const mpz_t);
-void mpz_swap (mpz_t, mpz_t);
+void mpz_swap (mpz_t u, mpz_t v);
 
 void mpz_add (mpz_t, const mpz_t, const mpz_t);
 void mpz_sub (mpz_t, const mpz_t, const mpz_t);

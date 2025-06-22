@@ -393,6 +393,52 @@ Proof.
     - pose proof (Zlength_nonneg l1); lia.
 Qed.
 
+Lemma list_store_Z_compact_bound: forall (l1: list Z) (n: Z),
+  list_store_Z_compact l1 n ->
+  UINT_MOD ^ ((Zlength l1) - 1) <= n < UINT_MOD ^ (Zlength l1).
+Proof.
+  intros.
+  destruct l1.
+  + rewrite Zlength_nil.
+    simpl.
+    unfold list_store_Z_compact; destruct H.
+    simpl in H.
+    lia.
+  + remember (z :: l1) as l eqn: Hl.
+    unfold list_store_Z_compact in H.
+    destruct H, H0.
+    assert (list_store_Z l n). {
+      unfold list_store_Z.
+      tauto.
+    }
+    clear H1 H.
+    split.
+    - pose proof (@nil_cons Z z l1); rewrite <-Hl in H.
+      pose proof (@app_removelast_last Z l 1 ltac:(auto)).
+      clear H.
+      rewrite H1 in H2.
+      apply list_store_Z_split in H2; destruct H2.
+      remember (Zlength (removelast l)) as len_lo eqn:Hlen_lo.
+      remember (n mod UINT_MOD ^ len_lo) as n_lo eqn:Hnlo.
+      remember (n / UINT_MOD ^ len_lo) as n_hi eqn:Hnhi.
+      assert (n = n_lo + n_hi * UINT_MOD ^ len_lo). {
+        pose proof (Z_div_mod_eq_full n (UINT_MOD ^ len_lo)).
+        lia.
+      }
+      unfold list_store_Z in H2; destruct H2.
+      simpl in H2.
+      apply list_store_Z_bound in H.
+      pose proof (@nil_cons Z z l1); rewrite <-Hl in H5.
+      pose proof (Aux.Zlength_removelast l ltac:(auto)).
+      clear H5.
+      rewrite H6 in *.
+      rewrite H2 in H0.
+      rewrite Hlen_lo in *.
+      nia.
+    - apply list_store_Z_bound in H2.
+      lia.
+Qed.
+
 Lemma list_store_Z_nth: forall (l: list Z) (n: Z) (i: Z),
   0 <= i < Zlength l ->
   list_store_Z l n ->

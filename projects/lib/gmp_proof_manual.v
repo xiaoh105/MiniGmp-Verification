@@ -692,7 +692,7 @@ Proof.
   entailer!.
   rewrite H20.
   entailer!.
-  apply store_uint_array_rec_def2undef.
+  apply store_uint_array_rec_def2undef; try lia.
   assert (Zlength l' = n_pre) by lia.
   rewrite <- H7.
   tauto.
@@ -1261,7 +1261,7 @@ Proof.
   entailer!.
   rewrite H10.
   entailer!.
-  apply store_uint_array_rec_def2undef.
+  apply store_uint_array_rec_def2undef; try lia.
   rewrite <- H29.
   assert (val_a_prefix = val_a). {
     rewrite <-H18 in H7.
@@ -1697,4 +1697,140 @@ Proof.
   unfold mpd_store_Z_compact, mpd_store_list.
   Intros data.
   entailer!.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_1 : mpz_sgn_return_wit_1_1.
+Proof.
+  pre_process.
+  Left; Left.
+  entailer!.
+  unfold store_Z.
+  Exists ptr cap size.
+  Left.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_2 : mpz_sgn_return_wit_1_2.
+Proof.
+  pre_process.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  assert (size >= 1). { lia. }
+  clear H H1.
+  entailer!.
+  + unfold store_Z.
+    Exists ptr cap size.
+    Right.
+    unfold mpd_store_Z_compact.
+    Exists data.
+    entailer!.
+  + apply list_store_Z_compact_bound in H3.
+    rewrite <-H4 in *.
+    nia.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_3 : mpz_sgn_return_wit_1_3.
+Proof.
+  pre_process.
+  Left; Right.
+  unfold store_Z.
+  Exists ptr cap size.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  Exists data.
+  entailer!.
+  subst.
+  pose proof (Zlength_nil_inv data ltac:(auto)).
+  subst.
+  unfold list_store_Z_compact in H3; destruct H3, H0.
+  unfold list_to_Z in H.
+  lia.
+Qed.
+
+Lemma proof_of_mpz_sgn_which_implies_wit_1 : mpz_sgn_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Intros ptr cap size.
+  rewrite orp_sepcon_left.
+  Split.
+  + Right.
+    Exists ptr cap size.
+    entailer!.
+  + Left.
+    Exists ptr cap size.
+    entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_return_wit_1_1 : mpz_swap_return_wit_1_1.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Exists ptr2 cap2 size2.
+  Exists ptr1 cap1 size1.
+  Right; Right.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_return_wit_1_2 : mpz_swap_return_wit_1_2.
+Proof.
+  pre_process.
+  subst.
+  unfold store_Z.
+  Exists ptr2 cap2 size2.
+  Exists ptr1 cap1 size1.
+  Right; Left.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_return_wit_1_3 : mpz_swap_return_wit_1_3.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Exists ptr2 cap2 size2.
+  Exists ptr1 cap1 size1.
+  Left; Right.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_return_wit_1_4 : mpz_swap_return_wit_1_4.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Exists ptr2 cap2 size2.
+  Exists ptr1 cap1 size1.
+  Left; Left.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_which_implies_wit_1 : mpz_swap_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Intros ptr cap size.
+  rewrite orp_sepcon_left.
+  Split.
+  + Right.
+    Exists ptr cap size.
+    entailer!.
+  + Left.
+    Exists ptr cap size.
+    entailer!.
+Qed.
+
+Lemma proof_of_mpz_swap_which_implies_wit_2 : mpz_swap_which_implies_wit_2.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Intros ptr cap size.
+  rewrite orp_sepcon_left.
+  Split.
+  + Right.
+    Exists ptr cap size.
+    entailer!.
+  + Left.
+    Exists ptr cap size.
+    entailer!.
 Qed.

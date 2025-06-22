@@ -571,7 +571,7 @@ mpz_realloc (mpz_t r, int size)
     c >= size@pre && 
     (n < 0 && mpd_store_Z_compact(ptr_new, -n, -old, c) ||
       n >= 0 && mpd_store_Z_compact(ptr_new, n, old, c)) &&
-    r -> _mp_size == old &&
+    r@pre -> _mp_size == old &&
     r@pre -> _mp_alloc == c &&
     r@pre -> _mp_d == ptr_new
 */
@@ -591,24 +591,76 @@ mpz_realloc (mpz_t r, int size)
 }
 
 /* Realloc for an mpz_t WHAT if it has less than NEEDED limbs.  */
-/*unsigned int *mrz_realloc_if(mpz_t z,int n) {
+/*unsigned int *mrz_realloc_if(mpz_t z,int n) 
+{
   return n > z->_mp_alloc ? mpz_realloc(z, n) : z->_mp_d;
 }*/
 
 /* MPZ comparisons and the like. */
-/*int
+int
 mpz_sgn (const mpz_t u)
+/*@
+  With
+    n
+  Require
+    store_Z(u, n)
+  Ensure
+    store_Z(u@pre, n) &&
+    (n > 0 && __return == 1 || n == 0 && __return == 0 ||
+      n < 0 && __return == -1)
+*/
 {
+  /*@
+    store_Z(u, n)
+    which implies
+    exists ptr cap size,
+      (size < 0 && n < 0 && mpd_store_Z_compact(ptr, -n, -size, cap) ||
+        size >= 0 && n >= 0 && mpd_store_Z_compact(ptr, n, size, cap)) &&
+      u->_mp_size == size && 
+      u->_mp_alloc == cap && 
+      u->_mp_d == ptr
+  */
   return gmp_cmp (u->_mp_size, 0);
-}*/
+}
 
-/*void
+void
 mpz_swap (mpz_t u, mpz_t v)
+/*@
+  With
+    n m
+  Require
+    store_Z(u, n) * store_Z(v, m)
+  Ensure
+    store_Z(u@pre, m) * store_Z(v@pre, n)
+*/
 {
-  int_swap (u->_mp_alloc, v->_mp_alloc);
-  mp_ptr_swap(u->_mp_d, v->_mp_d);
-  int_swap (u->_mp_size, v->_mp_size);
-}*/
+  /*@
+    store_Z(u, n)
+    which implies
+    exists ptr1 cap1 size1,
+      (size1 < 0 && n < 0 && mpd_store_Z_compact(ptr1, -n, -size1, cap1) ||
+        size1 >= 0 && n >= 0 && mpd_store_Z_compact(ptr1, n, size1, cap1)) &&
+      u->_mp_size == size1 && 
+      u->_mp_alloc == cap1 && 
+      u->_mp_d == ptr1
+  */
+  /*@
+    store_Z(v, m)
+    which implies
+    exists ptr2 cap2 size2,
+      (size2 < 0 && m < 0 && mpd_store_Z_compact(ptr2, -m, -size2, cap2) ||
+        size2 >= 0 && m >= 0 && mpd_store_Z_compact(ptr2, m, size2, cap2)) &&
+      v->_mp_size == size2 && 
+      v->_mp_alloc == cap2 && 
+      v->_mp_d == ptr2
+  */
+  /*@
+    Given ptr1 cap1 size1 ptr2 cap2 size2
+  */
+  int_swap (&u->_mp_alloc, &v->_mp_alloc);
+  mp_ptr_swap(&u->_mp_d, &v->_mp_d);
+  int_swap (&u->_mp_size, &v->_mp_size);
+}
 
 /* MPZ addition and subtraction */
 
