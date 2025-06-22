@@ -6071,6 +6071,521 @@ forall (n: Z) (u: Z) ,
   **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr))
 .
 
+(*----- Function mpz_swap -----*)
+
+Definition mpz_swap_return_wit_1_1 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+|--
+  (store_Z u_pre m )
+  **  (store_Z v_pre n )
+.
+
+Definition mpz_swap_return_wit_1_2 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+|--
+  (store_Z u_pre m )
+  **  (store_Z v_pre n )
+.
+
+Definition mpz_swap_return_wit_1_3 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+|--
+  (store_Z u_pre m )
+  **  (store_Z v_pre n )
+.
+
+Definition mpz_swap_return_wit_1_4 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+|--
+  (store_Z u_pre m )
+  **  (store_Z v_pre n )
+.
+
+Definition mpz_swap_partial_solve_wit_1 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) ,
+  (store_Z u_pre n )
+  **  (store_Z v_pre m )
+|--
+  (store_Z u_pre n )
+  **  (store_Z v_pre m )
+.
+
+Definition mpz_swap_partial_solve_wit_2 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) ,
+  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  (store_Z v_pre m )
+|--
+  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (store_Z v_pre m )
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_3 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) ,
+  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  (store_Z v_pre m )
+|--
+  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (store_Z v_pre m )
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_4 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_5 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_6 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_7 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+.
+
+Definition mpz_swap_partial_solve_wit_8 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+.
+
+Definition mpz_swap_partial_solve_wit_9 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+.
+
+Definition mpz_swap_partial_solve_wit_10 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+.
+
+Definition mpz_swap_partial_solve_wit_11 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+.
+
+Definition mpz_swap_partial_solve_wit_12 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+.
+
+Definition mpz_swap_partial_solve_wit_13 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  (mpd_store_Z_compact ptr1 n size1 cap1 )
+.
+
+Definition mpz_swap_partial_solve_wit_14 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+|--
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+.
+
+Definition mpz_swap_partial_solve_wit_15 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+|--
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+.
+
+Definition mpz_swap_which_implies_wit_1 := 
+forall (n: Z) (u: Z) ,
+  (store_Z u n )
+|--
+  (EX (ptr1: Z)  (cap1: Z)  (size1: Z) ,
+  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr1 n size1 cap1 )
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1))
+  ||
+  (EX (ptr1: Z)  (cap1: Z)  (size1: Z) ,
+  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr1 (-n) (-size1) cap1 )
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1))
+.
+
+Definition mpz_swap_which_implies_wit_2 := 
+forall (m: Z) (v: Z) ,
+  (store_Z v m )
+|--
+  (EX (ptr2: Z)  (cap2: Z)  (size2: Z) ,
+  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |]
+  &&  (mpd_store_Z_compact ptr2 m size2 cap2 )
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2))
+  ||
+  (EX (ptr2: Z)  (cap2: Z)  (size2: Z) ,
+  [| (size2 < 0) |] 
+  &&  [| (m < 0) |]
+  &&  (mpd_store_Z_compact ptr2 (-m) (-size2) cap2 )
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2))
+.
+
 Module Type VC_Correct.
 
 Axiom proof_of_gmp_abs_safety_wit_1 : gmp_abs_safety_wit_1.
@@ -6249,5 +6764,26 @@ Axiom proof_of_mpz_sgn_partial_solve_wit_1 : mpz_sgn_partial_solve_wit_1.
 Axiom proof_of_mpz_sgn_partial_solve_wit_2 : mpz_sgn_partial_solve_wit_2.
 Axiom proof_of_mpz_sgn_partial_solve_wit_3 : mpz_sgn_partial_solve_wit_3.
 Axiom proof_of_mpz_sgn_which_implies_wit_1 : mpz_sgn_which_implies_wit_1.
+Axiom proof_of_mpz_swap_return_wit_1_1 : mpz_swap_return_wit_1_1.
+Axiom proof_of_mpz_swap_return_wit_1_2 : mpz_swap_return_wit_1_2.
+Axiom proof_of_mpz_swap_return_wit_1_3 : mpz_swap_return_wit_1_3.
+Axiom proof_of_mpz_swap_return_wit_1_4 : mpz_swap_return_wit_1_4.
+Axiom proof_of_mpz_swap_partial_solve_wit_1 : mpz_swap_partial_solve_wit_1.
+Axiom proof_of_mpz_swap_partial_solve_wit_2 : mpz_swap_partial_solve_wit_2.
+Axiom proof_of_mpz_swap_partial_solve_wit_3 : mpz_swap_partial_solve_wit_3.
+Axiom proof_of_mpz_swap_partial_solve_wit_4 : mpz_swap_partial_solve_wit_4.
+Axiom proof_of_mpz_swap_partial_solve_wit_5 : mpz_swap_partial_solve_wit_5.
+Axiom proof_of_mpz_swap_partial_solve_wit_6 : mpz_swap_partial_solve_wit_6.
+Axiom proof_of_mpz_swap_partial_solve_wit_7 : mpz_swap_partial_solve_wit_7.
+Axiom proof_of_mpz_swap_partial_solve_wit_8 : mpz_swap_partial_solve_wit_8.
+Axiom proof_of_mpz_swap_partial_solve_wit_9 : mpz_swap_partial_solve_wit_9.
+Axiom proof_of_mpz_swap_partial_solve_wit_10 : mpz_swap_partial_solve_wit_10.
+Axiom proof_of_mpz_swap_partial_solve_wit_11 : mpz_swap_partial_solve_wit_11.
+Axiom proof_of_mpz_swap_partial_solve_wit_12 : mpz_swap_partial_solve_wit_12.
+Axiom proof_of_mpz_swap_partial_solve_wit_13 : mpz_swap_partial_solve_wit_13.
+Axiom proof_of_mpz_swap_partial_solve_wit_14 : mpz_swap_partial_solve_wit_14.
+Axiom proof_of_mpz_swap_partial_solve_wit_15 : mpz_swap_partial_solve_wit_15.
+Axiom proof_of_mpz_swap_which_implies_wit_1 : mpz_swap_which_implies_wit_1.
+Axiom proof_of_mpz_swap_which_implies_wit_2 : mpz_swap_which_implies_wit_2.
 
 End VC_Correct.

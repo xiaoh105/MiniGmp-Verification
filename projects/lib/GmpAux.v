@@ -25,13 +25,49 @@ Lemma Z_mod_add_carry: forall (a b m: Z),
    m > 0 -> 0 <= a < m -> 0 <= b < m ->
    (a + b) mod m < b ->
    a + b = (a + b) mod m + m.
-Proof. Admitted.
+Proof.
+  intros.
+  pose proof (Z_div_mod_eq_full (a + b) m).
+  assert (m <= a + b < 2 * m). {
+    assert (a + b >= m \/ b <= a + b < m). { lia. }
+    destruct H4.
+    + lia.
+    + assert ((a + b) mod m = a + b). { 
+        apply Z.mod_small.
+        lia.
+      }
+      lia.
+  }
+  assert ((a + b) / m = 1). {
+    pose proof (Zdiv_le_lower_bound (a + b) m 1 ltac:(lia) ltac:(lia)).
+    pose proof (Z.div_lt_upper_bound (a + b) m 2 ltac:(lia) ltac:(lia)).
+    lia.
+  }
+  rewrite H5 in H3.
+  nia.
+Qed.
 
 Lemma Z_mod_add_uncarry: forall (a b m: Z),
   m > 0 -> 0 <= a < m -> 0 <= b < m ->
   (a + b) mod m >= b ->
   a + b = (a + b) mod m.
-Proof. Admitted.
+Proof.
+  intros.
+  assert (b <= a + b < m). {
+    assert (a + b < m \/ m <= a + b < m + b). { lia. }
+    destruct H3.
+    + lia.
+    + assert ((a + b) / m = 1). { 
+        pose proof (Zdiv_le_lower_bound (a + b) m 1 ltac:(lia) ltac:(lia)).
+        pose proof (Z.div_lt_upper_bound (a + b) m 2 ltac:(lia) ltac:(lia)).
+        lia.
+      }
+      pose proof (Z_div_mod_eq_full (a + b) m).
+      rewrite H4 in H5.
+      lia.
+  }
+  rewrite Z.mod_small; lia.
+Qed.
 
 Lemma Z_mod_3add_carry10: forall (a b c m: Z),
   m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
@@ -354,11 +390,6 @@ Proof.
   split; tauto.
 Qed.
 
-Lemma store_uint_array_rec_def2undef: forall x a b l,
-  store_uint_array_rec x a b l |--
-  store_undef_uint_array_rec x a b.
-Proof. Admitted.
-
 Lemma store_undef_uint_array_rec_divide: forall x l mid r,
   0 <= l <= r ->
   l <= mid <= r ->
@@ -387,4 +418,45 @@ Proof.
   rewrite H1.
   split; entailer!.
 Qed.
+
+Lemma store_uint_array_rec_def2undef: forall x a b l,
+  0 <= a <= b ->
+  store_uint_array_rec x a b l |--
+  store_undef_uint_array_rec x a b.
+Proof.
+  intros.
+  revert x a b H.
+  induction l; intros.
+  + unfold store_uint_array_rec.
+    simpl.
+    entailer!.
+    subst.
+    unfold store_undef_uint_array_rec.
+    assert (b - b = 0). { lia. }
+    rewrite H0; clear H0.
+    simpl.
+    entailer!.
+  + assert (a0 = b \/ a0 < b). { lia. }
+    destruct H0.
+    - unfold store_uint_array_rec.
+      simpl.
+      sep_apply store_array_rec_false; try lia.
+      entailer!.
+    - sep_apply store_uint_array_rec_cons; try lia.
+      pose proof (store_undef_uint_array_rec_divide x a0 (a0 + 1) b ltac:(lia) ltac:(lia)).
+      destruct H2 as [_ H2].
+      rewrite <-H2; clear H2.
+      specialize (IHl x (a0 + 1) b ltac:(lia)).
+      sep_apply IHl; entailer!.
+      assert ((x + a0 * sizeof ( UINT )) # UInt |-> a |-- 
+                store_uint_array_rec x a0 (a0 + 1) [a]). {
+        unfold store_uint_array_rec.
+        simpl.
+        entailer!.
+      }
+      sep_apply H2; clear H2.
+      sep_apply store_uint_array_single_to_undef.
+      entailer!.
+Qed.
+
 End Aux.

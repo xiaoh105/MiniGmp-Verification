@@ -339,3 +339,48 @@ Proof. Admitted.
 Lemma proof_of_mpz_sgn_partial_solve_wit_3 : mpz_sgn_partial_solve_wit_3.
 Proof. Admitted. 
 
+Lemma proof_of_mpz_swap_partial_solve_wit_1 : mpz_swap_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_2 : mpz_swap_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_3 : mpz_swap_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_4 : mpz_swap_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_5 : mpz_swap_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_6 : mpz_swap_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_7 : mpz_swap_partial_solve_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_8 : mpz_swap_partial_solve_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_9 : mpz_swap_partial_solve_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_10 : mpz_swap_partial_solve_wit_10.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_11 : mpz_swap_partial_solve_wit_11.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_12 : mpz_swap_partial_solve_wit_12.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_13 : mpz_swap_partial_solve_wit_13.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_14 : mpz_swap_partial_solve_wit_14.
+Proof. Admitted. 
+
+Lemma proof_of_mpz_swap_partial_solve_wit_15 : mpz_swap_partial_solve_wit_15.
+Proof. Admitted. 
+

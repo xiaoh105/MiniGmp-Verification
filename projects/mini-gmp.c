@@ -569,13 +569,44 @@ mpz_sgn (const mpz_t u)
   return gmp_cmp (u->_mp_size, 0);
 }
 
-/*void
+void
 mpz_swap (mpz_t u, mpz_t v)
+/*@
+  With
+    n m
+  Require
+    store_Z(u, n) * store_Z(v, m)
+  Ensure
+    store_Z(u@pre, m) * store_Z(v@pre, n)
+*/
 {
-  int_swap (u->_mp_alloc, v->_mp_alloc);
-  mp_ptr_swap(u->_mp_d, v->_mp_d);
-  int_swap (u->_mp_size, v->_mp_size);
-}*/
+  /*@
+    store_Z(u, n)
+    which implies
+    exists ptr1 cap1 size1,
+      (size1 < 0 && n < 0 && mpd_store_Z_compact(ptr1, -n, -size1, cap1) ||
+        size1 >= 0 && n >= 0 && mpd_store_Z_compact(ptr1, n, size1, cap1)) &&
+      u->_mp_size == size1 && 
+      u->_mp_alloc == cap1 && 
+      u->_mp_d == ptr1
+  */
+  /*@
+    store_Z(v, m)
+    which implies
+    exists ptr2 cap2 size2,
+      (size2 < 0 && m < 0 && mpd_store_Z_compact(ptr2, -m, -size2, cap2) ||
+        size2 >= 0 && m >= 0 && mpd_store_Z_compact(ptr2, m, size2, cap2)) &&
+      v->_mp_size == size2 && 
+      v->_mp_alloc == cap2 && 
+      v->_mp_d == ptr2
+  */
+  /*@
+    Given ptr1 cap1 size1 ptr2 cap2 size2
+  */
+  int_swap (&u->_mp_alloc, &v->_mp_alloc);
+  mp_ptr_swap(&u->_mp_d, &v->_mp_d);
+  int_swap (&u->_mp_size, &v->_mp_size);
+}
 
 /* MPZ addition and subtraction */
 
