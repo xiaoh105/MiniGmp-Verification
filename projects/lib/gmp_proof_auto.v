@@ -252,6 +252,45 @@ Proof. Admitted.
 Lemma proof_of_mpn_add_n_partial_solve_wit_13 : mpn_add_n_partial_solve_wit_13.
 Proof. Admitted. 
 
+Lemma proof_of_mpn_add_safety_wit_1 : mpn_add_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_1 : mpn_add_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_2_pure : mpn_add_partial_solve_wit_2_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_2 : mpn_add_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_3_pure : mpn_add_partial_solve_wit_3_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_3 : mpn_add_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_4_pure : mpn_add_partial_solve_wit_4_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_4 : mpn_add_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_5_pure : mpn_add_partial_solve_wit_5_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_5 : mpn_add_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_6_pure : mpn_add_partial_solve_wit_6_pure.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_partial_solve_wit_6 : mpn_add_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_which_implies_wit_2 : mpn_add_which_implies_wit_2.
+Proof. Admitted. 
+
 Lemma proof_of_mpz_clear_return_wit_1_3 : mpz_clear_return_wit_1_3.
 Proof. Admitted. 
 

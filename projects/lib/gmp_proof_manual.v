@@ -1407,6 +1407,47 @@ Proof.
     lia.
 Qed.
 
+Lemma proof_of_mpn_add_return_wit_1_1 : mpn_add_return_wit_1_1.
+Proof.
+  pre_process.
+  assert (an_pre = bn_pre) by lia.
+  subst an_pre.
+  assert (val_a_low = val_a). {
+    admit.
+  }
+  subst val_a_low.
+  Exists val_r_out_2.
+  entailer!.
+  unfold mpd_store_Z.
+  Intros l_a_high.
+  Exists (l_r_low).
+  entailer!.
+  + unfold mpd_store_list.
+    entailer!.
+    rewrite H2.
+    entailer!.
+    Search "store_uint_array".
+    admit.
+  + admit.
+Admitted. 
+
+Lemma proof_of_mpn_add_return_wit_1_2 : mpn_add_return_wit_1_2.
+Proof. Admitted. 
+
+Lemma proof_of_mpn_add_which_implies_wit_1 : mpn_add_which_implies_wit_1.
+Proof.
+  pre_process.
+Admitted. 
+
+Lemma proof_of_mpn_add_which_implies_wit_3 : mpn_add_which_implies_wit_3.
+Proof.
+  pre_process.
+Admitted. 
+
+Lemma proof_of_mpn_add_which_implies_wit_4 : mpn_add_which_implies_wit_4.
+Proof. Admitted. 
+
+
 Lemma proof_of_mpz_clear_return_wit_1_1 : mpz_clear_return_wit_1_1.
 Proof.
   pre_process.
