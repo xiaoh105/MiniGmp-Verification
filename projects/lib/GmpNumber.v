@@ -89,9 +89,9 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma list_store_Z_compact_reverse_injection: forall l1 l2 n1 n2,
-  list_store_Z_compact l1 n1 ->
-  list_store_Z_compact l2 n2 ->
+Lemma list_store_Z_reverse_injection: forall l1 l2 n1 n2,
+  list_store_Z l1 n1 ->
+  list_store_Z l2 n2 ->
   n1 = n2 -> l1 = l2.
 Proof. Admitted.
 
@@ -284,7 +284,7 @@ Qed.
 
 Lemma list_store_Z_list_append: forall (l: list Z) (i: Z) (val_prefix: Z) (val_full: Z),
   0 <= i < Zlength l ->
-  list_store_Z_compact l val_full ->
+  list_store_Z l val_full ->
   list_store_Z (sublist 0 i l) val_prefix ->
   list_store_Z (sublist 0 (i+1) l) (val_prefix + Znth i l 0 * UINT_MOD ^ i).
 Proof.
@@ -313,7 +313,7 @@ Proof.
   split; try tauto.
   apply list_within_bound_Znth.
   lia.
-  unfold list_store_Z_compact in H0.
+  unfold list_store_Z in H0.
   tauto.
 Qed.
 

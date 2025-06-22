@@ -469,7 +469,7 @@ Proof.
         assert (0 <= Znth i l_3 0 < 4294967296). {
           assert (l_2=l_3).
           {
-            pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+            pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
             apply H30 in H9; try tauto.
           }
           assert (i < Zlength l_3). {
@@ -477,7 +477,7 @@ Proof.
             rewrite H17.
             tauto.
           }
-          unfold list_store_Z_compact in H9.
+          unfold list_store_Z in H9.
           apply list_within_bound_Znth.
           lia.
           tauto.
@@ -505,7 +505,7 @@ Proof.
       lia.
       + assert (l_2=l_3).
         {
-          pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+          pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
           apply H28 in H9; try tauto.
         }
 
@@ -539,7 +539,7 @@ Proof.
         lia.
         apply list_within_bound_Znth.
         lia.
-        unfold list_store_Z_compact in H9.
+        unfold list_store_Z in H9.
         tauto.
   - pose proof (Zlength_sublist0 i l'_2).
     lia.
@@ -585,7 +585,7 @@ Proof.
         assert (0 <= Znth i l_3 0 < 4294967296). {
           assert (l_2=l_3).
           {
-            pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+            pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
             apply H30 in H9; try tauto.
           }
           assert (i < Zlength l_3). {
@@ -593,7 +593,7 @@ Proof.
             rewrite H17.
             tauto.
           }
-          unfold list_store_Z_compact in H9.
+          unfold list_store_Z in H9.
           apply list_within_bound_Znth.
           lia.
           tauto.
@@ -621,7 +621,7 @@ Proof.
       lia.
       + assert (l_2=l_3).
         {
-          pose proof (list_store_Z_compact_reverse_injection l_2 l_3 val val).
+          pose proof (list_store_Z_reverse_injection l_2 l_3 val val).
           apply H28 in H9; try tauto.
         }
 
@@ -655,7 +655,7 @@ Proof.
         lia.
         apply list_within_bound_Znth.
         lia.
-        unfold list_store_Z_compact in H9.
+        unfold list_store_Z in H9.
         tauto.
   - pose proof (Zlength_sublist0 i l'_2).
     lia.
@@ -664,10 +664,10 @@ Qed.
 Lemma proof_of_mpn_add_1_return_wit_1 : mpn_add_1_return_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   unfold mpd_store_list.
   Exists val2.
-  pose proof (list_store_Z_compact_reverse_injection l l_2 val val).
+  pose proof (list_store_Z_reverse_injection l l_2 val val).
   apply H19 in H2; try tauto.
   rewrite <-H2 in H10.
   assert (i = n_pre) by lia.
@@ -675,32 +675,33 @@ Proof.
   rewrite <- H10 in H4.
   rewrite (sublist_self l (Zlength l)) in H4; try tauto.
   rewrite <-H2 in H12.
-  assert (list_store_Z l val). { apply list_store_Z_compact_to_normal. tauto. }
   pose proof (list_store_Z_injection l l val1 val).
-  apply H22 in H4; try tauto.
+  apply H21 in H4; try tauto.
   rewrite H4 in H6.
   entailer!.
   Exists l.
   entailer!.
   entailer!; try rewrite H20; try tauto.
-  - rewrite H10.
-    entailer!.
-    unfold mpd_store_Z.
-    unfold mpd_store_list.
-    Exists l'.
-    rewrite H7.
-    subst i.
-    entailer!.
-    rewrite H20.
-    entailer!.
-    apply store_uint_array_rec_def2undef.
-  - rewrite <- H20. tauto.
+  rewrite H10.
+  entailer!.
+  unfold mpd_store_Z.
+  unfold mpd_store_list.
+  Exists l'.
+  rewrite H7.
+  subst i.
+  entailer!.
+  rewrite H20.
+  entailer!.
+  apply store_uint_array_rec_def2undef.
+  assert (Zlength l' = n_pre) by lia.
+  rewrite <- H7.
+  tauto.
 Qed.
 
 Lemma proof_of_mpn_add_1_which_implies_wit_1 : mpn_add_1_which_implies_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   Intros l.
   Exists l.
   unfold mpd_store_list.
@@ -838,14 +839,14 @@ Proof.
   pre_process.
   rewrite replace_Znth_app_r.
   assert (l_a_3 = l_a_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_a_3 l_a_2 val_a val_a).
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
     specialize (H37 H13 H28).
     apply H37.
     reflexivity.
   }
   subst l_a_3.
   assert (l_b_3 = l_b_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_b_3 l_b_2 val_b val_b).
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
     specialize (H37 H14 H24).
     apply H37.
     reflexivity.
@@ -882,7 +883,7 @@ Proof.
         assert (2 ^ 32 = 4294967296). { nia. }
         rewrite H37 in H4, H3; clear H37.
         apply Z_mod_3add_carry10; try lia; try tauto;
-        try unfold list_store_Z_compact in H13, H14;
+        try unfold list_store_Z in H13, H14;
         try apply list_within_bound_Znth;
         try lia;
         try tauto.
@@ -936,14 +937,14 @@ Proof.
   pre_process.
   rewrite replace_Znth_app_r.
   assert (l_a_3 = l_a_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_a_3 l_a_2 val_a val_a).
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
     specialize (H37 H13 H28).
     apply H37.
     reflexivity.
   }
   subst l_a_3.
   assert (l_b_3 = l_b_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_b_3 l_b_2 val_b val_b).
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
     specialize (H37 H14 H24).
     apply H37.
     reflexivity.
@@ -980,7 +981,7 @@ Proof.
         assert (2 ^ 32 = 4294967296). { nia. }
         rewrite H37 in H4, H3; clear H37.
         apply Z_mod_3add_carry11; try lia; try tauto;
-        try unfold list_store_Z_compact in H13, H14;
+        try unfold list_store_Z in H13, H14;
         try apply list_within_bound_Znth;
         try lia;
         try tauto.
@@ -1034,14 +1035,14 @@ Proof.
   pre_process.
   rewrite replace_Znth_app_r.
   assert (l_a_3 = l_a_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_a_3 l_a_2 val_a val_a).
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
     specialize (H37 H13 H28).
     apply H37.
     reflexivity.
   }
   subst l_a_3.
   assert (l_b_3 = l_b_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_b_3 l_b_2 val_b val_b).
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
     specialize (H37 H14 H24).
     apply H37.
     reflexivity.
@@ -1078,7 +1079,7 @@ Proof.
         assert (2 ^ 32 = 4294967296). { nia. }
         rewrite H37 in H4, H3; clear H37.
         apply Z_mod_3add_carry00; try lia; try tauto;
-        try unfold list_store_Z_compact in H13, H14;
+        try unfold list_store_Z in H13, H14;
         try apply list_within_bound_Znth;
         try lia;
         try tauto.
@@ -1132,14 +1133,14 @@ Proof.
   pre_process.
   rewrite replace_Znth_app_r.
   assert (l_a_3 = l_a_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_a_3 l_a_2 val_a val_a).
+    pose proof (list_store_Z_reverse_injection l_a_3 l_a_2 val_a val_a).
     specialize (H37 H13 H28).
     apply H37.
     reflexivity.
   }
   subst l_a_3.
   assert (l_b_3 = l_b_2). {
-    pose proof (list_store_Z_compact_reverse_injection l_b_3 l_b_2 val_b val_b).
+    pose proof (list_store_Z_reverse_injection l_b_3 l_b_2 val_b val_b).
     specialize (H37 H14 H24).
     apply H37.
     reflexivity.
@@ -1176,7 +1177,7 @@ Proof.
         assert (2 ^ 32 = 4294967296). { nia. }
         rewrite H37 in H4, H3; clear H37.
         apply Z_mod_3add_carry01; try lia; try tauto;
-        try unfold list_store_Z_compact in H13, H14;
+        try unfold list_store_Z in H13, H14;
         try apply list_within_bound_Znth;
         try lia;
         try tauto.
@@ -1229,14 +1230,14 @@ Lemma proof_of_mpn_add_n_return_wit_1 : mpn_add_n_return_wit_1.
 Proof.
   pre_process.
   assert (l_a_2 = l_a). {
-    pose proof (list_store_Z_compact_reverse_injection l_a_2 l_a val_a val_a).
+    pose proof (list_store_Z_reverse_injection l_a_2 l_a val_a val_a).
     specialize (H29 H20 H5).
     apply H29.
     reflexivity.
   }
   subst l_a_2.
   assert (l_b_2 = l_b). {
-    pose proof (list_store_Z_compact_reverse_injection l_b_2 l_b val_b val_b).
+    pose proof (list_store_Z_reverse_injection l_b_2 l_b val_b val_b).
     specialize (H29 H16 H6).
     apply H29.
     reflexivity.
@@ -1244,55 +1245,50 @@ Proof.
   subst l_b_2.
   assert (i = n_pre) by lia.
   Exists val_r_prefix.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   unfold mpd_store_list.
   Exists l_a.
   Exists l_b.
   entailer!.
-  + rewrite H14.
-    rewrite H18.
-    entailer!.
-    unfold mpd_store_Z.
-    Exists l_r_prefix.
-    rewrite H29 in *.
-    entailer!.
-    unfold mpd_store_list.
-    entailer!.
-    rewrite H10.
-    entailer!.
-    apply store_uint_array_rec_def2undef.
-  + rewrite <- H29.
-    assert (val_a_prefix = val_a). {
-      assert (i = Zlength l_a). {
-        lia.
-      }
-      rewrite H30 in H7.
-      rewrite sublist_self in H7.
-      unfold list_store_Z_compact in H5.
-      unfold list_store_Z in H7.
-      lia.
-      reflexivity.
-    }
-    rewrite <- H30; clear H30.
-    assert (val_b_prefix = val_b). {
-      assert (i = Zlength l_b). {
-        lia.
-      }
-      rewrite H30 in H8.
-      rewrite sublist_self in H8.
-      unfold list_store_Z_compact in H6.
-      unfold list_store_Z in H8.
-      lia.
-      reflexivity.
-    }
-    rewrite <- H30; clear H30.
-    tauto.
+  rewrite H14.
+  rewrite H18.
+  entailer!.
+  unfold mpd_store_Z.
+  Exists l_r_prefix.
+  rewrite H29 in *.
+  entailer!.
+  unfold mpd_store_list.
+  entailer!.
+  rewrite H10.
+  entailer!.
+  apply store_uint_array_rec_def2undef.
+  rewrite <- H29.
+  assert (val_a_prefix = val_a). {
+    rewrite <-H18 in H7.
+    rewrite sublist_self in H7.
+    unfold list_store_Z in H5.
+    unfold list_store_Z in H7.
+    lia.
+    reflexivity.
+  }
+  rewrite <- H30; clear H30.
+  assert (val_b_prefix = val_b). {
+    rewrite <-H14 in H8.
+    rewrite sublist_self in H8.
+    unfold list_store_Z in H6.
+    unfold list_store_Z in H8.
+    lia.
+    reflexivity.
+  }
+  rewrite <- H30; clear H30.
+  rewrite H29.
+  tauto.
 Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_1 : mpn_add_n_which_implies_wit_1.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   Intros l.
   Exists l.
   unfold mpd_store_list.
@@ -1304,7 +1300,7 @@ Qed.
 Lemma proof_of_mpn_add_n_which_implies_wit_2 : mpn_add_n_which_implies_wit_2.
 Proof.
   pre_process.
-  unfold mpd_store_Z_compact.
+  unfold mpd_store_Z.
   Intros l.
   Exists l.
   unfold mpd_store_list.
