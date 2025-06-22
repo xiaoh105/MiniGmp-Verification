@@ -1226,7 +1226,68 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_n_return_wit_1 : mpn_add_n_return_wit_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  assert (l_a_2 = l_a). {
+    pose proof (list_store_Z_compact_reverse_injection l_a_2 l_a val_a val_a).
+    specialize (H29 H20 H5).
+    apply H29.
+    reflexivity.
+  }
+  subst l_a_2.
+  assert (l_b_2 = l_b). {
+    pose proof (list_store_Z_compact_reverse_injection l_b_2 l_b val_b val_b).
+    specialize (H29 H16 H6).
+    apply H29.
+    reflexivity.
+  }
+  subst l_b_2.
+  assert (i = n_pre) by lia.
+  Exists val_r_prefix.
+  unfold mpd_store_Z_compact.
+  unfold mpd_store_list.
+  Exists l_a.
+  Exists l_b.
+  entailer!.
+  + rewrite H14.
+    rewrite H18.
+    entailer!.
+    unfold mpd_store_Z.
+    Exists l_r_prefix.
+    rewrite H29 in *.
+    entailer!.
+    unfold mpd_store_list.
+    entailer!.
+    rewrite H10.
+    entailer!.
+    apply store_uint_array_rec_def2undef.
+  + rewrite <- H29.
+    assert (val_a_prefix = val_a). {
+      assert (i = Zlength l_a). {
+        lia.
+      }
+      rewrite H30 in H7.
+      rewrite sublist_self in H7.
+      unfold list_store_Z_compact in H5.
+      unfold list_store_Z in H7.
+      lia.
+      reflexivity.
+    }
+    rewrite <- H30; clear H30.
+    assert (val_b_prefix = val_b). {
+      assert (i = Zlength l_b). {
+        lia.
+      }
+      rewrite H30 in H8.
+      rewrite sublist_self in H8.
+      unfold list_store_Z_compact in H6.
+      unfold list_store_Z in H8.
+      lia.
+      reflexivity.
+    }
+    rewrite <- H30; clear H30.
+    tauto.
+Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_1 : mpn_add_n_which_implies_wit_1.
 Proof. Admitted. 
