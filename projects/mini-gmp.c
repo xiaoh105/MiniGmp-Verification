@@ -228,7 +228,7 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
 /*@
   With val l2 cap1 cap2
   Require
-    mpd_store_Z_compact(ap, val, n, cap1) *
+    mpd_store_Z(ap, val, n, cap1) *
     store_uint_array(rp, cap2, l2) &&
     Zlength(l2) == cap2 &&
     cap2 >= n &&
@@ -237,13 +237,13 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
     n > 0 && n <= cap1
   Ensure
     exists val',
-    mpd_store_Z_compact(ap@pre, val, n@pre, cap1) *
+    mpd_store_Z(ap@pre, val, n@pre, cap1) *
     mpd_store_Z(rp@pre, val', n@pre, cap2) &&
     (val' + __return * Z::pow(UINT_MOD, n@pre) == val + b@pre)
 */
 {
   /*@
-    mpd_store_Z_compact(ap@pre, val, n@pre, cap1)
+    mpd_store_Z(ap@pre, val, n@pre, cap1)
     which implies
     exists l,
       n@pre <= cap1 && 
@@ -251,7 +251,7 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
       cap1 <= 100000000 &&
       store_uint_array(ap@pre, n@pre, l) *
       store_undef_uint_array_rec(ap@pre, n@pre, cap1) &&
-      list_store_Z_compact(l, val)
+      list_store_Z(l, val)
   */
   int i;
   //assert (n > 0);
@@ -278,7 +278,7 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
   /*@Inv
     exists l l' l'' val1 val2,
     0 <= i && i <= n@pre &&
-    list_store_Z_compact(l, val) && n@pre <= cap1 &&
+    list_store_Z(l, val) && n@pre <= cap1 &&
     store_uint_array(ap@pre, n@pre, l) *
     store_undef_uint_array_rec(ap@pre, n@pre, cap1) &&
     list_store_Z(sublist(0, i, l), val1) &&
@@ -318,8 +318,8 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
 /*@
  With cap_a cap_b cap_r val_a val_b l_r
  Require
-   mpd_store_Z_compact(ap, val_a, n, cap_a) *
-   mpd_store_Z_compact(bp, val_b, n, cap_b) *
+   mpd_store_Z(ap, val_a, n, cap_a) *
+   mpd_store_Z(bp, val_b, n, cap_b) *
    store_uint_array(rp, cap_r, l_r) &&
    Zlength(l_r) == cap_r &&
    cap_a <= 100000000 &&
@@ -328,14 +328,14 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
    n > 0 && n <= cap_a && n <= cap_b && n <= cap_r
  Ensure
    exists val_r_out,
-   mpd_store_Z_compact(ap@pre, val_a, n@pre, cap_a) *
-   mpd_store_Z_compact(bp@pre, val_b, n@pre, cap_b) *
+   mpd_store_Z(ap@pre, val_a, n@pre, cap_a) *
+   mpd_store_Z(bp@pre, val_b, n@pre, cap_b) *
    mpd_store_Z(rp@pre, val_r_out, n@pre, cap_r) &&
    (val_r_out + __return * Z::pow(UINT_MOD, n@pre) == val_a + val_b)
 */
 {
   /*@
-    mpd_store_Z_compact(ap@pre, val_a, n@pre, cap_a)
+    mpd_store_Z(ap@pre, val_a, n@pre, cap_a)
     which implies
     exists l_a,
       n@pre <= cap_a &&
@@ -343,10 +343,10 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
       cap_a <= 100000000 &&
       store_uint_array(ap@pre, n@pre, l_a) *
       store_undef_uint_array_rec(ap@pre, n@pre, cap_a) &&
-      list_store_Z_compact(l_a, val_a)
+      list_store_Z(l_a, val_a)
   */
   /*@
-    mpd_store_Z_compact(bp@pre, val_b, n@pre, cap_b)
+    mpd_store_Z(bp@pre, val_b, n@pre, cap_b)
     which implies
     exists l_b,
       n@pre <= cap_b &&
@@ -354,7 +354,7 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
       cap_b <= 100000000 &&
       store_uint_array(bp@pre, n@pre, l_b) *
       store_undef_uint_array_rec(bp@pre, n@pre, cap_b) &&
-      list_store_Z_compact(l_b, val_b)
+      list_store_Z(l_b, val_b)
   */
   int i;
   unsigned int cy;
@@ -370,8 +370,8 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
   /*@Inv
     exists l_a l_b l_r_prefix l_r_suffix val_a_prefix val_b_prefix val_r_prefix,
       0 <= i && i <= n@pre && n@pre <= cap_a && n@pre <= cap_b && n@pre <= cap_r &&
-      list_store_Z_compact(l_a, val_a) &&
-      list_store_Z_compact(l_b, val_b) &&
+      list_store_Z(l_a, val_a) &&
+      list_store_Z(l_b, val_b) &&
       list_store_Z(sublist(0, i, l_a), val_a_prefix) &&
       list_store_Z(sublist(0, i, l_b), val_b_prefix) &&
       list_store_Z(l_r_prefix, val_r_prefix) &&
