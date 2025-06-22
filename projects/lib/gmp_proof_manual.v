@@ -1290,13 +1290,50 @@ Proof.
 Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_1 : mpn_add_n_which_implies_wit_1.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact.
+  Intros l.
+  Exists l.
+  unfold mpd_store_list.
+  entailer!.
+  subst n_pre.
+  entailer!.
+Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_2 : mpn_add_n_which_implies_wit_2.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  unfold mpd_store_Z_compact.
+  Intros l.
+  Exists l.
+  unfold mpd_store_list.
+  entailer!.
+  subst n_pre.
+  entailer!.
+Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_3 : mpn_add_n_which_implies_wit_3.
-Proof. Admitted. 
+Proof.
+  pre_process.
+  pose proof (store_uint_array_divide rp_pre cap_r l_r 0).
+  pose proof (Zlength_nonneg l_r).
+  specialize (H0 ltac:(lia) ltac:(lia)).
+  destruct H0 as [H0 _].
+  simpl in H0.
+  entailer!.
+  rewrite (sublist_nil l_r 0 0) in H0; [ | lia].
+  sep_apply H0.
+  entailer!.
+  unfold store_uint_array, store_uint_array_rec.
+  unfold store_array.
+  rewrite (sublist_self l_r cap_r); [ | lia ].
+  assert (rp_pre + 0 = rp_pre). { lia. }
+  rewrite H2; clear H2.
+  assert (cap_r - 0 = cap_r). { lia. }
+  rewrite H2; clear H2.
+  reflexivity.
+Qed.
 
 Lemma proof_of_mpn_add_n_which_implies_wit_4 : mpn_add_n_which_implies_wit_4.
 Proof. Admitted. 
