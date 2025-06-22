@@ -413,16 +413,69 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
 }
 
 /*不同位数的多精度数相加，返回最后的进位*/
-/*unsigned int
+unsigned int
 mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
+/*@
+ With cap_a cap_b cap_r val_a val_b l_r
+ Require
+   mpd_store_Z(ap, val_a, an, cap_a) *
+   mpd_store_Z(bp, val_b, bn, cap_b) *
+   store_uint_array(rp, cap_r, l_r) &&
+   Zlength(l_r) == cap_r &&
+   cap_a <= 100000000 &&
+   cap_b <= 100000000 &&
+   cap_r <= 100000000 &&
+   an > 0 && an <= cap_a && an <= cap_r &&
+   bn > 0 && bn <= cap_b && bn <= cap_r && an >= bn
+ Ensure
+   exists val_r_out,
+   mpd_store_Z(ap@pre, val_a, an@pre, cap_a) *
+   mpd_store_Z(bp@pre, val_b, bn@pre, cap_b) *
+   mpd_store_Z(rp@pre, val_r_out, an@pre, cap_r) &&
+   (val_r_out + __return * Z::pow(UINT_MOD, an@pre) == val_a + val_b)
+*/
 {
   unsigned int cy;
-  //assert (an >= bn);
-  cy = mpn_add_n (rp, ap, bp, bn);
-  if (an > bn)
-    cy = mpn_add_1 (rp + bn, ap + bn, an - bn, cy);
+  /*@
+    mpd_store_Z(ap@pre, val_a, an@pre, cap_a)
+    which implies
+      exists val_a_low val_a_high,
+        mpd_store_Z(ap@pre, val_a_low, bn@pre, cap_a) *
+        mpd_store_Z(ap@pre + bn@pre * sizeof(unsigned int), val_a_high, an@pre - bn@pre, cap_a - bn@pre) &&
+        val_a == val_a_low + val_a_high * Z::pow(UINT_MOD, bn@pre)
+    */
+  /*@
+    an@pre >= bn@pre && an@pre <= cap_a
+    which implies
+      bn@pre <= cap_a
+  */
+  /*@
+    Given val_a_low val_a_high
+   */
+  cy = mpn_add_n (rp, ap, bp, bn) /*@ where cap_a=cap_a, cap_b=cap_b, cap_r=cap_r, val_a=val_a_low, val_b=val_b, l_r=l_r*/ ;
+  /*@
+  exists val_r_out, mpd_store_Z(rp@pre, val_r_out, bn@pre, cap_r) && Zlength(l_r) == cap_r && bn@pre <= cap_r
+  which implies
+    exists l_r_low l_r_high,
+    l_r == app(l_r_low, l_r_high) &&
+    store_uint_array(rp@pre, bn@pre, l_r_low) * store_uint_array(rp@pre + bn@pre * sizeof(unsigned int), cap_r - bn@pre, l_r_high) &&
+    Zlength(l_r) == cap_r && Zlength(l_r_low) == bn@pre && Zlength(l_r_high) == cap_r - bn@pre
+  */
+  /*@
+    Given l_r_low l_r_high
+  */
+  if (an > bn) {
+    /*@
+      an@pre <= cap_r && cap_a <= 100000000 && cap_r <= 100000000 &&
+      an@pre > bn@pre && an@pre <= cap_a
+      which implies
+        cap_r-bn@pre >= an@pre - bn@pre && cap_a - bn@pre <= 100000000 && cap_r-bn@pre <= 100000000 && an@pre - bn@pre > 0 && an@pre - bn@pre <= cap_a-bn@pre
+   */
+    cy = mpn_add_1 (rp + bn, ap + bn, an - bn, cy)
+    /*@ where val=val_a_high, l2=l_r_high, cap1=cap_a-bn@pre, cap2=cap_r-bn@pre*/;
+  }
   return cy;
-}*/
+}
 
 /*unsigned int
 mpn_sub_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)

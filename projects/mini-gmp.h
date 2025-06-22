@@ -85,7 +85,7 @@ int mpn_cmp (unsigned int *ap, unsigned int *bp, int n);
 
 unsigned int mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b);
 unsigned int mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n);
-unsigned int mpn_add (unsigned int *, unsigned int *, int, unsigned int *, int);
+unsigned int mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn);
 
 unsigned int mpn_sub_1 (unsigned int *, unsigned int *, int, unsigned int);
 unsigned int mpn_sub_n (unsigned int *, unsigned int *, unsigned int *, int);
