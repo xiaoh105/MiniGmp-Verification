@@ -4837,7 +4837,7 @@ forall (n_pre: Z) (rp_pre: Z) (cap_r: Z) (l_r_suffix: (@list Z)) (l_r_prefix: (@
 (*----- Function mpn_add -----*)
 
 Definition mpn_add_safety_wit_1 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| ((cap_r - bn_pre ) >= (an_pre - bn_pre )) |] 
   &&  [| ((cap_a - bn_pre ) <= 100000000) |] 
   &&  [| ((cap_r - bn_pre ) <= 100000000) |] 
@@ -4848,6 +4848,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -4879,12 +4881,14 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 .
 
 Definition mpn_add_return_wit_1_1 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out_2: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out_2: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| (an_pre <= bn_pre) |] 
   &&  [| (l_r = (app (l_r_low) (l_r_high))) |] 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out_2 + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -4913,7 +4917,7 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 .
 
 Definition mpn_add_return_wit_1_2 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out_2: Z) (retval_2: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) (val': Z) (retval: Z) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out_2: Z) (retval_2: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) (val': Z) (retval: Z) ,
   [| ((val' + (retval * (Z.pow (UINT_MOD) ((an_pre - bn_pre ))) ) ) = (val_a_high + retval_2 )) |] 
   &&  [| ((cap_r - bn_pre ) >= (an_pre - bn_pre )) |] 
   &&  [| ((cap_a - bn_pre ) <= 100000000) |] 
@@ -4925,6 +4929,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out_2 + (retval_2 * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5217,12 +5223,14 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 Definition mpn_add_partial_solve_wit_4 := mpn_add_partial_solve_wit_4_pure -> mpn_add_partial_solve_wit_4_aux.
 
 Definition mpn_add_partial_solve_wit_5_pure := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| (an_pre > bn_pre) |] 
   &&  [| (l_r = (app (l_r_low) (l_r_high))) |] 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5257,12 +5265,14 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 .
 
 Definition mpn_add_partial_solve_wit_5_aux := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| (an_pre > bn_pre) |] 
   &&  [| (l_r = (app (l_r_low) (l_r_high))) |] 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5293,6 +5303,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5317,7 +5329,7 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 Definition mpn_add_partial_solve_wit_5 := mpn_add_partial_solve_wit_5_pure -> mpn_add_partial_solve_wit_5_aux.
 
 Definition mpn_add_partial_solve_wit_6_pure := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| ((cap_r - bn_pre ) >= (an_pre - bn_pre )) |] 
   &&  [| ((cap_a - bn_pre ) <= 100000000) |] 
   &&  [| ((cap_r - bn_pre ) <= 100000000) |] 
@@ -5328,6 +5340,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5363,7 +5377,7 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
 .
 
 Definition mpn_add_partial_solve_wit_6_aux := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (val_b: Z) (val_a: Z) (cap_r: Z) (cap_b: Z) (cap_a: Z) (val_a_high: Z) (val_a_low: Z) (val_r_out: Z) (retval: Z) (val_r_high: Z) (val_r_low: Z) (l_r_low: (@list Z)) (l_r_high: (@list Z)) ,
   [| ((cap_r - bn_pre ) >= (an_pre - bn_pre )) |] 
   &&  [| ((cap_a - bn_pre ) <= 100000000) |] 
   &&  [| ((cap_r - bn_pre ) <= 100000000) |] 
@@ -5374,6 +5388,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5410,6 +5426,8 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (l_r: (@list 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
   &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |] 
   &&  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
   &&  [| (bn_pre <= cap_a) |] 
   &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
@@ -5459,11 +5477,13 @@ forall (bn_pre: Z) (rp_pre: Z) (l_r: (@list Z)) (cap_r: Z) (val_r_out: Z) ,
   &&  [| (bn_pre <= cap_r) |]
   &&  (mpd_store_Z rp_pre val_r_out bn_pre cap_r )
 |--
-  EX (l_r_low: (@list Z))  (l_r_high: (@list Z)) ,
+  EX (val_r_high: Z)  (val_r_low: Z)  (l_r_low: (@list Z))  (l_r_high: (@list Z)) ,
   [| (l_r = (app (l_r_low) (l_r_high))) |] 
   &&  [| ((Zlength (l_r)) = cap_r) |] 
   &&  [| ((Zlength (l_r_low)) = bn_pre) |] 
-  &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |]
+  &&  [| ((Zlength (l_r_high)) = (cap_r - bn_pre )) |] 
+  &&  [| (list_store_Z l_r_low val_r_low ) |] 
+  &&  [| (list_store_Z l_r_high val_r_high ) |]
   &&  (store_uint_array rp_pre bn_pre l_r_low )
   **  (store_uint_array (rp_pre + (bn_pre * sizeof(UINT) ) ) (cap_r - bn_pre ) l_r_high )
 .

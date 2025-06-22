@@ -456,10 +456,11 @@ mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
   /*@
   exists val_r_out, mpd_store_Z(rp@pre, val_r_out, bn@pre, cap_r) && Zlength(l_r) == cap_r && bn@pre <= cap_r
   which implies
-    exists l_r_low l_r_high,
+    exists l_r_low l_r_high val_r_low val_r_high,
     l_r == app(l_r_low, l_r_high) &&
     store_uint_array(rp@pre, bn@pre, l_r_low) * store_uint_array(rp@pre + bn@pre * sizeof(unsigned int), cap_r - bn@pre, l_r_high) &&
-    Zlength(l_r) == cap_r && Zlength(l_r_low) == bn@pre && Zlength(l_r_high) == cap_r - bn@pre
+    Zlength(l_r) == cap_r && Zlength(l_r_low) == bn@pre && Zlength(l_r_high) == cap_r - bn@pre &&
+    list_store_Z(l_r_low, val_r_low) && list_store_Z(l_r_high, val_r_high)
   */
   /*@
     Given l_r_low l_r_high
