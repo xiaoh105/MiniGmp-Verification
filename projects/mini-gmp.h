@@ -93,7 +93,7 @@ unsigned int mpn_sub (unsigned int *, unsigned int *, int, unsigned int *, int);
 
 void mpz_clear (mpz_t r);
 
-int mpz_sgn (const mpz_t);
+int mpz_sgn (const mpz_t u);
 
 void mpz_neg (mpz_t, const mpz_t);
 void mpz_swap (mpz_t, mpz_t);

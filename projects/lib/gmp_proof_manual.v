@@ -1057,3 +1057,68 @@ Proof.
   Intros data.
   entailer!.
 Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_1 : mpz_sgn_return_wit_1_1.
+Proof.
+  pre_process.
+  Left; Left.
+  entailer!.
+  unfold store_Z.
+  Exists ptr cap size.
+  Left.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_2 : mpz_sgn_return_wit_1_2.
+Proof.
+  pre_process.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  assert (size >= 1). { lia. }
+  clear H H1.
+  entailer!.
+  + unfold store_Z.
+    Exists ptr cap size.
+    Right.
+    unfold mpd_store_Z_compact.
+    Exists data.
+    entailer!.
+  + apply list_store_Z_compact_bound in H3.
+    rewrite <-H4 in *.
+    nia.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_1_3 : mpz_sgn_return_wit_1_3.
+Proof.
+  pre_process.
+  Left; Right.
+  unfold store_Z.
+  Exists ptr cap size.
+  Right.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  Exists data.
+  entailer!.
+  subst.
+  pose proof (Zlength_nil_inv data ltac:(auto)).
+  subst.
+  unfold list_store_Z_compact in H3; destruct H3, H0.
+  unfold list_to_Z in H.
+  lia.
+Qed.
+
+Lemma proof_of_mpz_sgn_which_implies_wit_1 : mpz_sgn_which_implies_wit_1.
+Proof.
+  pre_process.
+  unfold store_Z.
+  Intros ptr cap size.
+  rewrite orp_sepcon_left.
+  Split.
+  + Right.
+    Exists ptr cap size.
+    entailer!.
+  + Left.
+    Exists ptr cap size.
+    entailer!.
+Qed.

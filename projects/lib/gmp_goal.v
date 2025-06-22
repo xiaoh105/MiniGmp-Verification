@@ -3679,6 +3679,215 @@ forall (size_pre: Z) (r_pre: Z) (n: Z) (cap: Z) (old: Z) (retval: Z) (retval_2: 
 
 Definition mpz_realloc_partial_solve_wit_10 := mpz_realloc_partial_solve_wit_10_pure -> mpz_realloc_partial_solve_wit_10_aux.
 
+(*----- Function mpz_sgn -----*)
+
+Definition mpz_sgn_safety_wit_1 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((( &( "u" ) )) # Ptr  |-> u_pre)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_sgn_safety_wit_2 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size < 0) |] 
+  &&  [| (retval = (-1)) |] 
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((( &( "u" ) )) # Ptr  |-> u_pre)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| False |]
+.
+
+Definition mpz_sgn_safety_wit_3 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((( &( "u" ) )) # Ptr  |-> u_pre)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition mpz_sgn_safety_wit_4 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size = 0) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((( &( "u" ) )) # Ptr  |-> u_pre)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| False |]
+.
+
+Definition mpz_sgn_safety_wit_5 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size > 0) |] 
+  &&  [| (retval = 1) |] 
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((( &( "u" ) )) # Ptr  |-> u_pre)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| False |]
+.
+
+Definition mpz_sgn_return_wit_1_1 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size < 0) |] 
+  &&  [| (retval = (-1)) |] 
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  ([| (n < 0) |] 
+  &&  [| (retval = (-1)) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n = 0) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n > 0) |] 
+  &&  [| (retval = 1) |]
+  &&  (store_Z u_pre n ))
+.
+
+Definition mpz_sgn_return_wit_1_2 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size > 0) |] 
+  &&  [| (retval = 1) |] 
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  ([| (n < 0) |] 
+  &&  [| (retval = (-1)) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n = 0) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n > 0) |] 
+  &&  [| (retval = 1) |]
+  &&  (store_Z u_pre n ))
+.
+
+Definition mpz_sgn_return_wit_1_3 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
+  [| (size = 0) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  ([| (n < 0) |] 
+  &&  [| (retval = (-1)) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n = 0) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_Z u_pre n ))
+  ||
+  ([| (n > 0) |] 
+  &&  [| (retval = 1) |]
+  &&  (store_Z u_pre n ))
+.
+
+Definition mpz_sgn_partial_solve_wit_1 := 
+forall (u_pre: Z) (n: Z) ,
+  (store_Z u_pre n )
+|--
+  (store_Z u_pre n )
+.
+
+Definition mpz_sgn_partial_solve_wit_2 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_sgn_partial_solve_wit_3 := 
+forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) ,
+  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+|--
+  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_sgn_which_implies_wit_1 := 
+forall (n: Z) (u: Z) ,
+  (store_Z u n )
+|--
+  (EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact ptr n size cap )
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr))
+  ||
+  (EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact ptr (-n) (-size) cap )
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((u)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr))
+.
+
 Module Type VC_Correct.
 
 Axiom proof_of_gmp_abs_safety_wit_1 : gmp_abs_safety_wit_1.
@@ -3810,5 +4019,17 @@ Axiom proof_of_mpz_realloc_partial_solve_wit_9_pure : mpz_realloc_partial_solve_
 Axiom proof_of_mpz_realloc_partial_solve_wit_9 : mpz_realloc_partial_solve_wit_9.
 Axiom proof_of_mpz_realloc_partial_solve_wit_10_pure : mpz_realloc_partial_solve_wit_10_pure.
 Axiom proof_of_mpz_realloc_partial_solve_wit_10 : mpz_realloc_partial_solve_wit_10.
+Axiom proof_of_mpz_sgn_safety_wit_1 : mpz_sgn_safety_wit_1.
+Axiom proof_of_mpz_sgn_safety_wit_2 : mpz_sgn_safety_wit_2.
+Axiom proof_of_mpz_sgn_safety_wit_3 : mpz_sgn_safety_wit_3.
+Axiom proof_of_mpz_sgn_safety_wit_4 : mpz_sgn_safety_wit_4.
+Axiom proof_of_mpz_sgn_safety_wit_5 : mpz_sgn_safety_wit_5.
+Axiom proof_of_mpz_sgn_return_wit_1_1 : mpz_sgn_return_wit_1_1.
+Axiom proof_of_mpz_sgn_return_wit_1_2 : mpz_sgn_return_wit_1_2.
+Axiom proof_of_mpz_sgn_return_wit_1_3 : mpz_sgn_return_wit_1_3.
+Axiom proof_of_mpz_sgn_partial_solve_wit_1 : mpz_sgn_partial_solve_wit_1.
+Axiom proof_of_mpz_sgn_partial_solve_wit_2 : mpz_sgn_partial_solve_wit_2.
+Axiom proof_of_mpz_sgn_partial_solve_wit_3 : mpz_sgn_partial_solve_wit_3.
+Axiom proof_of_mpz_sgn_which_implies_wit_1 : mpz_sgn_which_implies_wit_1.
 
 End VC_Correct.

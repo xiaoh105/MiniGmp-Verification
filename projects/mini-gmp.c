@@ -437,7 +437,7 @@ mpz_realloc (mpz_t r, int size)
     c >= size@pre && 
     (n < 0 && mpd_store_Z_compact(ptr_new, -n, -old, c) ||
       n >= 0 && mpd_store_Z_compact(ptr_new, n, old, c)) &&
-    r -> _mp_size == old &&
+    r@pre -> _mp_size == old &&
     r@pre -> _mp_alloc == c &&
     r@pre -> _mp_d == ptr_new
 */
@@ -457,16 +457,37 @@ mpz_realloc (mpz_t r, int size)
 }
 
 /* Realloc for an mpz_t WHAT if it has less than NEEDED limbs.  */
-/*unsigned int *mrz_realloc_if(mpz_t z,int n) {
+/*unsigned int *mrz_realloc_if(mpz_t z,int n) 
+{
   return n > z->_mp_alloc ? mpz_realloc(z, n) : z->_mp_d;
 }*/
 
 /* MPZ comparisons and the like. */
-/*int
+int
 mpz_sgn (const mpz_t u)
+/*@
+  With
+    n
+  Require
+    store_Z(u, n)
+  Ensure
+    store_Z(u@pre, n) &&
+    (n > 0 && __return == 1 || n == 0 && __return == 0 ||
+      n < 0 && __return == -1)
+*/
 {
+  /*@
+    store_Z(u, n)
+    which implies
+    exists ptr cap size,
+      (size < 0 && n < 0 && mpd_store_Z_compact(ptr, -n, -size, cap) ||
+        size >= 0 && n >= 0 && mpd_store_Z_compact(ptr, n, size, cap)) &&
+      u->_mp_size == size && 
+      u->_mp_alloc == cap && 
+      u->_mp_d == ptr
+  */
   return gmp_cmp (u->_mp_size, 0);
-}*/
+}
 
 /*void
 mpz_swap (mpz_t u, mpz_t v)
