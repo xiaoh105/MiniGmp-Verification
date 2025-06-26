@@ -74,28 +74,86 @@ Lemma Z_mod_3add_carry10: forall (a b c m: Z),
   (a + c) mod m < c ->
   ((a + c) mod m + b) mod m >= b ->
   a + b + c = ((a + c) mod m + b) mod m + m.
-Proof. Admitted.
+Proof.
+  intros.
+  assert (a + c = (a + c) mod m + m). {
+    apply Z_mod_add_carry; try lia.
+  }
+  assert ((a + c) mod m + b = ((a + c) mod m + b) mod m). {
+    apply Z_mod_add_uncarry; try lia.
+    apply Z.mod_pos_bound.
+    lia.
+  }
+  rewrite <-H6.
+  assert ((a + c) mod m + b + m = (a + c) mod m + m + b) by lia.
+  rewrite H7.
+  rewrite <-H5.
+  lia.
+Qed.
 
 Lemma Z_mod_3add_carry01: forall (a b c m: Z),
   m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
   (a + c) mod m >= c ->
   ((a + c) mod m + b) mod m < b ->
   a + b + c = ((a + c) mod m + b) mod m + m.
-Proof. Admitted.
+Proof.
+  intros.
+  assert (a + c = (a + c) mod m). {
+    apply Z_mod_add_uncarry; try lia.
+  }
+  assert ((a + c) mod m + b = ((a + c) mod m + b) mod m + m). {
+    apply Z_mod_add_carry; try lia.
+    apply Z.mod_pos_bound.
+    lia.
+  }
+  rewrite <-H6.
+  rewrite <-H5.
+  lia.
+Qed.
 
 Lemma Z_mod_3add_carry11: forall (a b c m: Z),
   m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
   (a + c) mod m < c ->
   ((a + c) mod m + b) mod m < b ->
   a + b + c = ((a + c) mod m + b) mod m + m * 2.
-Proof. Admitted.
+Proof.
+  intros.
+  assert (a + c = (a + c) mod m + m). {
+    apply Z_mod_add_carry; try lia.
+  }
+  assert ((a + c) mod m + b = ((a + c) mod m + b) mod m + m). {
+    apply Z_mod_add_carry; try lia.
+    apply Z.mod_pos_bound.
+    lia.
+  }
+  assert (((a + c) mod m + b) mod m + m * 2 = ((a + c) mod m + b) mod m + m + m) by lia.
+  rewrite H7.
+  rewrite <-H6.
+  assert ((a + c) mod m + b + m = (a + c) mod m + m + b) by lia.
+  rewrite H8.
+  rewrite <-H5.
+  lia.
+Qed.
 
 Lemma Z_mod_3add_carry00: forall (a b c m: Z),
   m > 0 -> 0 <= a < m -> 0 <= b < m -> 0 <= c < m ->
   (a + c) mod m >= c ->
   ((a + c) mod m + b) mod m >= b ->
   a + b + c = ((a + c) mod m + b) mod m.
-Proof. Admitted.
+Proof.
+  intros.
+  assert (a + c = (a + c) mod m). {
+    apply Z_mod_add_uncarry; try lia.
+  }
+  assert ((a + c) mod m + b = ((a + c) mod m + b) mod m). {
+    apply Z_mod_add_uncarry; try lia.
+    apply Z.mod_pos_bound.
+    lia.
+  }
+  rewrite <-H6.
+  rewrite <-H5.
+  lia.
+Qed.
 
 Lemma Z_of_nat_succ: forall (n: nat),
   Z.of_nat (S n) = Z.of_nat n + 1.
